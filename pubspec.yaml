@@ -39,9 +39,9 @@ dependencies:
 
   # [status]
   # App추가 / 상태관리기능 / MIT / https://github.com/rrousselGit/riverpod
-#  flutter_riverpod: ^2.6.1
+  flutter_riverpod: ^2.6.1
   # App추가 / 상태관리기능 / MIT / https://github.com/rrousselGit/riverpod
-#  riverpod_annotation: ^2.6.1
+  riverpod_annotation: ^2.6.1
 
   # [Network]
   # App추가 / 통신모듈 / MIT / https://github.com/cfug/dio/tree/main/dio
@@ -112,8 +112,8 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   build_runner: ^2.4.15
 #  go_router_builder: ^2.9.0 # dart run build_runner build
-#  riverpod_generator: ^2.6.5
-#  riverpod_lint: ^2.6.5 # 빠른 수정 및 리팩토링 옵션과 함께 다양한 경고를 추가
+  riverpod_generator: ^2.6.5
+  riverpod_lint: ^2.6.5 # 빠른 수정 및 리팩토링 옵션과 함께 다양한 경고를 추가
 #  retrofit_generator: ^9.2.0
   json_serializable: ^6.9.5
 
