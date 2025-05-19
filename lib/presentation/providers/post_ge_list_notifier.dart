@@ -1,6 +1,8 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../core/error/failures.dart';
 import '../../data/providers/post_repository_provider.dart';
 import '../../domain/entities/post.dart';
 import '../../domain/repositories/post_repository.dart';
@@ -9,37 +11,45 @@ import '../../utils/print_log.dart';
 part 'post_ge_list_notifier.g.dart';
 
 @riverpod
-class PostListNotifier extends _$PostListNotifier {
+class PostGeListNotifier extends _$PostGeListNotifier {
   late final PostRepository _repository;
 
   ///
   /// ref.invalidate(postListNotifierProvider);
   /// → 이걸 사용하면 build()가 다시 실행되어 API도 다시 호출됩니다.
   /// (일종의 프로바이더 리셋 기능)
+  ///
   @override
-  FutureOr<List<Post>> build() async {
-    QcLog.d('build 초기화');
+  AsyncValue<Either<Failure, List<Post>>> build() {
     _repository = ref.read(postRepositoryProvider);
-    return await _fetchPosts();
+    // return const AsyncValue.loading(); // 초기값
+    return const AsyncValue.data(Right(<Post>[])); // 초기값으로 빈 Post 리스트
   }
 
-  Future<List<Post>> _fetchPosts() async {
+  /// 데이터를 가져오는 메서드
+  Future<void> fetchPosts() async {
+    state = const AsyncValue.loading();
     try {
-      final posts = await _repository.getPosts();
-      await Future.delayed(Duration(seconds: 1)); // 테스트용 지연
-      return posts;
+      final postsOrFailure = await _repository.getPosts();
+      state = AsyncValue.data(postsOrFailure); // Either<Failure, List<Post>>
     } catch (e, st) {
-      // build()에서 예외 발생 시 상태가 AsyncError가 됨
-      rethrow;
+      state = AsyncValue.error(e, st);
     }
   }
 
-  Future<void> refreshPosts() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async => await _fetchPosts());
+  /// 초기화 메서드
+  void resetPosts() {
+    state = const AsyncValue.data(Right(<Post>[]));
   }
 
-  void resetPosts() {
-    state = const AsyncData([]); // 상태 초기화
+  /// 새로고침 메서드
+  Future<void> refreshPosts() async {
+    try {
+      state = const AsyncValue.loading();
+      final postsOrFailure = await _repository.getPosts();
+      state = AsyncValue.data(postsOrFailure);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
   }
 }

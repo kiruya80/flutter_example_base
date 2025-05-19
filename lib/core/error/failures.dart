@@ -49,3 +49,14 @@ Failure mapExceptionToFailure(Exception e) {
     return ServerFailure("알 수 없는 오류");
   }
 }
+
+String mapFailureToMessage(Failure failure) {
+  if (failure is CacheFailure) {
+    return 'Could not retrieve cached data.';
+  }
+  return 'Unexpected error';
+}
+
+Exception mapFailureToException(Failure failure) {
+  return Exception(mapFailureToMessage(failure));
+}

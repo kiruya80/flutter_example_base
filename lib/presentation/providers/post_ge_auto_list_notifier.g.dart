@@ -7,13 +7,13 @@ part of 'post_ge_auto_list_notifier.dart';
 // **************************************************************************
 
 String _$postGeAutoListNotifierHash() =>
-    r'012dd3026537c5af4a0111de813b55274026f0fb';
+    r'45711abdc465b5fa57551b032aa23b06b0f45d4b';
 
 /// See also [PostGeAutoListNotifier].
 @ProviderFor(PostGeAutoListNotifier)
-final postGeAutoListNotifierProvider = AutoDisposeNotifierProvider<
+final postGeAutoListNotifierProvider = AutoDisposeAsyncNotifierProvider<
   PostGeAutoListNotifier,
-  AsyncValue<List<Post>>
+  AsyncValue<Either<Failure, List<Post>>>
 >.internal(
   PostGeAutoListNotifier.new,
   name: r'postGeAutoListNotifierProvider',
@@ -25,6 +25,7 @@ final postGeAutoListNotifierProvider = AutoDisposeNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$PostGeAutoListNotifier = AutoDisposeNotifier<AsyncValue<List<Post>>>;
+typedef _$PostGeAutoListNotifier =
+    AutoDisposeAsyncNotifier<AsyncValue<Either<Failure, List<Post>>>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

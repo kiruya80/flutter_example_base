@@ -6,22 +6,26 @@ part of 'post_ge_list_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postListNotifierHash() => r'55682430af01744acf6e945e12751fa0812ff172';
+String _$postGeListNotifierHash() =>
+    r'e7b3b5f955eaff7fc19f9f98025f8168ff7e146e';
 
-/// See also [PostListNotifier].
-@ProviderFor(PostListNotifier)
-final postListNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<PostListNotifier, List<Post>>.internal(
-      PostListNotifier.new,
-      name: r'postListNotifierProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$postListNotifierHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+/// See also [PostGeListNotifier].
+@ProviderFor(PostGeListNotifier)
+final postGeListNotifierProvider = AutoDisposeNotifierProvider<
+  PostGeListNotifier,
+  AsyncValue<Either<Failure, List<Post>>>
+>.internal(
+  PostGeListNotifier.new,
+  name: r'postGeListNotifierProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$postGeListNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
-typedef _$PostListNotifier = AutoDisposeAsyncNotifier<List<Post>>;
+typedef _$PostGeListNotifier =
+    AutoDisposeNotifier<AsyncValue<Either<Failure, List<Post>>>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
