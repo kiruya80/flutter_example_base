@@ -81,7 +81,7 @@ dependencies:
   # App추가 / 토스트 2 / BSD-3-Clause / https://pub.dev/packages/toastification
   #  toastification: ^3.0.2
   # App추가 / 모델 Helper / BSD-3-Clause / https://github.com/google/json_serializable.dart/tree/master/json_annotation
-#  json_annotation: ^4.9.0
+  json_annotation: ^4.9.0
   # App추가 / 표준화 국제화 날짜 숫자등 / BSD-3-Clause / https://pub.dev/packages/intl
   #  intl: ^0.18.1
   # App추가 / 로컬 노티피케이션 / BSD-3-Clause / https://github.com/MaikuB/flutter_local_notifications/tree/master/flutter_local_notifications

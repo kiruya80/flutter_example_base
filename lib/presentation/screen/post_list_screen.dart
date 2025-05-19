@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../utils/print_log.dart';
 import '../providers/post_list_notifier.dart';
 
 
@@ -8,6 +9,7 @@ class PostListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    QcLog.d('PostListScreen === ');
     final postListAsync = ref.watch(postListNotifierProvider);
     final postListNotifier = ref.read(postListNotifierProvider.notifier);
 
@@ -30,6 +32,7 @@ class PostListScreen extends ConsumerWidget {
           itemCount: posts.length,
           itemBuilder: (_, index) {
             final post = posts[index];
+            QcLog.d('post toJson === ${post.toJson()}');
             return ListTile(
               title: Text(post.title),
               subtitle: Text(post.body),
