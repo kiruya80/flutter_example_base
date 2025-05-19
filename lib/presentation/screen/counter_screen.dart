@@ -5,8 +5,8 @@ import '../widgets/counter_display.dart';
 import '../widgets/counter_ge_display.dart';
 import '../widgets/increment_button.dart';
 
-class CounterPage extends ConsumerWidget {
-  const CounterPage({super.key});
+class CounterScreen extends ConsumerWidget {
+  const CounterScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
