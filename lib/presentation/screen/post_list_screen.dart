@@ -10,7 +10,10 @@ class PostListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     QcLog.d('PostListScreen === ');
+    /// AsyncValue<List<Post>> 형태의 상태 값을 가져옴
     final postListAsync = ref.watch(postListNotifierProvider);
+
+    /// PostListNotifier 인스턴스를 가져옴
     final postListNotifier = ref.read(postListNotifierProvider.notifier);
 
     return Scaffold(
