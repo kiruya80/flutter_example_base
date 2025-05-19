@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/presentation/pages/counter_page.dart';
+import 'package:flutter_example_base/presentation/screen/post_list_screen.dart';
 import 'package:flutter_example_base/utils/print_log.dart';
 
 class MyApp extends StatelessWidget {
@@ -12,7 +12,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-      home: const CounterPage(),
+      // home: const CounterScreen(),
+      home: const PostListScreen(),
     );
   }
 }
