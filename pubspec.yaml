@@ -45,7 +45,7 @@ dependencies:
 
   # [Network]
   # App추가 / 통신모듈 / MIT / https://github.com/cfug/dio/tree/main/dio
-#  dio: ^5.8.0+1
+  dio: ^5.8.0+1
   # App추가 / 통신모듈 / BSD-3-Clause / https://pub.dev/packages/http
   http: ^1.4.0
   # App추가 / 통신모듈 / MIT / https://github.com/trevorwang/retrofit.dart
