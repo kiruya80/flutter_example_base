@@ -7,3 +7,8 @@ abstract class Failure {
 class CacheFailure extends Failure {
   const CacheFailure(String message) : super(message);
 }
+
+class CacheException implements Exception {
+  final String message;
+  CacheException(this.message);
+}

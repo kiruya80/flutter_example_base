@@ -1,10 +1,11 @@
-import 'package:flutter_example_base/state/shared_prefs_provider.dart';
+import 'package:flutter_example_base/data/providers/shared_prefs_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/data_sources/local/local_counter_datasource.dart';
-import '../data/data_sources/local/local_counter_datasource_impl.dart';
-import '../data/repositories/counter_repository_impl.dart';
-import '../domain/repositories/counter_repository.dart';
+import '../data_sources/local/local_counter_datasource.dart';
+import '../data_sources/local/local_counter_datasource_impl.dart';
+import '../repositories/counter_repository_impl.dart';
+import '../../domain/repositories/counter_repository.dart';
+
 
 ///
 /// DB

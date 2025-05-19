@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/presentation/pages/counter_page.dart';
 import 'package:flutter_example_base/utils/print_log.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,4 +16,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

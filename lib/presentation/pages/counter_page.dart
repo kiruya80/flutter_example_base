@@ -10,9 +10,7 @@ class CounterPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final sharedPreferencesState = ref.watch(sharedPreferencesProvider);
 
-    // SharedPreferences 로딩이 완료되면 CounterPage UI를 빌드합니다.
     return Scaffold(
       appBar: AppBar(title: const Text('Counter App')),
       body: SingleChildScrollView(

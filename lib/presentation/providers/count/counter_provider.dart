@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/entities/counter.dart';
-import '../../domain/usecases/get_counter_value.dart';
-import '../../domain/usecases/increment_counter.dart';
-import '../../domain/usecases/reset_counter.dart';
-import '../repository_providers.dart';
+import '../../../domain/entities/counter.dart';
+import '../../../domain/usecases/get_counter_value.dart';
+import '../../../domain/usecases/increment_counter.dart';
+import '../../../domain/usecases/reset_counter.dart';
+import '../../../data/providers/local_repository_providers.dart';
 import 'counter_state_notifier.dart';
 
 final incrementCounterProvider = Provider<IncrementCounter>((ref) {

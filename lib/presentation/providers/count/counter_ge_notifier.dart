@@ -1,9 +1,9 @@
 import 'package:flutter_example_base/utils/print_log.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../core/error/failures.dart';
-import '../../core/usecases/usecase.dart';
-import '../../domain/entities/counter.dart';
+import '../../../core/error/failures.dart';
+import '../../../core/usecases/usecase.dart';
+import '../../../domain/entities/counter.dart';
 import 'counter_provider.dart';
 
 part 'counter_ge_notifier.g.dart';
@@ -16,6 +16,11 @@ class CounterGeNotifier extends _$CounterGeNotifier {
   late final getValueUseCase;
   late final resetCounterUseCase;
 
+  ///
+  /// @riverpod에서는 생성자에 의존성을 넣지 않고, 반드시 build() 안에서 주입해야 합니다.
+  /// build애서 의존성을 주입하는 구조이기세
+  /// ref.read(incrementCounterProvider); 같이 사용 가능
+  ///
   @override
   FutureOr<Counter> build() async {
     QcLog.d('build 초기화');

@@ -15,15 +15,24 @@ flutter pub run build_runner build
 ✅ 요약
 lib/
 ├── core/         # 전역 에러 처리, 공통 타입 등 앱의 핵심 요소
-├── data/         # 외부 연동 (API, DB 등) 및 모델/구현
-├── domain/       # 비즈니스 로직: 엔티티, 유스케이스, 추상화 레포지토리
-├── presentation/ # UI 화면 및 위젯
+├── data/         ## 외부 연동 (API, DB 등) 및 모델/구현
+├── domain/       ## 비즈니스 로직: 엔티티, 유스케이스, 추상화 레포지토리
+├── presentation/ ## UI 화면 및 위젯
 ├── state/        # 상태관리 관련 (Provider, Notifier, ViewModel 등)
 ├── utils/        # 헬퍼 클래스, 유틸성 기능 (formatter, validator 등)
 ├── main.dart     # 앱 진입점
 
 ✅이벤트 흐름
 [presentaion]widget > [state]provider(Notifier) > [domain]usecase > repositories 추상화 | [data] repositories
+Presentation (UI)
+↓        ↑
+Provider (StateNotifier / AsyncNotifier)
+↓
+UseCase (Application Logic)
+↓
+Repository (Domain abstraction)
+↓
+Data Source (API, DB, etc)
 
 ✅ core/
 앱 전역에서 사용하는 공통 요소, 예외 처리, 상수 등
@@ -38,10 +47,10 @@ typedef          typedefs.dart
 ✅ data/
 외부 소스 연동 및 domain 레이어 구현
 
-하위 폴더       역할                     예시
-data_sources/   API, DB, SharedPrefs 등  counter_local_data_source.dart
-models/         DTO 모델                 counter_model.dart  
-repositories/   domain 추상화 구현       counter_repository_impl.dart
+하위 폴더       역할                              예시
+data_sources/   API, DB, SharedPrefs 등           counter_local_data_source.dart
+models/         JSON ↔ 객체 변환 모델 (DTO 등)    counter_model.dart  
+repositories/   domain 레포지토리 추상화 구현     counter_repository_impl.dart
 
 
 ✅ domain/

@@ -1,23 +1,24 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/error/failures.dart';
 import 'local_counter_datasource.dart';
 
 class LocalCounterDataSourceImpl implements LocalCounterDataSource {
-  final SharedPreferences sharedPreferences;
+  final SharedPreferences prefs;
 
-  LocalCounterDataSourceImpl(this.sharedPreferences);
+  LocalCounterDataSourceImpl(this.prefs);
 
   Future<void> _ensureCounterExists() async {
-    final value = sharedPreferences.getInt('counter');
+    final value = prefs.getInt('counter');
     if (value == null) {
-      await sharedPreferences.setInt('counter', 0); // 초기값 0 저장
+      await prefs.setInt('counter', 0); // 초기값 0 저장
     }
   }
 
   @override
   Future<int> getCounter() async {
     await _ensureCounterExists(); // 카운터 값 존재 확인 및 초기화
-    final value = sharedPreferences.getInt('counter');
+    final value = prefs.getInt('counter');
     if (value != null) {
       return value;
     } else {
@@ -27,11 +28,6 @@ class LocalCounterDataSourceImpl implements LocalCounterDataSource {
 
   @override
   Future<void> saveCounter(int value) async {
-    await sharedPreferences.setInt('counter', value);
+    await prefs.setInt('counter', value);
   }
-}
-
-class CacheException implements Exception {
-  final String message;
-  CacheException(this.message);
 }

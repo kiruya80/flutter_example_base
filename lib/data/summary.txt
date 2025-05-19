@@ -1,31 +1,27 @@
-[data]
-lib/
-├── data/              ← 외부 데이터와의 실제 연결 (DB, API 등)
+✅ 요약 : 외부 연동 (API, DB 등) 및 모델/구현
 
 data/
 ├── data_sources/      ← 실제 데이터 원천 (API 호출, DB, shared_preferences 등)
 ├── models/            ← JSON ↔ 객체 변환 모델 (DTO 등)
 ├── repositories/      ← domain의 레포지토리 구현체
 
-폴더 /  설명
-data_sources / 예: RemoteDataSource, LocalDataSource 등 외부 호출
-models / JSON 직렬화/역직렬화 클래스, toEntity()/fromJson()
-repositories / CounterRepositoryImpl implements CounterRepository 처럼 domain의 추상 클래스 구현
-
-
-data/
-실제 구현
-Memory 기반 Repository 구현
-
 역할
 외부 의존성 구현 (API, DB, Cache 등)  Repository 구현
 
-Provider 정의 여부
-❌ Provider 정의 X  (단, 구현체는 여기서 작성)
-Data는 구현만 담당하고, 상태를 갖지 않기 때문에 Provider가 필요 없습니다.
+└── data/
+    ├── datasources/
+    │   ├── post_api.dart              <-- ✅ API 호출 구현
+    │   ├── post_api_provider.dart     <-- ✅ API provider
+    │   └── post_local_db.dart         <-- ✅ 로컬 DB 접근
+    └── repositories/ post_repository_impl.dart (domain/repositories/post_repository.dart에 정의된 인터페이스를 만족시키는 구현체)
 
-[트리구조]
-data_sources - 로컬db 또는 api
-models - repositories에서 사용
-repositories - domain(repositories)의 추상화 클래스를 상속받아 구현
+[UI] (presentation)
+  ↳ postController (StateNotifier)
+
+    ↳ useCase (domain)
+      ↳ repository (domain)
+
+        ↳ repositoryImpl (data)
+          ↳ apiProvider / localDbProvider (data)
+
 
