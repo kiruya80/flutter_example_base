@@ -1,0 +1,27 @@
+✅ 요약 : 외부 연동 (API, DB 등) 및 모델/구현
+
+data/
+├── data_sources/      ← 실제 데이터 원천 (API 호출, DB, shared_preferences 등)
+├── models/            ← JSON ↔ 객체 변환 모델 (DTO 등)
+├── repositories/      ← domain의 레포지토리 구현체
+
+역할
+외부 의존성 구현 (API, DB, Cache 등)  Repository 구현
+
+└── data/
+    ├── datasources/
+    │   ├── post_api.dart              <-- ✅ API 호출 구현
+    │   ├── post_api_provider.dart     <-- ✅ API provider
+    │   └── post_local_db.dart         <-- ✅ 로컬 DB 접근
+    └── repositories/ post_repository_impl.dart (domain/repositories/post_repository.dart에 정의된 인터페이스를 만족시키는 구현체)
+
+[UI] (presentation)
+  ↳ postController (StateNotifier)
+
+    ↳ useCase (domain)
+      ↳ repository (domain)
+
+        ↳ repositoryImpl (data)
+          ↳ apiProvider / localDbProvider (data)
+
+

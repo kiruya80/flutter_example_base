@@ -1,0 +1,5 @@
+✅ 요약 : UI 화면 및 위젯
+
+presentation/
+├── pages/             ← 각 화면 단위 (예: HomePage, SettingsPage)
+├── widgets/           ← 재사용 가능한 위젯 모음
