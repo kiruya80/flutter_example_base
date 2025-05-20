@@ -7,9 +7,25 @@ part of 'post_ge_auto_list_notifier.dart';
 // **************************************************************************
 
 String _$postGeAutoListNotifierHash() =>
-    r'45711abdc465b5fa57551b032aa23b06b0f45d4b';
+    r'b17bc10237dcd21c52807b098cf452e55d93c045';
 
-/// See also [PostGeAutoListNotifier].
+///
+/// 초기값으로 api 호출
+///
+/// Future<AsyncValue<...>>
+/// ❌ 직접 state = ... 불가능
+/// ✅ AsyncNotifier에서 초기 로딩 상태 포함한 패턴
+///
+/// Future<void> 또는 void
+/// ✅ state = ... 직접 조작 가능
+/// ✅ AsyncNotifier에서 상태 수동으로 관리할 때 사용
+///
+/// 초기에 데이터를 로딩하고 이후에 state를 변경하려면
+///
+/// @override
+///
+///
+/// Copied from [PostGeAutoListNotifier].
 @ProviderFor(PostGeAutoListNotifier)
 final postGeAutoListNotifierProvider = AutoDisposeAsyncNotifierProvider<
   PostGeAutoListNotifier,

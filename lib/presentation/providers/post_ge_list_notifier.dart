@@ -10,6 +10,9 @@ import '../../utils/print_log.dart';
 
 part 'post_ge_list_notifier.g.dart';
 
+///
+/// 빌드시 초기값으로 []
+///
 @riverpod
 class PostGeListNotifier extends _$PostGeListNotifier {
   late final PostRepository _repository;

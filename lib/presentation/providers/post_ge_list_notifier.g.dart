@@ -7,9 +7,13 @@ part of 'post_ge_list_notifier.dart';
 // **************************************************************************
 
 String _$postGeListNotifierHash() =>
-    r'e7b3b5f955eaff7fc19f9f98025f8168ff7e146e';
+    r'7432d978569f8f333e6af194ac7842232af04ce7';
 
-/// See also [PostGeListNotifier].
+///
+/// 빌드시 초기값으로 []
+///
+///
+/// Copied from [PostGeListNotifier].
 @ProviderFor(PostGeListNotifier)
 final postGeListNotifierProvider = AutoDisposeNotifierProvider<
   PostGeListNotifier,
