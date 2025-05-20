@@ -98,3 +98,108 @@ lib/
 │       ├── presentation/
 │       ├── state/
 
+## 리버팟
+flutter pub run build_runner build --delete-conflicting-outputs
+flutter pub run build_runner build
+
+✅ autoDispose
+AutoDisposeNotifierProvider - @riverpod 또는 @Riverpod()
+    @Riverpod()
+    @riverpod
+    class Counter extends _$Counter
+
+NotifierProvider
+    @Riverpod(keepAlive: true)
+    class PersistentCounter extends _$PersistentCounter
+
+
+✅ build() 함수의 반환 타입에 따른 구분
+@override
+int build() {
+    return 0;
+}
+
+[Notifier]
+@override
+T build()
+
+build 반환 타입 : T
+Provider 종류 : NotifierProvider<TNotifier, T>
+Provider 반환 타입 : ref.watch(...) →T
+설명 : 동기 상태를 다루는 일반 Notifier
+state : T 
+state = newValue
+
+ref.read(userNameNotifierProvider.notifier).setUserName(value);
+
+[AsyncNotifier]
+@override
+Future<T> build()
+@override
+FutureOr<T> build()
+
+build 반환 타입 : Future<T> 또는 FutureOr<T> 
+Provider 종류 : AsyncNotifierProvider<TNotifier, T>
+Provider 반환 타입 : ref.watch(...) → AsyncValue<T>
+설명 : 비동기 상태 처리, AsyncLoading, AsyncError, AsyncData 등 사용
+state : AsyncValue<T>
+AsyncValue<T>는 비동기 작업의 3가지 상태를 표현하는 추상 클래스
+AsyncLoading : state = const AsyncValue.loading();
+AsyncData<T> : state = AsyncValue.data(T),
+AsyncError : state = AsyncValue.error(_mapFailureToMessage(failure), StackTrace.current),
+
+AsyncValue.guard는 비동기 작업을 안전하게 실행하고, 자동으로 AsyncLoading → AsyncData / AsyncError 상태로 감싸주는 헬퍼 함수
+(try-catch를 쓰는 코드를 간결)
+Future<void> refreshPosts() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => ref.read(postRepositoryProvider).getPosts());
+}
+
+widget에서
+final state = ref.watch(postListNotifierProvider);
+state.when(
+    loading: () => CircularProgressIndicator(),
+    data: (posts) => ListView(...),
+    error: (e, st) => Text('오류 발생: $e'),
+);
+switch (state) {
+    AsyncData(:final value) => ...,
+    AsyncError(:final error) => ...,
+    AsyncLoading() => ...,
+};
+🔍 Future vs FutureOr
+•	Future<T>: 항상 await 필요
+•	FutureOr<T>: T 타입이거나 Future<T> 둘 다 가능 → 동기/비동기 혼합 처리할 수 있음
+
+[FutureProvider]
+
+build 반환 타입 : Stream<T>
+Provider 종류 : StreamNotifierProvider<TNotifier, T>
+Provider 반환 타입 : ref.watch(...) → AsyncValue<T>
+설명 : 비동기 상태 처리, AsyncLoading, AsyncError, AsyncData 등 사용
+state :
+스트림 기반의 상태 처리
+
+✨ 정리
+
+build()에서 사용할 수 있는 주요 반환 타입:
+•	T (예: int, List<Post>) → 일반 Notifier
+•	Future<T> / FutureOr<T> → AsyncNotifier (비동기)
+•	Stream<T> → StreamNotifier
+•	AsyncValue<T> / AsyncValue<Either<Failure, T>> → 상태를 명시적으로 관리할 때 유용
+
+👉 일반적인 API 통신에는 AsyncValue<Either<Failure, T>> 구조를 추천합니다.
+
+build() 반환 타입                   생성되는 Provider 타입                 설명
+T (int, String, List, bool, etc.)   AutoDisposeProvider<T>                 기본 동기 Provider
+Future<T> 또는 FutureOr<T>          AutoDisposeFutureProvider<T>           비동기 Future Provider
+Stream<T>                           AutoDisposeStreamProvider<T>           스트림 Provider
+Notifier<T>                         AutoDisposeNotifierProvider<T>         동기 상태 관리
+AsyncNotifier<T>                    AutoDisposeAsyncNotifierProvider<T>    비동기 상태 관리
+
+
+
+
+ 
+ 
+
