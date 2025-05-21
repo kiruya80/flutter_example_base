@@ -54,25 +54,11 @@ class PostGeAutoListNotifier extends _$PostGeAutoListNotifier {
     }
   }
 
+  ///
+  /// Future<AsyncValue<...>> 반환값인 경우는 state 값 조작 불가
+  /// Future<void> 또는 void 반환값은 가능
+  ///
   void resetPosts()   {
-    // Either<Failure, List<Post>> emptyPostListResult = Right(<Post>[]);
-    // // Either 값을 확인하는 방법
-    // emptyPostListResult.fold(
-    //       (failure) {
-    //     print('실패: $failure');
-    //   },
-    //       (postList) {
-    //     print('성공 (빈 리스트): $postList'); // 출력: 성공 (빈 리스트): []
-    //     print('리스트 타입: ${postList.runtimeType}'); // 출력: 리스트 타입: List<Post>
-    //   },
-    // );
-    // state =   AsyncData(Right([]) as AsyncValue<Either<Failure, List<Post>>>);
-    // state = AsyncValue.data(Right<List<Post>>([]));
-    // state = AsyncValue.data<Either<Failure, List<Post>>>(Right<List<Post>>([]));
-    // state = AsyncValue.data(Right(<Post>[]));
-    // state =   AsyncValue.data(Right(<Post>[]));
-    // state =   AsyncValue.data(Right([]));
-    // state =   AsyncValue.guard(() => Right(<Post>[]));
   }
 
   Future<void> refreshPosts() async {
