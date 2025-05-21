@@ -92,3 +92,5 @@ auto_route: ^8.1.3  # 의미: >=8.1.3 <9.0.0 허용
 
 yaml 파일까지 자동으로 업그레이드
 fvm flutter pub upgrade --major-versions
+
+# go router
