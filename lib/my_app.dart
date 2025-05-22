@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/presentation/routes/app_router.dart';
+import 'package:flutter_example_base/presentation/routes/app_routes.dart';
+import 'package:flutter_example_base/presentation/routes/tab_navigator/app_router.dart';
 
 import 'package:flutter_example_base/utils/print_log.dart';
 import 'package:go_router/go_router.dart';
@@ -20,11 +22,40 @@ class MyApp extends StatelessWidget {
     //     theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
     //     routerConfig: shellRouter);
 
+
+    // return MaterialApp.router(
+    //   routerConfig: shellRouter,
+    //   title: 'GoRouter Tabs Demo',
+    //   theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+    // );
+
+    /// 바텀네비게이터
     return MaterialApp.router(
       routerConfig: shellTabRouter,
       title: 'GoRouter Tabs Demo',
-      // theme: ThemeData(primarySwatch: Colors.blue),
-        theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+    );
+  }
+}
+
+/// 바텀네비게이터
+class ScaffoldWithNavBar extends StatelessWidget {
+  final StatefulNavigationShell shell;
+  const ScaffoldWithNavBar({super.key, required this.shell});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: shell,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: shell.currentIndex,
+        onTap: (index) => shell.goBranch(index),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
     );
   }
 }
@@ -34,7 +65,9 @@ class MainScaffold extends StatelessWidget {
   final Widget child;
   const MainScaffold({super.key, required this.child});
 
-  static const tabs = ['/home', '/search', '/profile'];
+  // static   List<String> tabs = ['/home', '/search', '/profile'];
+  static List<String>  tabs = [AppTabRoutes.home.path, AppTabRoutes.search.path,
+    AppTabRoutes.profile.path,];
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +80,10 @@ class MainScaffold extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex < 0 ? 0 : currentIndex,
         onTap: (index) => context.go(tabs[index]),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        items:   [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: AppTabRoutes.home.name),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: AppTabRoutes.search.name),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: AppTabRoutes.profile.name),
         ],
       ),
     );

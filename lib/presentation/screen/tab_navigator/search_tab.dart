@@ -1,39 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/presentation/screen/search_query_screen.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../utils/print_log.dart';
-import '../detail_screen.dart';
-
-
-final _homeNavKey = GlobalKey<NavigatorState>();
+import '../../routes/app_routes.dart';
 
 class SearchTab extends StatelessWidget {
+  const SearchTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: _homeNavKey,
-      onGenerateRoute: (settings) {
-        if (settings.name == '/search/detail') {
-          return MaterialPageRoute(
-            builder: (_) => DetailScreen(title: 'search Detail'),
-          );
-        }
-        return MaterialPageRoute(
-          builder: (_) => ProfileScreen2(),
-        );
-      },
-    );
-  }
-}
-class ProfileScreen2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        child: Text('Go to detail from search'),
-        onPressed: () => _homeNavKey.currentState?.pushNamed('/search/detail'),
+    return Scaffold(
+      appBar: AppBar(title: Text(AppTabRoutes.search.name)),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // context.go('/search/detail');
+            context.go('${AppTabRoutes.search.path}/${AppTabRoutes.search.path}');
+          },
+          child: Text('Go to search Detail'),
+        ),
       ),
     );
   }

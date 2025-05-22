@@ -1,4 +1,4 @@
-import 'package:flutter_example_base/presentation/screen/login_screen.dart';
+import 'package:flutter_example_base/presentation/screen/move/login_screen.dart';
 import 'package:go_router/go_router.dart';
 
 import 'app_routes.dart';

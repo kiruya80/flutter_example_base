@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../utils/print_log.dart';
+import '../../../utils/print_log.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
