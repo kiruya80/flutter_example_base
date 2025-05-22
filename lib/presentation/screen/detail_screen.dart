@@ -3,24 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_example_base/utils/print_log.dart';
 import 'package:go_router/go_router.dart';
 
-class DetailPathScreen extends StatefulWidget {
-  final String? id;
+class DetailScreen extends StatefulWidget {
+  final String? title;
 
-  const DetailPathScreen({super.key, this.id});
+  const DetailScreen({super.key, this.title});
 
   @override
-  State<DetailPathScreen> createState() => _DetailPathScreenState();
+  State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailPathScreenState extends State<DetailPathScreen> {
+class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
-    QcLog.d('DetailPathScreen ===== ${widget.id}');
+    QcLog.d('DetailScreen =====  ');
     return Scaffold(
-      appBar: AppBar(title: const Text('Details')),
+      appBar: AppBar(title:   Text('${widget.title}')),
       body: Column(
         children: [
-          Text('id : ${widget.id}'),
           ElevatedButton(
             onPressed: () {
               if (context.canPop()) {

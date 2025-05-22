@@ -14,7 +14,8 @@ final List<GoRoute> homeRoutes = [
       path: AppRoutes.home.path,
       builder: (context, state) => const HomeScreen()),
   GoRoute(
-    path: '/detail/:id',
+    name: AppRoutes.detail.name,
+    path: AppRoutes.detail.path,
     builder: (context, state) {
       final id = state.pathParameters['id']!;
       return DetailPathScreen(id: id);
