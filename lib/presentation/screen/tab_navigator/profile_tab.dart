@@ -17,7 +17,7 @@ class ProfileTab extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // context.go('/profile/detail');
-            context.go('${AppTabRoutes.profile.path}/${AppTabRoutes.detail.path}');
+            context.go('${AppTabRoutes.profile.path}/${AppTabRoutes.profileDetail.path}');
           },
           child: Text('Go to profile Detail'),
         ),

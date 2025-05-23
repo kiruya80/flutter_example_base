@@ -46,8 +46,8 @@ final List<GoRoute> homeTabRoutes = [
       /// 'detail'   실제 라우팅 결과:  /home/detail      ✅ 상대경로로 이어짐
       /// 'xxx' 는 상대경로 ,'/detail'  절대경로 하면 안 됨
       GoRoute(
-        name: AppTabRoutes.detail.name,
-        path: AppTabRoutes.detail.path,
+        name: AppTabRoutes.homeDetail.name,
+        path: AppTabRoutes.homeDetail.path,
         builder: (context, state) {
           final id = state.pathParameters['id'];
           return DetailScreen(id: id);

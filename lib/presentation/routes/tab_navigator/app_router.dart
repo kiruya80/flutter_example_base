@@ -43,14 +43,14 @@ final GoRouter shellTabRouter = GoRouter(
                 // ),
                 /// path parameter 사용하기
                 GoRoute(
-                  name: AppTabRoutes.detail.name,
-                  path: '${AppTabRoutes.detail.path}/:id',
+                  name: AppTabRoutes.homeDetail.name,
+                  path: '${AppTabRoutes.homeDetail.path}/:id',
                   builder: (context, state) {
-                    final id = state.pathParameters['id'];
-                    final title = state.uri.queryParameters['title'] ?? '';
-                    QcLog.d('detail === $id , $title');
-                    return DetailScreen(id: id, title: title,);
-                    // return DetailScreen(title: 'home Detail');
+                    // final id = state.pathParameters['id'];
+                    // final title = state.uri.queryParameters['title'] ?? '';
+                    // QcLog.d('detail === $id , $title');
+                    // return DetailScreen(id: id, title: title,);
+                    return DetailScreen(title: 'home Detail');
                   },
                 ),
               ],
@@ -65,13 +65,19 @@ final GoRouter shellTabRouter = GoRouter(
               name: AppTabRoutes.search.name,
               path: AppTabRoutes.search.path,
               pageBuilder: (context, state) => NoTransitionPage(child: SearchTab()),
-              // routes: [
-              //   GoRoute(
-              //     name: AppTabRoutes.detail.name,
-              //     path: AppTabRoutes.detail.path,
-              //     builder: (context, state) => DetailScreen(title: 'search Detail'),
-              //   ),
-              // ],
+              routes: [
+                GoRoute(
+                  name: AppTabRoutes.searchDetail.name,
+                  path: AppTabRoutes.searchDetail.path,
+                  builder: (context, state) {
+                    final id = state.pathParameters['id'];
+                    final title = state.uri.queryParameters['title'] ?? '';
+                    QcLog.d('detail === $id , $title');
+                    return DetailScreen(id: id, title: title,);
+                    return DetailScreen(title: 'search Detail');
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -83,13 +89,13 @@ final GoRouter shellTabRouter = GoRouter(
               name: AppTabRoutes.profile.name,
               path: AppTabRoutes.profile.path,
               pageBuilder: (context, state) => NoTransitionPage(child: ProfileTab()),
-              // routes: [
-              //   GoRoute(
-              //     name: AppTabRoutes.detail.name,
-              //     path: AppTabRoutes.detail.path,
-              //     builder: (context, state) => DetailScreen(title: 'profile Detail'),
-              //   ),
-              // ],
+              routes: [
+                GoRoute(
+                  name: AppTabRoutes.profileDetail.name,
+                  path: AppTabRoutes.profileDetail.path,
+                  builder: (context, state) => DetailScreen(title: 'profile Detail'),
+                ),
+              ],
             ),
           ],
         ),

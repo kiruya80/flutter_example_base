@@ -29,15 +29,38 @@ class AppTabRoutes {
   static final search = RouteRegistry.register('search', '/search');
   static final profile = RouteRegistry.register('profile', '/profile');
 
-  // 상대 경로 예시
-  static final detail = RouteRegistry.register('homeDetail', 'detail');
+  // 상대경로 예시: 홈 탭 안의 디테일 화면
+  static final homeDetail = RouteRegistry.register('homeDetail', 'detail');
+  // 파라미터가 필요한 경로 예시
+  static final searchDetail = RouteRegistry.register('searchDetail', 'detail/:id');
+  static final profileDetail = RouteRegistry.register('profileDetail', 'detail');
 
-  /// context.go(AppTabRoutes.detailPath('123'));
+
   ///
+  /// 헬퍼 예시 context.go 를 사용할 때
   /// context.goNamed(
   ///   AppTabRoutes.detail.name,
   ///   queryParameters: {'id': '123'},
   /// );
-  static String detailPath(String id) => '${home.path}/${detail.path}?id=$id';
+  /// 예: /search/detail/123
+  /// context.go(AppTabRoutes.searchDetailPath('123'));
+  /// context.go(AppTabRoutes.searchDetailFullPath(
+  ///   id: '123',
+  ///   query: {'tab': 'review', 'sort': 'asc'},
+  /// ));
+  ///  👉 /search/detail/123?tab=review&sort=asc
+  ///
+  static String searchDetailPath(String id) =>'${home.path}/${searchDetail.pathWithParams({'id': id})}';
+  // static String searchDetailPath(String id) => '${home.path}/${detail.path}?id=$id';
+
+  /// 예: /search/detail/123?tab=review&sort=asc
+  static String searchDetailFullPath({
+    required String id,
+    Map<String, String> query = const {},
+  }) {
+    final path = searchDetail.pathWithParams({'id': id});
+    final queryStr = searchDetail.queryString(query);
+    return '${search.path}/$path$queryStr';
+  }
 }
 

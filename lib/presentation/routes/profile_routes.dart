@@ -35,8 +35,8 @@ final List<GoRoute> profileTabRoutes = [
     pageBuilder: (context, state) => NoTransitionPage(child: ProfileTab()),
     routes: [
       GoRoute(
-        name: AppTabRoutes.detail.name,
-        // path: AppTabRoutes.detail.path,
+        name: AppTabRoutes.profileDetail.name,
+        // path: AppTabRoutes.profileDetail.path,
         path:'detail',
         builder: (context, state) => DetailScreen(title: 'profile Detail'),
       ),

@@ -25,9 +25,6 @@ import 'app_routes.dart';
 //   ),
 // ];
 
-///
-/// 홈탭
-///
 final List<GoRoute> searchTabRoutes = [
   GoRoute(
     name: AppTabRoutes.search.name,
@@ -35,10 +32,12 @@ final List<GoRoute> searchTabRoutes = [
     pageBuilder: (context, state) => NoTransitionPage(child: SearchTab()),
     routes: [
       GoRoute(
-        name: AppTabRoutes.detail.name,
-        // path: AppTabRoutes.detail.path,
+        name: AppTabRoutes.searchDetail.name,
+        // path: AppTabRoutes.searchDetail.path,
         path:'detail',
-        builder: (context, state) => DetailScreen(title: 'search Detail'),
+        builder: (context, state) {
+          return DetailScreen(title: 'search Detail');
+        },
       ),
     ],
   ),

@@ -21,7 +21,7 @@ class HomeTab extends StatelessWidget {
             //     context.pushNamed('details', pathParameters: {'id': '123'});
             /// path parameter 사용하기
             //     context.push('/home/detail/:id=aaaa?title=home');
-                context.goNamed(AppTabRoutes.detail.path, pathParameters: {'id': '123'}, queryParameters: {'title':'home'});
+                context.goNamed(AppTabRoutes.homeDetail.path, pathParameters: {'id': '123'}, queryParameters: {'title':'home'});
           },
           child: Text('Go to Home Detail'),
         ),
