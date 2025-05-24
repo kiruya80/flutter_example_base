@@ -29,75 +29,75 @@ final GoRouter shellTabRouter = GoRouter(
       },
       branches: [
         StatefulShellBranch(
-          // routes: homeTabRoutes
-          routes: [
-            GoRoute(
-              name: AppTabRoutes.home.name,
-              path: AppTabRoutes.home.path,
-              pageBuilder: (context, state) => NoTransitionPage(child: HomeTab()),
-              routes: [
-                // GoRoute(
-                //   name: AppTabRoutes.detail.name,
-                //   path: AppTabRoutes.detail.path,
-                //   builder: (context, state) => DetailScreen(title: 'home Detail'),
-                // ),
-                /// path parameter 사용하기
-                GoRoute(
-                  name: AppTabRoutes.homeDetail.name,
-                  path: '${AppTabRoutes.homeDetail.path}/:id',
-                  builder: (context, state) {
-                    // final id = state.pathParameters['id'];
-                    // final title = state.uri.queryParameters['title'] ?? '';
-                    // QcLog.d('detail === $id , $title');
-                    // return DetailScreen(id: id, title: title,);
-                    return DetailScreen(title: 'home Detail');
-                  },
-                ),
-              ],
-            ),
-          ],
+          routes: homeTabRoutes
+          // routes: [
+          //   GoRoute(
+          //     name: AppTabRoutes.home.name,
+          //     path: AppTabRoutes.home.path,
+          //     pageBuilder: (context, state) => NoTransitionPage(child: HomeTab()),
+          //     routes: [
+          //       // GoRoute(
+          //       //   name: AppTabRoutes.detail.name,
+          //       //   path: AppTabRoutes.detail.path,
+          //       //   builder: (context, state) => DetailScreen(title: 'home Detail'),
+          //       // ),
+          //       /// path parameter 사용하기
+          //       GoRoute(
+          //         name: AppTabRoutes.homeDetail.name,
+          //         path: '${AppTabRoutes.homeDetail.path}/:id',
+          //         builder: (context, state) {
+          //           // final id = state.pathParameters['id'];
+          //           // final title = state.uri.queryParameters['title'] ?? '';
+          //           // QcLog.d('detail === $id , $title');
+          //           // return DetailScreen(id: id, title: title,);
+          //           return DetailScreen(title: 'home Detail');
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ],
         ),
 
         StatefulShellBranch(
-          // routes: searchTabRoutes
-          routes: [
-            GoRoute(
-              name: AppTabRoutes.search.name,
-              path: AppTabRoutes.search.path,
-              pageBuilder: (context, state) => NoTransitionPage(child: SearchTab()),
-              routes: [
-                GoRoute(
-                  name: AppTabRoutes.searchDetail.name,
-                  path: AppTabRoutes.searchDetail.path,
-                  builder: (context, state) {
-                    final id = state.pathParameters['id'];
-                    final title = state.uri.queryParameters['title'] ?? '';
-                    QcLog.d('detail === $id , $title');
-                    return DetailScreen(id: id, title: title,);
-                    return DetailScreen(title: 'search Detail');
-                  },
-                ),
-              ],
-            ),
-          ],
+          routes: searchTabRoutes
+          // routes: [
+          //   GoRoute(
+          //     name: AppTabRoutes.search.name,
+          //     path: AppTabRoutes.search.path,
+          //     pageBuilder: (context, state) => NoTransitionPage(child: SearchTab()),
+          //     routes: [
+          //       GoRoute(
+          //         name: AppTabRoutes.searchDetail.name,
+          //         path: AppTabRoutes.searchDetail.path,
+          //         builder: (context, state) {
+          //           final id = state.pathParameters['id'];
+          //           final title = state.uri.queryParameters['title'] ?? '';
+          //           QcLog.d('detail === $id , $title');
+          //           return DetailScreen(id: id, title: title,);
+          //           return DetailScreen(title: 'search Detail');
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ],
         ),
 
         StatefulShellBranch(
-          // routes: profileTabRoutes
-          routes: [
-            GoRoute(
-              name: AppTabRoutes.profile.name,
-              path: AppTabRoutes.profile.path,
-              pageBuilder: (context, state) => NoTransitionPage(child: ProfileTab()),
-              routes: [
-                GoRoute(
-                  name: AppTabRoutes.profileDetail.name,
-                  path: AppTabRoutes.profileDetail.path,
-                  builder: (context, state) => DetailScreen(title: 'profile Detail'),
-                ),
-              ],
-            ),
-          ],
+          routes: profileTabRoutes
+          // routes: [
+          //   GoRoute(
+          //     name: AppTabRoutes.profile.name,
+          //     path: AppTabRoutes.profile.path,
+          //     pageBuilder: (context, state) => NoTransitionPage(child: ProfileTab()),
+          //     routes: [
+          //       GoRoute(
+          //         name: AppTabRoutes.profileDetail.name,
+          //         path: AppTabRoutes.profileDetail.path,
+          //         builder: (context, state) => DetailScreen(title: 'profile Detail'),
+          //       ),
+          //     ],
+          //   ),
+          // ],
         ),
       ],
       ///

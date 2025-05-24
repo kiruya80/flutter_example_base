@@ -36,9 +36,12 @@ final List<GoRoute> profileTabRoutes = [
     routes: [
       GoRoute(
         name: AppTabRoutes.profileDetail.name,
-        // path: AppTabRoutes.profileDetail.path,
-        path:'detail',
-        builder: (context, state) => DetailScreen(title: 'profile Detail'),
+        path: AppTabRoutes.profileDetail.path,
+        builder: (context, state) {
+          final id = state.pathParameters['id'];
+          final title = state.uri.queryParameters['title'] ?? '';
+          return DetailScreen(id: id, title: title);
+        },
       ),
     ],
   ),

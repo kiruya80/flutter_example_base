@@ -21,19 +21,16 @@ class SearchTab extends StatelessWidget {
             );
             QcLog.d('fullPath ==== $url');
 
-            context.go('${AppTabRoutes.home.path}/${AppTabRoutes.searchDetail.path}/123');
-            context.go('${AppTabRoutes.home.path}/${AppTabRoutes.searchDetail.pathWithParams({'id': '123'})}');
             context.go(AppTabRoutes.searchDetailPath('123'));
-
-            context.goNamed(
-              AppTabRoutes.searchDetail.name,
-              pathParameters: {'id': '123'},
-            );
+            // context.goNamed(
+            //   AppTabRoutes.searchDetail.name,
+            //   pathParameters: {'id': '123'},
+            // );
 
 // → /home/user/123?tab=settings
             // context.go('/search/detail');
           },
-          child: Text('Go to search Detail'),
+          child: Text('goNamed search Detail'),
         ),
       ),
     );

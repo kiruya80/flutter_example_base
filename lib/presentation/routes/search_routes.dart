@@ -8,9 +8,9 @@ import '../screen/tab_navigator/search_tab.dart';
 import 'app_routes.dart';
 
 ///
-/// home 모듈 전용 routes
+/// search 모듈 전용 routes
 ///
-// final List<GoRoute> homeRoutes = [
+// final List<GoRoute> searchRoutes = [
 //   GoRoute(
 //       name: AppRoutes.home.name,
 //       path: AppRoutes.home.path,
@@ -33,10 +33,11 @@ final List<GoRoute> searchTabRoutes = [
     routes: [
       GoRoute(
         name: AppTabRoutes.searchDetail.name,
-        // path: AppTabRoutes.searchDetail.path,
-        path:'detail',
+        path: AppTabRoutes.searchDetail.path,
         builder: (context, state) {
-          return DetailScreen(title: 'search Detail');
+          final id = state.pathParameters['id'];
+          final title = state.uri.queryParameters['title'] ?? '';
+          return DetailScreen(id: id, title:title);
         },
       ),
     ],

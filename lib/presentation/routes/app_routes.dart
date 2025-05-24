@@ -33,7 +33,7 @@ class AppTabRoutes {
   static final homeDetail = RouteRegistry.register('homeDetail', 'detail');
   // 파라미터가 필요한 경로 예시
   static final searchDetail = RouteRegistry.register('searchDetail', 'detail/:id');
-  static final profileDetail = RouteRegistry.register('profileDetail', 'detail');
+  static final profileDetail = RouteRegistry.register('profileDetail', 'detail/:id');
 
 
   ///
@@ -50,7 +50,7 @@ class AppTabRoutes {
   /// ));
   ///  👉 /search/detail/123?tab=review&sort=asc
   ///
-  static String searchDetailPath(String id) =>'${home.path}/${searchDetail.pathWithParams({'id': id})}';
+  static String searchDetailPath(String id) =>'${search.path}/${searchDetail.pathWithParams({'id': id})}';
   // static String searchDetailPath(String id) => '${home.path}/${detail.path}?id=$id';
 
   /// 예: /search/detail/123?tab=review&sort=asc

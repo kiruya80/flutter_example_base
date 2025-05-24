@@ -49,8 +49,9 @@ final List<GoRoute> homeTabRoutes = [
         name: AppTabRoutes.homeDetail.name,
         path: AppTabRoutes.homeDetail.path,
         builder: (context, state) {
-          final id = state.pathParameters['id'];
-          return DetailScreen(id: id);
+          // final id = state.pathParameters['id'];
+          // final title = state.uri.queryParameters['title'] ?? '';
+          return DetailScreen();
           // return DetailScreen(title: 'home Detail');
         },
       ),
