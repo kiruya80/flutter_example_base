@@ -31,9 +31,9 @@ class AppTabRoutes {
 
   // 상대경로 예시: 홈 탭 안의 디테일 화면
   static final homeDetail = RouteRegistry.register('homeDetail', 'detail');
-  // 파라미터가 필요한 경로 예시
-  static final searchDetail = RouteRegistry.register('searchDetail', 'detail/:id');
   static final profileDetail = RouteRegistry.register('profileDetail', 'detail/:id');
+  // 파라미터가 필요한 경로 예시
+  static final searchDetail = RouteRegistry.register('searchDetail', 'detail/:id' );
 
 
   ///
@@ -50,8 +50,18 @@ class AppTabRoutes {
   /// ));
   ///  👉 /search/detail/123?tab=review&sort=asc
   ///
-  static String searchDetailPath(String id) =>'${search.path}/${searchDetail.pathWithParams({'id': id})}';
+  // static String searchDetailPath(String id) =>'${search.path}/${searchDetail.pathWithParams({'id': id})}';
   // static String searchDetailPath(String id) => '${home.path}/${detail.path}?id=$id';
+  /// go() 전용 경로 만들기
+  static String searchDetailPath({
+    required String id,
+    Map<String, String> queryParams = const {},
+  }) {
+    return searchDetail.fullPath(
+      pathParams: {'id': id},
+      queryParams: queryParams,
+    );
+  }
 
   /// 예: /search/detail/123?tab=review&sort=asc
   static String searchDetailFullPath({
@@ -62,5 +72,15 @@ class AppTabRoutes {
     final queryStr = searchDetail.queryString(query);
     return '${search.path}/$path$queryStr';
   }
+
+  // static String profileDetailPath({
+  //   required String id,
+  //   Map<String, String> queryParams = const {},
+  // }) {
+  //   return profileDetail.fullPath(
+  //     pathParams: {'id': id},
+  //     queryParams: queryParams,
+  //   );
+  // }
 }
 

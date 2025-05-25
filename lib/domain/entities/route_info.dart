@@ -7,9 +7,12 @@
 class RouteInfo {
   final String name;
   final String path;
+  final String? prefixPath; // 탭 경로 등 앞에 붙일 경로
 
-  const RouteInfo(this.name, this.path);
+  const RouteInfo(this.name, this.path, {this.prefixPath});
+}
 
+extension RouteInfoHelper on RouteInfo {
   /// 예: /home/detail/123
   String pathWithParams(Map<String, String> pathParams) {
     var finalPath = path;
@@ -26,12 +29,23 @@ class RouteInfo {
   }
 
   /// 예: /home/detail/123?id=aaa
+  // String fullPath({
+  //   Map<String, String> pathParams = const {},
+  //   Map<String, String> queryParams = const {},
+  // }) {
+  //   final base = pathWithParams(pathParams);
+  //   final query = queryString(queryParams);
+  //   return '$base$query';
+  // }
+
+  /// 전체 경로 반환 (prefixPath 포함)
   String fullPath({
     Map<String, String> pathParams = const {},
     Map<String, String> queryParams = const {},
   }) {
-    final base = pathWithParams(pathParams);
+    final bodyPath = pathWithParams(pathParams);
     final query = queryString(queryParams);
-    return '$base$query';
+    final prefix = prefixPath != null ? '$prefixPath/' : '';
+    return '$prefix$bodyPath$query';
   }
 }

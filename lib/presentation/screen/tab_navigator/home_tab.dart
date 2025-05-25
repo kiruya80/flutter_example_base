@@ -2,29 +2,48 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/base_state.dart';
 import '../../../utils/print_log.dart';
 import '../../routes/app_routes.dart';
-import '../detail_screen.dart';
-import '../move/home_screen.dart';
+import '../../widgets/router_move_item.dart';
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
 
   @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends BaseState<HomeTab> {
+  @override
   Widget build(BuildContext context) {
+    QcLog.d('build ===== $isThisPageVisible');
+
     return Scaffold(
       appBar: AppBar(title: Text(AppTabRoutes.home.name)),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
-            //     context.pushNamed('details', pathParameters: {'id': '123'});
-            /// path parameter 사용하기
-            //     context.push('/home/detail/:id=aaaa?title=home');
-            //     context.goNamed(AppTabRoutes.homeDetail.path, pathParameters: {'id': '123'}, queryParameters: {'title':'home'});
-            context.goNamed(AppTabRoutes.homeDetail.name);
-          },
-          child: Text('Go to Home Detail'),
+        child: Column(
+          children: [
+            Text('context Go & Push'),
+            const SizedBox(height: 30),
+            RouterMoveItem('go(/home/detail)', () {
+              // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
+              //     context.pushNamed('details', pathParameters: {'id': '123'});
+              context.go('/home/detail');
+            }),
+
+            RouterMoveItem('go(/detail)', () {
+              context.go('/detail');
+            }, isError: true),
+
+            RouterMoveItem('push(/home/detail)', () {
+              context.push('/home/detail');
+            }),
+
+            RouterMoveItem('push(/detail)', () {
+              context.push('/detail');
+            }, isError: true),
+          ],
         ),
       ),
     );

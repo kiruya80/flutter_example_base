@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
     //     theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
     //     routerConfig: shellRouter);
 
-
     // return MaterialApp.router(
     //   routerConfig: shellRouter,
     //   title: 'GoRouter Tabs Demo',
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
 
     /// 바텀네비게이터
     return MaterialApp.router(
-      routerConfig: shellTabRouter,
+      routerConfig: AppRouter.shellTabRouter,
       title: 'GoRouter Tabs Demo',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
     );
@@ -41,6 +40,7 @@ class MyApp extends StatelessWidget {
 /// 바텀네비게이터
 class ScaffoldWithNavBar extends StatelessWidget {
   final StatefulNavigationShell shell;
+
   const ScaffoldWithNavBar({super.key, required this.shell});
 
   @override
@@ -49,25 +49,47 @@ class ScaffoldWithNavBar extends StatelessWidget {
       body: shell,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: shell.currentIndex,
-        onTap: (index) => shell.goBranch(index),
+        onTap: (index) {
+          // QcLog.d(
+          //   'state before ===== ${GoRouterState.of(context).topRoute.toString()} , ${GoRouterState.of(context).uri} , ${shell.currentIndex} ',
+          // );
+
+          TabChangeObserver.onTabChanged(index);
+          shell.goBranch(index);
+
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
         ],
       ),
     );
   }
 }
 
+class TabChangeObserver {
+  static int _lastIndex = 0;
+
+  static void onTabChanged(int newIndex) {
+    if (_lastIndex != newIndex) {
+      debugPrint('🟢 탭 변경: $_lastIndex -> $newIndex');
+      _lastIndex = newIndex;
+    }
+  }
+}
 
 class MainScaffold extends StatelessWidget {
   final Widget child;
+
   const MainScaffold({super.key, required this.child});
 
   // static   List<String> tabs = ['/home', '/search', '/profile'];
-  static List<String>  tabs = [AppTabRoutes.home.path, AppTabRoutes.search.path,
-    AppTabRoutes.profile.path,];
+  static List<String> tabs = [
+    AppTabRoutes.home.path,
+    AppTabRoutes.search.path,
+    AppTabRoutes.profile.path,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +102,7 @@ class MainScaffold extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex < 0 ? 0 : currentIndex,
         onTap: (index) => context.go(tabs[index]),
-        items:   [
+        items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: AppTabRoutes.home.name),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: AppTabRoutes.search.name),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: AppTabRoutes.profile.name),
