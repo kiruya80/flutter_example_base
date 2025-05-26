@@ -37,8 +37,8 @@ class _SearchTabState extends BaseState<SearchTab> {
       body: Center(
         child: Column(
           children: [
-            Text('context Go'),
-            const SizedBox(height: 30),
+            Text('context Go path'),
+            const SizedBox(height: 10),
 
             RouterMoveItem('go(/search/detail)', () {
               context.go('/search/detail');
@@ -52,6 +52,19 @@ class _SearchTabState extends BaseState<SearchTab> {
             RouterMoveItem('go(/search/detail/123?query=ddddddd)', () {
               context.go(AppTabRoutes.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
             }),
+
+            const SizedBox(height: 20),
+            Text('context push'),
+            const SizedBox(height: 10),
+
+            RouterMoveItem('push(/search/detail/123)', () {
+              context.push('/search/detail/123');
+            }),
+
+            RouterMoveItem('push(/search/detail/123?query=ddddddd)', () {
+              context.push(AppTabRoutes.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
+            }),
+
           ],
         ),
       ),

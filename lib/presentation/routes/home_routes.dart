@@ -10,18 +10,18 @@ import 'app_routes.dart';
 /// home 모듈 전용 routes
 ///
 final List<GoRoute> homeRoutes = [
-  GoRoute(
-      name: AppRoutes.home.name,
-      path: AppRoutes.home.path,
-      builder: (context, state) => const HomeScreen()),
-  GoRoute(
-    name: AppRoutes.detail.name,
-    path: AppRoutes.detail.path,
-    builder: (context, state) {
-      final id = state.pathParameters['id']!;
-      return DetailScreen(id: id);
-    },
-  ),
+  // GoRoute(
+  //     name: AppRoutes.home.name,
+  //     path: AppRoutes.home.path,
+  //     builder: (context, state) => const HomeScreen()),
+  // GoRoute(
+  //   name: AppRoutes.detail.name,
+  //   path: AppRoutes.detail.path,
+  //   builder: (context, state) {
+  //     final id = state.pathParameters['id']!;
+  //     return DetailScreen(id: id);
+  //   },
+  // ),
 ];
 
 ///

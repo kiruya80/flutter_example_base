@@ -10,8 +10,9 @@ push()  스택 위에 새 라우트를 추가
 
 메서드                  설명             스택 유지      라우트 이름 지원
 context.go(...)         전체 리셋 이동    ❌           ✅ 경로 기반
-context.push(...)       스택에 추가       ✅           ✅ 경로 기반
 context.goNamed(...)    이름 기반 이동    ❌           ✅
+
+context.push(...)       스택에 추가       ✅           ✅ 경로 기반
 context.pushNamed(...)  이름 기반 푸시    ✅           ✅ ✔️ 추천
 
 단,

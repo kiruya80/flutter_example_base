@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/domain/entities/route_info.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/base_state.dart';
@@ -27,22 +26,30 @@ class _ProfileTabState extends BaseState<ProfileTab> {
         child: Column(
           children: [
             Text('context goNamed'),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
 
             RouterMoveItem('goNamed(profileDetail)', () {
               context.goNamed(AppTabRoutes.profileDetail.name);
             }, isError: true),
 
-            RouterMoveItem('goNamed(profileDetail, pathParameters: {id: 123})', () {
+            RouterMoveItem('goNamed(profileDetail, \npathParameters: {id: 123})', () {
               context.goNamed(AppTabRoutes.profileDetail.name, pathParameters: {'id': '123'});
             }),
 
-            RouterMoveItem('goNamed(profileDetail, queryParameters: {title: profile})', () {
+            RouterMoveItem('goNamed(profileDetail, \nqueryParameters: {title: profile})', () {
               context.goNamed(
                 AppTabRoutes.profileDetail.name,
                 queryParameters: {'title': 'profile'},
               );
             }, isError: true),
+
+            const SizedBox(height: 20),
+            Text('context pushNamed'),
+            const SizedBox(height: 10),
+
+            RouterMoveItem('push(/profile/detail, \npathParameters: {id: 123}', () {
+              context.pushNamed(AppTabRoutes.profileDetail.name, pathParameters: {'id': '123'});
+            }),
           ],
         ),
       ),

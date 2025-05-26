@@ -6,17 +6,19 @@ import '../../utils/route_registry.dart';
 /// 라우터 네임과 패스를 같이
 ///
 ///
-class RouteNames {
-  static const String home = 'home';
-  static const String profile = 'profile';
-  static const String login = 'login';
-}
+// class RouteNames {
+//   static const String home = 'home';
+//   static const String profile = 'profile';
+//   static const String login = 'login';
+// }
 
 class AppRoutes {
   static const login = RouteInfo('login', '/login');
-  static const home = RouteInfo('home', '/home');
-  static const profile = RouteInfo('profile', '/profile');
-  static const detail = RouteInfo('detail', '/detail/:id');
+  // static const home = RouteInfo('home', '/home');
+  // static const profile = RouteInfo('profile', '/profile');
+  // static const detail = RouteInfo('detail', '/detail/:id');
+
+  static const setting = RouteInfo('setting', '/setting');
 }
 
 class AppTabRoutes {

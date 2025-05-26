@@ -5,10 +5,12 @@ import 'package:go_router/go_router.dart';
 import '../../../core/base_state.dart';
 import '../../../my_app.dart';
 import '../../screen/detail_screen.dart';
+import '../../screen/setting_screen.dart';
 import '../../screen/tab_navigator/home_tab.dart';
 import '../../screen/tab_navigator/profile_tab.dart';
 import '../../screen/tab_navigator/search_tab.dart';
 import '../app_routes.dart';
+import '../auth_routes.dart';
 import '../home_routes.dart';
 import '../my_route_observer.dart';
 import '../profile_routes.dart';
@@ -74,6 +76,12 @@ class AppRouter {
         //   ),
         // ],
       ),
+      GoRoute(
+        name: AppRoutes.setting.name,
+        path: AppRoutes.setting.path,
+        builder: (context, state) => SettingScreen(),
+      ),
+      ...authRoutes
     ],
   );
 }

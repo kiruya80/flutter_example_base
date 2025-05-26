@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_example_base/utils/print_log.dart';
 
 class RouterMoveItem extends StatelessWidget {
@@ -15,7 +14,7 @@ class RouterMoveItem extends StatelessWidget {
     // QcLog.d('title : $title , btnTitle : $btnTitle , isError : $isError , ');
 
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(6.0),
       child: Column(
         children: [
           Row(

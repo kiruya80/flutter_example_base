@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,11 +20,11 @@ class _HomeTabState extends BaseState<HomeTab> {
 
     return Scaffold(
       appBar: AppBar(title: Text(AppTabRoutes.home.name)),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Text('context Go & Push'),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
             RouterMoveItem('go(/home/detail)', () {
               // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
               //     context.pushNamed('details', pathParameters: {'id': '123'});
@@ -43,6 +42,30 @@ class _HomeTabState extends BaseState<HomeTab> {
             RouterMoveItem('push(/detail)', () {
               context.push('/detail');
             }, isError: true),
+
+            const SizedBox(height: 20),
+            Text('Setting go & push'),
+            const SizedBox(height: 10),
+
+            /// 스택 리셋 back 불가
+            RouterMoveItem('go(/setting) 스택 리셋', () {
+              context.go(AppRoutes.setting.path);
+            }),
+
+            /// 스택 리셋 back 불가
+            RouterMoveItem('goNamed(/setting) 스택 리셋', () {
+              context.goNamed(AppRoutes.setting.name);
+            }),
+
+            /// 스택 추가 back 가능
+            RouterMoveItem('push(/setting) 스택 추가', () {
+              context.push(AppRoutes.setting.path);
+            }),
+
+            /// 스택 추가 back 가능
+            RouterMoveItem('pushNamed(/setting) 스택 추가', () {
+              context.pushNamed(AppRoutes.setting.name);
+            }),
           ],
         ),
       ),
