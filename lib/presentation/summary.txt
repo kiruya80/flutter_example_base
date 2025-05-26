@@ -4,8 +4,16 @@ presentation/
 ├── pages/             ← 각 화면 단위 (예: HomePage, SettingsPage)
 ├── widgets/           ← 재사용 가능한 위젯 모음
 
+일반적인 GoRouter
+go()    현재 라우팅 스택 모두 제거하고 이동
+push()  스택 위에 새 라우트를 추가
+
 메서드                  설명             스택 유지      라우트 이름 지원
-context.go(...)         전체 리셋 이동    ❌           ✅ 경로 기반     > StatefulShellRoute안 브런치에서 이동시
+context.go(...)         전체 리셋 이동    ❌           ✅ 경로 기반
 context.push(...)       스택에 추가       ✅           ✅ 경로 기반
 context.goNamed(...)    이름 기반 이동    ❌           ✅
 context.pushNamed(...)  이름 기반 푸시    ✅           ✅ ✔️ 추천
+
+단,
+StatefulShellRoute는 **각 탭(브랜치)**가 자체적인 Navigator 스택을 갖습니다.
+즉, 각 브랜치마다 스택이 분리되어 관리되며 내부에서 이동할 땐 go()와 push()가 거의 동일하게 작동합니다
