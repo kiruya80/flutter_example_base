@@ -10,7 +10,6 @@ class CounterScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Scaffold(
       appBar: AppBar(title: const Text('Counter App')),
       body: SingleChildScrollView(

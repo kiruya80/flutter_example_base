@@ -8,14 +8,12 @@ import '../../../domain/entities/counter.dart';
 import '../../../domain/usecases/get_counter_value.dart';
 import '../../../domain/usecases/increment_counter.dart';
 
-
-
 // 더 이상 incrementCounterProvider와 getCounterValueProvider를 여기서 정의하지 않습니다.
 // 이들은 main.dart에서 정의되었습니다.
 // 상태를 관리하는 StateNotifierProvider
 class CounterNotifier extends StateNotifier<AsyncValue<Counter>> {
   CounterNotifier(this._increment, this._getValue, this._resetCounterValue)
-    : super(const AsyncValue.loading());
+      : super(const AsyncValue.loading());
 
   final IncrementCounter _increment;
   final GetCounterValue _getValue;

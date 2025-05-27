@@ -27,26 +27,21 @@ class _ProfileTabState extends BaseState<ProfileTab> {
           children: [
             Text('context goNamed'),
             const SizedBox(height: 10),
-
             RouterMoveItem('goNamed(profileDetail)', () {
               context.goNamed(AppTabRoutes.profileDetail.name);
             }, isError: true),
-
             RouterMoveItem('goNamed(profileDetail, \npathParameters: {id: 123})', () {
               context.goNamed(AppTabRoutes.profileDetail.name, pathParameters: {'id': '123'});
             }),
-
             RouterMoveItem('goNamed(profileDetail, \nqueryParameters: {title: profile})', () {
               context.goNamed(
                 AppTabRoutes.profileDetail.name,
                 queryParameters: {'title': 'profile'},
               );
             }, isError: true),
-
             const SizedBox(height: 20),
             Text('context pushNamed'),
             const SizedBox(height: 10),
-
             RouterMoveItem('push(/profile/detail, \npathParameters: {id: 123}', () {
               context.pushNamed(AppTabRoutes.profileDetail.name, pathParameters: {'id': '123'});
             }),

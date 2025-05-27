@@ -38,6 +38,7 @@ class AppRouter {
         builder: (context, state) => SettingScreen(),
       ),
       ...authRoutes,
+
       /// 홈
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

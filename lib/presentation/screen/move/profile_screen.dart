@@ -20,11 +20,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Column(
         children: [
           ElevatedButton(
-            child: Text('Go to Detail from Profile'),
-            onPressed: () {
-              context.push('/profile/detail');
-              // context.pushNamed('/profile/details', pathParameters: {'id': '123'});
-            }),
+              child: Text('Go to Detail from Profile'),
+              onPressed: () {
+                context.push('/profile/detail');
+                // context.pushNamed('/profile/details', pathParameters: {'id': '123'});
+              }),
           ElevatedButton(
             onPressed: () {
               context.pop(); // 뒤로 가기

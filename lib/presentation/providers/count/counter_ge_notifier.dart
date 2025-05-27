@@ -8,7 +8,6 @@ import 'counter_provider.dart';
 
 part 'counter_ge_notifier.g.dart';
 
-
 // @Riverpod(keepAlive: false)
 @riverpod
 class CounterGeNotifier extends _$CounterGeNotifier {

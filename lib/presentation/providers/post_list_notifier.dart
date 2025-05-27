@@ -28,13 +28,15 @@ class PostListNotifier extends StateNotifier<AsyncValue<Either<Failure, List<Pos
       state = AsyncValue.error(e, st);
     }
   }
+
   /// 🧹 상태 초기화 (빈 리스트로)
   void resetPosts() {
     state = const AsyncValue.data(Right(<Post>[]));
   }
 }
 
-final postListNotifierProvider = StateNotifierProvider<PostListNotifier, AsyncValue<Either<Failure, List<Post>>>>((ref) {
+final postListNotifierProvider =
+    StateNotifierProvider<PostListNotifier, AsyncValue<Either<Failure, List<Post>>>>((ref) {
   final repo = ref.read(postRepositoryProvider);
   return PostListNotifier(repo);
 });

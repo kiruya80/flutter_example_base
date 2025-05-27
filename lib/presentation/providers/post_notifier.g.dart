@@ -10,17 +10,14 @@ String _$postNotifierHash() => r'b7e27d5633d81f2562b027d2d1af82296025a89f';
 
 /// See also [PostNotifier].
 @ProviderFor(PostNotifier)
-final postNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<PostNotifier, void>.internal(
-      PostNotifier.new,
-      name: r'postNotifierProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$postNotifierHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+final postNotifierProvider = AutoDisposeAsyncNotifierProvider<PostNotifier, void>.internal(
+  PostNotifier.new,
+  name: r'postNotifierProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$postNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef _$PostNotifier = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint

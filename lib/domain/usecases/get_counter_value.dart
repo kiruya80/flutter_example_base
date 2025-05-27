@@ -16,13 +16,13 @@ class GetCounterValue implements UseCase<Counter, NoParams> {
     QcLog.d('GetCounterValue call =====');
     final result = await repository.getCounterValue();
     return result.fold(
-          (failure) {
+      (failure) {
         if (failure is CacheFailure) {
           return Right(const Counter(value: 0)); // CacheFailure 시 초기값 반환
         }
         return Left(failure);
       },
-          (counter) => Right(counter),
+      (counter) => Right(counter),
     );
   }
 }

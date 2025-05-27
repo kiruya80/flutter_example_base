@@ -34,7 +34,6 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> with RouteAw
     // final currentUri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
     _location = getCurrentPath(context);
     print('currentUri.path == ${_location}'); // 예: /home/detail/123
-
   }
 
   String getCurrentPath(BuildContext context) {

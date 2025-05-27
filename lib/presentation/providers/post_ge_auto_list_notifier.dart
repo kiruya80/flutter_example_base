@@ -47,7 +47,9 @@ class PostGeAutoListNotifier extends _$PostGeAutoListNotifier {
   Future<AsyncValue<Either<Failure, List<Post>>>> fetchPosts() async {
     try {
       final postsOrFailure = await _repository.getPosts();
-      QcLog.d('postsOrFailure === ${postsOrFailure.runtimeType}'); /// Right<Failure, List<Post>>
+      QcLog.d('postsOrFailure === ${postsOrFailure.runtimeType}');
+
+      /// Right<Failure, List<Post>>
       return AsyncValue.data(postsOrFailure);
     } catch (e, st) {
       return AsyncValue.error(e, st);
@@ -58,8 +60,7 @@ class PostGeAutoListNotifier extends _$PostGeAutoListNotifier {
   /// Future<AsyncValue<...>> 반환값인 경우는 state 값 조작 불가
   /// Future<void> 또는 void 반환값은 가능
   ///
-  void resetPosts()   {
-  }
+  void resetPosts() {}
 
   Future<void> refreshPosts() async {
     /// 1번 작성법

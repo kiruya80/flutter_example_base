@@ -52,7 +52,6 @@ class _HomeTabState extends BaseState<HomeTab> {
               context.push('/home/homeCard');
             }),
 
-
             const SizedBox(height: 20),
             Text('Setting go & push'),
             const SizedBox(height: 10),

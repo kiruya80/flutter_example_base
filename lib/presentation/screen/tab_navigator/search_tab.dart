@@ -48,7 +48,6 @@ class _SearchTabState extends BaseState<SearchTab> {
               context.go('/search/detail/123');
             }),
 
-
             RouterMoveItem('go(/search/detail/123?query=ddddddd)', () {
               context.go(AppTabRoutes.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
             }),
@@ -62,22 +61,24 @@ class _SearchTabState extends BaseState<SearchTab> {
             }),
 
             RouterMoveItem('push(/search/detail/123?query=ddddddd)', () {
-              context.push(AppTabRoutes.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
+              context
+                  .push(AppTabRoutes.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
             }),
 
             Text('home detail Go & Push'),
             const SizedBox(height: 10),
+
             /// 브랜치로 전환(현재탭 스택 제거) home 이동후 detail 이동
             /// 뒤로가기시 홈으로 가능
             RouterMoveItem('go(/home/detail)', () {
               context.go('/home/detail');
             }),
+
             /// 현재탭 위에 /home/detai 쌓임
             /// 뒤로가기시 현재탭으로
             RouterMoveItem('push(/home/detail)', () {
               context.push('/home/detail');
             }),
-
 
             /// home 이동후 detail
             RouterMoveItem('go(/home/homeCard)', () {
@@ -88,7 +89,6 @@ class _SearchTabState extends BaseState<SearchTab> {
             RouterMoveItem('push(/home/homeCard)', () {
               context.push('/home/homeCard');
             }),
-
           ],
         ),
       ),

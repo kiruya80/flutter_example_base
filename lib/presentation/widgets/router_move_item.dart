@@ -25,7 +25,6 @@ class RouterMoveItem extends StatelessWidget {
                   style: TextStyle(color: isError == true ? Colors.red : Colors.black),
                 ),
               ),
-
               ElevatedButton(
                 onPressed: onPress,
                 child: Text(

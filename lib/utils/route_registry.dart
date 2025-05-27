@@ -9,6 +9,7 @@ class RouteRegistry {
     if (_names.contains(name)) {
       throw ArgumentError('Route name "$name" is already registered. 라우터');
     }
+
     /// 라우터 경로는 중복 가능. 단, 같은 브랜치는 사용 불가
     if (_paths.contains(path)) {
       print('[경고] 경로 "$path" 는 이미 등록된 경로입니다. 같은 브랜치에서 중복되면 에러가 납니다.');

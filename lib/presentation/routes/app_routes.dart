@@ -1,4 +1,3 @@
-
 import '../../domain/entities/route_info.dart';
 import '../../utils/route_registry.dart';
 
@@ -35,8 +34,7 @@ class AppTabRoutes {
   static final homeDetail = RouteRegistry.register('homeDetail', 'detail');
   static final profileDetail = RouteRegistry.register('profileDetail', 'detail/:id');
   // 파라미터가 필요한 경로 예시
-  static final searchDetail = RouteRegistry.register('searchDetail', 'detail/:id' );
-
+  static final searchDetail = RouteRegistry.register('searchDetail', 'detail/:id');
 
   static final homeCard = RouteRegistry.register('homeCard', 'homeCard');
 
@@ -87,4 +85,3 @@ class AppTabRoutes {
   //   );
   // }
 }
-

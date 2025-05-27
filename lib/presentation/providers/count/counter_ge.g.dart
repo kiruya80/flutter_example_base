@@ -30,8 +30,7 @@ String _$counterGeHash() => r'7d2a6e4d5024060c96468a1457a23555103de834';
 final counterGeProvider = NotifierProvider<CounterGe, int>.internal(
   CounterGe.new,
   name: r'counterGeProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$counterGeHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product') ? null : _$counterGeHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

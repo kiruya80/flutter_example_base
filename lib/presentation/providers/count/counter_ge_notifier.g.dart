@@ -12,15 +12,13 @@ String _$counterGeNotifierHash() => r'ad39f84cb17d76ed2d2691f54104568c71c78cee';
 @ProviderFor(CounterGeNotifier)
 final counterGeNotifierProvider =
     AutoDisposeAsyncNotifierProvider<CounterGeNotifier, Counter>.internal(
-      CounterGeNotifier.new,
-      name: r'counterGeNotifierProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$counterGeNotifierHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  CounterGeNotifier.new,
+  name: r'counterGeNotifierProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$counterGeNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef _$CounterGeNotifier = AutoDisposeAsyncNotifier<Counter>;
 // ignore_for_file: type=lint

@@ -35,7 +35,9 @@ final List<GoRoute> homeRoutes = [
 final List<GoRoute> homeTabRoutes = [
   GoRoute(
     name: AppTabRoutes.home.name,
-    path: AppTabRoutes.home.path, /// '/xxx'는 절대경로
+    path: AppTabRoutes.home.path,
+
+    /// '/xxx'는 절대경로
     pageBuilder: (context, state) => NoTransitionPage(child: HomeTab()),
     routes: [
       // GoRoute(

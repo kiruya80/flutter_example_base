@@ -39,9 +39,7 @@ class _PostApiService implements PostApiService {
     late List<PostModel> _value;
     try {
       _value =
-          _result.data!
-              .map((dynamic i) => PostModel.fromJson(i as Map<String, dynamic>))
-              .toList();
+          _result.data!.map((dynamic i) => PostModel.fromJson(i as Map<String, dynamic>)).toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

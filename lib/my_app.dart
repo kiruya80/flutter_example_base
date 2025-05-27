@@ -5,6 +5,7 @@ import 'package:flutter_example_base/presentation/routes/tab_navigator/app_route
 
 import 'package:flutter_example_base/presentation/screen/post_list_screen.dart';
 import 'package:flutter_example_base/utils/print_log.dart';
+import 'package:go_router/go_router.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,11 +14,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     QcLog.d('My App build');
 
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    /// 기본
+    // return MaterialApp(
+    //   title: 'Flutter Demo',
+    //   theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+    //   home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    // );
 
 
     // return MaterialApp(
@@ -28,11 +30,11 @@ class MyApp extends StatelessWidget {
     // );
 
     /// 바텀네비게이터
-    // return MaterialApp.router(
-    //   routerConfig: AppRouter.shellTabRouter,
-    //   title: 'GoRouter Tabs Demo',
-    //   theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-    // );
+    return MaterialApp.router(
+      routerConfig: AppRouter.shellTabRouter,
+      title: 'GoRouter Tabs Demo',
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+    );
   }
 }
 

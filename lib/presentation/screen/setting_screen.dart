@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/base_state.dart';
 
 class SettingScreen extends StatefulWidget {
-
   const SettingScreen({super.key});
 
   @override

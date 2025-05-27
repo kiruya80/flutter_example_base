@@ -11,8 +11,6 @@ final List<GoRoute> authRoutes = [
     name: AppRoutes.login.name,
     path: AppRoutes.login.path,
     builder: (context, state) => const LoginScreen(),
-    redirect: (context, state) {
-
-    },
+    redirect: (context, state) {},
   ),
 ];
