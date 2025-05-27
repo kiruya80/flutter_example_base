@@ -22,7 +22,7 @@ class _ProfileTabState extends BaseState<ProfileTab> {
 
     return Scaffold(
       appBar: AppBar(title: Text(AppTabRoutes.profile.name)),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Text('context goNamed'),

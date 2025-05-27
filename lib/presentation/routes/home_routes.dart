@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_example_base/presentation/screen/move/home_screen.dart';
 
 import '../screen/detail_screen.dart';
+import '../screen/home_card_screen.dart';
 import '../screen/tab_navigator/home_tab.dart';
 import 'app_routes.dart';
 
@@ -52,6 +53,16 @@ final List<GoRoute> homeTabRoutes = [
           // final id = state.pathParameters['id'];
           // final title = state.uri.queryParameters['title'] ?? '';
           return DetailScreen();
+          // return DetailScreen(title: 'home Detail');
+        },
+      ),
+      GoRoute(
+        name: AppTabRoutes.homeCard.name,
+        path: AppTabRoutes.homeCard.path,
+        builder: (context, state) {
+          // final id = state.pathParameters['id'];
+          // final title = state.uri.queryParameters['title'] ?? '';
+          return HomeCardScreen();
           // return DetailScreen(title: 'home Detail');
         },
       ),

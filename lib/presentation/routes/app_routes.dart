@@ -38,6 +38,8 @@ class AppTabRoutes {
   static final searchDetail = RouteRegistry.register('searchDetail', 'detail/:id' );
 
 
+  static final homeCard = RouteRegistry.register('homeCard', 'homeCard');
+
   ///
   /// 헬퍼 예시 context.go 를 사용할 때
   /// context.goNamed(

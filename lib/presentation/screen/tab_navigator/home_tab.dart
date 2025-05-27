@@ -43,6 +43,16 @@ class _HomeTabState extends BaseState<HomeTab> {
               context.push('/detail');
             }, isError: true),
 
+            RouterMoveItem('go(/home/homeCard)', () {
+              // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
+              //     context.pushNamed('details', pathParameters: {'id': '123'});
+              context.go('/home/homeCard');
+            }),
+            RouterMoveItem('push(/home/homeCard)', () {
+              context.push('/home/homeCard');
+            }),
+
+
             const SizedBox(height: 20),
             Text('Setting go & push'),
             const SizedBox(height: 10),

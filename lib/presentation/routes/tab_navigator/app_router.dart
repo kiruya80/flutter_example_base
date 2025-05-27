@@ -32,6 +32,13 @@ class AppRouter {
       MyRouteObserver(), // 👈 사용자 정의 옵저버
     ],
     routes: [
+      GoRoute(
+        name: AppRoutes.setting.name,
+        path: AppRoutes.setting.path,
+        builder: (context, state) => SettingScreen(),
+      ),
+      ...authRoutes,
+      /// 홈
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return ScaffoldWithNavBar(shell: navigationShell);
@@ -76,12 +83,6 @@ class AppRouter {
         //   ),
         // ],
       ),
-      GoRoute(
-        name: AppRoutes.setting.name,
-        path: AppRoutes.setting.path,
-        builder: (context, state) => SettingScreen(),
-      ),
-      ...authRoutes
     ],
   );
 }
