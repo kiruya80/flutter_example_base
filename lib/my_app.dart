@@ -4,14 +4,16 @@ import 'package:flutter_example_base/presentation/routes/app_routes.dart';
 import 'package:flutter_example_base/presentation/routes/tab_navigator/app_router.dart';
 
 import 'package:flutter_example_base/presentation/screen/post_list_screen.dart';
+import 'package:flutter_example_base/core/providers/root_router_provider.dart';
 import 'package:flutter_example_base/utils/print_log.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     QcLog.d('My App build');
 
     /// 기본
@@ -30,10 +32,16 @@ class MyApp extends StatelessWidget {
     // );
 
     /// 바텀네비게이터
+    // return MaterialApp.router(
+    //   routerConfig: AppRouter.shellTabRouter,
+    //   title: 'GoRouter Tabs Demo',
+    //   theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+    // );
+
+
+    final router = ref.watch(rootRouterProvider);
     return MaterialApp.router(
-      routerConfig: AppRouter.shellTabRouter,
-      title: 'GoRouter Tabs Demo',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      routerConfig: router,
     );
   }
 }
