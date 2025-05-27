@@ -1,0 +1,85 @@
+✅ 바텀 네비게이션 - 탭별 네비게이션 스택 보존
+
+
+///
+/// 바텀 네비게이션
+/// 각 탭은 히스토리 유지 가능 StatefulShellRoute
+///
+final GoRouter shellTabRouter = GoRouter(
+  initialLocation: '/home',
+  navigatorKey: _rootNavigatorKey,
+  routes: [
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) {
+        return ScaffoldWithNavBar(shell: navigationShell);
+      },
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/home',
+              pageBuilder: (context, state) => NoTransitionPage(child: HomeTab()),
+              routes: [
+                GoRoute(
+                  path: 'detail',
+                  builder: (context, state) => DetailScreen(title: 'home Detail'),
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/search',
+              pageBuilder: (context, state) => NoTransitionPage(child: SearchTab()),
+              routes: [
+                GoRoute(
+                  path: 'detail',
+                  builder: (context, state) => DetailScreen(title: 'search Detail'),
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/profile',
+              pageBuilder: (context, state) => NoTransitionPage(child: ProfileTab()),
+              routes: [
+                GoRoute(
+                  path: 'detail',
+                  builder: (context, state) => DetailScreen(title: 'profile Detail'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
+  ],
+);
+
+class ScaffoldWithNavBar extends StatelessWidget {
+  final StatefulNavigationShell shell;
+  const ScaffoldWithNavBar({super.key, required this.shell});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: shell,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: shell.currentIndex,
+        onTap: (index) => shell.goBranch(index),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
+    );
+  }
+}
