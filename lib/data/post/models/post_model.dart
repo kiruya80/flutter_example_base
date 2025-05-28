@@ -1,7 +1,43 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../../../domain/post/entities/post.dart';
 
 part 'post_model.g.dart';
+// part 'post_model.freezed.dart';
+
+// @freezed
+// class PostModel with _$PostModel {
+//   const factory PostModel({
+//     required int? id,
+//     required String? title,
+//     required String? body,
+//     required int? userId,
+//   }) = _PostModel;
+//
+//   /// fromJson 생성자
+//   factory PostModel.fromJson(Map<String, dynamic> json) =>
+//       _$PostModelFromJson(json);
+//
+//   /// ✅ Model → Entity 변환
+//   factory PostModel.fromEntity(Post entity) {
+//     return PostModel(
+//       id: entity.id,
+//       title: entity.title,
+//       body: entity.body,
+//       userId: entity.userId,
+//     );
+//   }
+// }
+//
+// extension PostModelX on PostModel {
+//   /// ✅ Entity로 변환하는 toEntity 확장
+//   Post toEntity() => Post(
+//     id: id,
+//     title: title,
+//     body: body,
+//     userId: userId,
+//   );
+// }
 
 @JsonSerializable()
 class PostModel {
@@ -35,6 +71,7 @@ class PostModel {
     );
   }
 }
+
 // @JsonSerializable()
 // class PostModel extends Post {
 //   PostModel({

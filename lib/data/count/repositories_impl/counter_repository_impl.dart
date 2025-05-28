@@ -17,7 +17,7 @@ class CounterRepositoryImpl implements CounterRepository {
       final localCounter = await localDataSource.getCounter();
       return Right(CounterModel(value: localCounter).toEntity());
     } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
+      return Left(CacheFailure(e.message));
     }
   }
 
@@ -30,7 +30,7 @@ class CounterRepositoryImpl implements CounterRepository {
       // return Right(result);
       return Right(CounterModel(value: result).toEntity());
     } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
+      return Left(CacheFailure(e.message));
     }
   }
 
@@ -40,7 +40,7 @@ class CounterRepositoryImpl implements CounterRepository {
       await localDataSource.saveCounter(deValue ?? 0);
       return const Right(null);
     } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
+      return Left(CacheFailure(e.message));
     }
   }
 }

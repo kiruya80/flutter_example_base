@@ -32,6 +32,8 @@ dependencies:
   shared_preferences: ^2.5.3
   # App추가 / 로그 / MIT / https://pub.dev/packages/logger
   logger: ^2.5.0
+  # App추가 / freezed / MIT / https://pub.dev/packages/freezed_annotation
+  freezed_annotation: ^3.0.0
 
   # [route]
   # Pub추가 / router / BSD-3-Clause / https://pub.dev/packages/go_router
@@ -118,6 +120,7 @@ dev_dependencies:
   riverpod_lint: ^2.6.5 # 빠른 수정 및 리팩토링 옵션과 함께 다양한 경고를 추가
   retrofit_generator: ^9.2.0
   json_serializable: ^6.9.5
+  freezed: ^3.0.6
 
 flutter:
   uses-material-design: true

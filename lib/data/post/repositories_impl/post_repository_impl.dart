@@ -16,7 +16,7 @@ class PostRepositoryImpl implements PostRepository {
       final response = await api.getPosts();
       return Right(response.map((e) => e.toEntity()).toList());
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return Left(ServerFailure(e.toString()));
     }
   }
 
@@ -27,7 +27,7 @@ class PostRepositoryImpl implements PostRepository {
       final response = await api.createPost(model.toJson());
       return Right(response.toEntity());
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return Left(ServerFailure(e.toString()));
     }
   }
 
@@ -38,7 +38,7 @@ class PostRepositoryImpl implements PostRepository {
       final response = await api.updatePost(post.id ?? 123, model.toJson());
       return Right(response.toEntity());
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return Left(ServerFailure(e.toString()));
     }
   }
 
@@ -48,7 +48,7 @@ class PostRepositoryImpl implements PostRepository {
       await api.deletePost(id);
       return const Right(null);
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

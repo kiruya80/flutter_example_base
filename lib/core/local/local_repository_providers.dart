@@ -9,18 +9,14 @@ import '../../data/count/repositories_impl/counter_repository_impl.dart';
 ///
 /// DB
 ///
-// final sharedPreferencesProvider = FutureProvider<SharedPreferences>((ref) async {
-//   return await SharedPreferences.getInstance();
-// });
-
 final localCounterDataSourceProvider = Provider<LocalCounterDataSource>((ref) {
-  // final sharedPreferences = ref.watch(sharedPrefsProviderer).requireValue;
   final sharedPreferences = ref.watch(sharedPreferencesProvider);
   return LocalCounterDataSourceImpl(sharedPreferences);
 });
 
 ///
 /// 로컬 데이터 접근 프로바이더
+/// counter 사용
 ///
 final counterRepositoryProvider = Provider<CounterRepository>((ref) {
   final localDataSource = ref.watch(localCounterDataSourceProvider);

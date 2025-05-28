@@ -1,9 +1,9 @@
 import 'package:go_router/go_router.dart';
 
-import '../screens/detail_screen.dart';
-import '../screens/home_card_screen.dart';
-import '../screens/tab_navigator/home_tab.dart';
-import '../../app/app_routes.dart';
+import '../../other/screens/detail_screen.dart';
+import '../../other/screens/home_card_screen.dart';
+import '../../tab_navigator/home/home_tab.dart';
+import '../app_routes_info.dart';
 
 ///
 /// home 모듈 전용 routes
@@ -32,23 +32,23 @@ final List<GoRoute> homeRoutes = [
 ///
 final List<GoRoute> homeTabRoutes = [
   GoRoute(
-    name: AppTabRoutes.home.name,
-    path: AppTabRoutes.home.path,
+    name: AppTabRoutesInfo.home.name,
+    path: AppTabRoutesInfo.home.path,
 
     /// '/xxx'는 절대경로
     pageBuilder: (context, state) => NoTransitionPage(child: HomeTab()),
     routes: [
       // GoRoute(
-      //   name: AppTabRoutes.detail.name,
-      //   path: AppTabRoutes.detail.path,
+      //   name: AppTabRoutesInfo.detail.name,
+      //   path: AppTabRoutesInfo.detail.path,
       //   builder: (context, state) => DetailScreen(title: 'home Detail'),
       // ),
 
       /// 'detail'   실제 라우팅 결과:  /home/detail      ✅ 상대경로로 이어짐
       /// 'xxx' 는 상대경로 ,'/detail'  절대경로 하면 안 됨
       GoRoute(
-        name: AppTabRoutes.homeDetail.name,
-        path: AppTabRoutes.homeDetail.path,
+        name: AppTabRoutesInfo.homeDetail.name,
+        path: AppTabRoutesInfo.homeDetail.path,
         builder: (context, state) {
           // final id = state.pathParameters['id'];
           // final title = state.uri.queryParameters['title'] ?? '';
@@ -57,8 +57,8 @@ final List<GoRoute> homeTabRoutes = [
         },
       ),
       GoRoute(
-        name: AppTabRoutes.homeCard.name,
-        path: AppTabRoutes.homeCard.path,
+        name: AppTabRoutesInfo.homeCard.name,
+        path: AppTabRoutesInfo.homeCard.path,
         builder: (context, state) {
           // final id = state.pathParameters['id'];
           // final title = state.uri.queryParameters['title'] ?? '';

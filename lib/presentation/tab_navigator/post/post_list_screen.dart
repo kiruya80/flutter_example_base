@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../application/providers/viewmodel/auth_viewmodel_providers.dart';
-import '../../application/providers/viewmodel/post_viewmodel_providers.dart';
 
-class PostListPage extends ConsumerWidget {
-  const PostListPage({super.key});
+import '../../../application/providers/viewmodel/auth_viewmodel_providers.dart';
+import '../../../application/providers/viewmodel/post_viewmodel_providers.dart';
+import '../../app/app_routes_info.dart';
+
+
+class PostListScreen extends ConsumerWidget {
+  const PostListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,11 +32,13 @@ class PostListPage extends ConsumerWidget {
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final state = ref.read(loginViewModelProvider);
+          final state = ref.read(authViewModelProvider);
           if (state.isLoggedIn == true) {
-            context.push('/write');
+            // context.push('/postAdd');
+            context.pushNamed(AppTabRoutesInfo.postAdd.name);
           } else {
-            context.push('/login');
+            // context.push('/login');
+            context.pushNamed(AppRoutesInfo.login.name);
           }
         },
         child: const Icon(Icons.add),

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../core/error/failures.dart';
+import '../../../core/usecases/usecase.dart';
 import '../entities/user.dart';
 import '../repositories/auth_repository.dart';
 
@@ -9,12 +10,30 @@ import '../repositories/auth_repository.dart';
 ///   •	단일 원칙 책임
 /// 	•	주입 가능한 구조 (예: Provider, Riverpod, DI 등)
 ///
-class Login {
+// class Login {
+//   final AuthRepository repository;
+//
+//   Login(this.repository);
+//
+//   Future<Either<Failure, User>> call(String id, {String? password}) {
+//     return repository.login(id, password: password);
+//   }
+// }
+
+class Login implements UseCase<User, LoginParams> {
   final AuthRepository repository;
 
   Login(this.repository);
 
-  Future<Either<Failure, User>> call(String id, {String? password}) {
-    return repository.login(id, password: password);
+  @override
+  Future<Either<Failure, User>> call(LoginParams params) {
+    return repository.login(params.id, password: params.pwd);
   }
+}
+
+class LoginParams {
+  final String id;
+  final String? pwd;
+
+  LoginParams({required this.id, this.pwd});
 }

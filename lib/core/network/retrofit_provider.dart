@@ -3,6 +3,10 @@ import '../../core/network/dio_provider.dart';
 import '../../data/auth/data_sources/remote/auth_api.dart';
 import '../../data/post/data_sources/remote/post_api.dart';
 
+///
+/// retrofit을 사용하는 api 프로바이더
+///
+
 final authApiProvider = Provider<AuthApi>((ref) {
   final dio = ref.watch(dioProvider);
   return AuthApi(dio);

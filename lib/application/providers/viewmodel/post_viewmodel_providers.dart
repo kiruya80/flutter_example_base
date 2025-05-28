@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../presentation/post/post_list_state.dart';
-import '../../../presentation/post/post_list_view_model.dart';
-import '../../../presentation/post/post_write_state.dart';
-import '../../../presentation/post/post_write_view_model.dart';
+import '../../../presentation/tab_navigator/post/post_list_state.dart';
+import '../../../presentation/tab_navigator/post/post_list_view_model.dart';
+import '../../../presentation/tab_navigator/post/post_write_state.dart';
+import '../../../presentation/tab_navigator/post/post_write_view_model.dart';
 import '../usecase/post_usecase_providers.dart';
 
 /// PostListViewModel, PostEditViewModel provider

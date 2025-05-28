@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../application/providers/viewmodel/auth_viewmodel_providers.dart';
-import '../../core/base_con_state.dart';
+import '../../core/state/base_con_state.dart';
 
-class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({super.key});
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  ConsumerState<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends BaseConState<LoginPage> {
+class _LoginScreenState extends BaseConState<LoginScreen> {
   final _controller = TextEditingController();
 
   @override
@@ -27,13 +27,14 @@ class _LoginPageState extends BaseConState<LoginPage> {
       return;
     }
 
-    final success = await ref.read(loginViewModelProvider.notifier).loginUser(userId);
+    final success = await ref.read(authViewModelProvider.notifier).loginUser(userId);
     if (!mounted) return;
 
     if (success) {
-      context.go('/posts');
+      // context.goNamed(AppTabRoutesInfo.posts.name);
+      context.pop();
     } else {
-      final error = ref.read(loginViewModelProvider).errorMessage;
+      final error = ref.read(authViewModelProvider).errorMessage;
       _showError(error ?? '로그인 실패');
     }
   }
@@ -46,7 +47,7 @@ class _LoginPageState extends BaseConState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(loginViewModelProvider);
+    final state = ref.watch(authViewModelProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('로그인')),

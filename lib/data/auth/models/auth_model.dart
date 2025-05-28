@@ -27,12 +27,25 @@ class AuthModel {
     this.userId,
   });
 
+  /// 	•	API 응답 → UserInfoModel.fromJson()
   factory AuthModel.fromJson(Map<String, dynamic> json) => _$AuthModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AuthModelToJson(this);
 
+  /// ✅ Model → Entity
+  /// 	•	model.toEntity() → UseCase로 전달
   User toEntity() {
     // return User(id: id, email: email, name: name);
     return User(id: id, title: title, body: body, userId: userId);
+  }
+
+  // ✅ Entity → Model (선택사항)
+  factory AuthModel.fromEntity(User entity) {
+    return AuthModel(
+      id: entity.id,
+      title: entity.title,
+      body: entity.body,
+      userId: entity.userId,
+    );
   }
 }

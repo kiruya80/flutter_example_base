@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/error/failures.dart';
-import '../../domain/post/entities/post.dart';
-import '../../domain/post/usecases/create_post.dart';
+import '../../../core/error/failures.dart';
+import '../../../domain/post/entities/post.dart';
+import '../../../domain/post/usecases/create_post.dart';
 import 'post_write_state.dart';
 
 class PostWriteViewModel extends StateNotifier<PostWriteState> {

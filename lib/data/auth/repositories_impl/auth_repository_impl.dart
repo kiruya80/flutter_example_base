@@ -22,7 +22,7 @@ class AuthRepositoryImpl implements AuthRepository {
       // final response = await api.login({'email': email, 'password': password});
       return Right(response.toEntity());
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return Left(ServerFailure( e.toString()));
     }
   }
 
@@ -32,7 +32,7 @@ class AuthRepositoryImpl implements AuthRepository {
       await api.logout();
       return const Right(null);
     } catch (e) {
-      return Left(ServerFailure(message: e.toString()));
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

@@ -17,7 +17,7 @@ import 'auth_state.dart';
 ///
 /// 그래서 ViewModel은 절대 repository에 직접 접근하면 안 됩니다.
 ///
-// LoginViewModel
+// AuthViewModel
 //    ↓ 의존
 //  Login (UseCase)
 //    ↓ 의존
@@ -25,16 +25,16 @@ import 'auth_state.dart';
 //    ↓ 의존
 //  AuthRemoteDataSource (Retrofit)
 ///
-// 🔹 LoginViewModel: ViewModel은 UseCase만 알고 있음
-class LoginViewModel extends StateNotifier<AuthState> {
+// 🔹 AuthViewModel: ViewModel은 UseCase만 알고 있음
+class AuthViewModel extends StateNotifier<AuthState> {
   final Login login;
 
-  LoginViewModel(this.login) : super(AuthState.initial());
+  AuthViewModel(this.login) : super(AuthState.initial());
 
   Future<bool> loginUser(int userId) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
-    final result = await login('$userId');
+    final result = await login(LoginParams(id:'$userId'));
     return result.fold(
       (Failure failure) {
         state = state.copyWith(isLoading: false, errorMessage: failure.message);

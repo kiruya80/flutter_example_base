@@ -107,6 +107,9 @@ fvm flutter packages pub run build_runner build
 fvm flutter pub run build_runner build --delete-conflicting-outputs
 fvm flutter pub run build_runner build
 
+## freezed 설정
+flutter pub run build_runner build --delete-conflicting-outputs
+
 # 클린 아키텍쳐
 의존성 규칙
 모듈의 의존성이 단방향으로 이어져야 한다 (과녁)

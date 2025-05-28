@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../application/providers/viewmodel/post_viewmodel_providers.dart';
-import '../../core/base_con_state.dart';
 
-class PostWritePage extends ConsumerStatefulWidget {
-  const PostWritePage({super.key});
+import '../../../application/providers/viewmodel/post_viewmodel_providers.dart';
+import '../../../core/state/base_con_state.dart';
+
+class PostWriteScreen extends ConsumerStatefulWidget {
+  const PostWriteScreen({super.key});
 
   @override
-  ConsumerState<PostWritePage> createState() => _PostWritePageState();
+  ConsumerState<PostWriteScreen> createState() => _PostWriteScreenState();
 }
 
-class _PostWritePageState extends BaseConState<PostWritePage> {
+class _PostWriteScreenState extends BaseConState<PostWriteScreen> {
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
 
@@ -36,7 +37,8 @@ class _PostWritePageState extends BaseConState<PostWritePage> {
     if (!mounted) return;
 
     if (success) {
-      context.go('/posts');
+      // context.go('/posts');
+      context.pop();
     } else {
       final error = ref.read(postWriteViewModelProvider).errorMessage;
       _showError(error ?? '작성 실패');

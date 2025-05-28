@@ -1,6 +1,6 @@
+import 'package:flutter_example_base/presentation/auth/login_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../presentation/other/screens/move/login_screen.dart';
 import '../../presentation/other/screens/post_list_screen.dart';
 import '../router/route_names.dart';
 import 'auth_provider.dart';
@@ -30,7 +30,7 @@ final rootRouterProvider = Provider<GoRouter>((ref) {
         path: RouteNames.login,
         builder: (context, state) {
           final redirectPath = state.uri.queryParameters['redirect'];
-          return LoginScreen(redirectPath: redirectPath);
+          return LoginScreen();
         },
       ),
       GoRoute(

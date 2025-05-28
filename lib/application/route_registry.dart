@@ -1,4 +1,4 @@
-import '../domain/entities/route_info.dart';
+import '../domain/common/entities/route_info.dart';
 
 class RouteRegistry {
   static final Set<String> _names = {};

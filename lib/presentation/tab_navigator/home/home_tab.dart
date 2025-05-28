@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/base_state.dart';
-import '../../../../core/utils/print_log.dart';
-import '../../../app/app_routes.dart';
-import '../../../widgets/router_move_item.dart';
+import '../../../core/state/base_state.dart';
+import '../../../core/utils/print_log.dart';
+import '../../app/app_routes_info.dart';
+import '../../widgets/router_move_item.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -19,7 +19,7 @@ class _HomeTabState extends BaseState<HomeTab> {
     QcLog.d('build ===== $isThisPageVisible');
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppTabRoutes.home.name)),
+      appBar: AppBar(title: Text(AppTabRoutesInfo.home.name)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -58,22 +58,22 @@ class _HomeTabState extends BaseState<HomeTab> {
 
             /// 스택 리셋 back 불가
             RouterMoveItem('go(/setting) 스택 리셋', () {
-              context.go(AppRoutes.setting.path);
+              context.go(AppRoutesInfo.setting.path);
             }),
 
             /// 스택 리셋 back 불가
             RouterMoveItem('goNamed(/setting) 스택 리셋', () {
-              context.goNamed(AppRoutes.setting.name);
+              context.goNamed(AppRoutesInfo.setting.name);
             }),
 
             /// 스택 추가 back 가능
             RouterMoveItem('push(/setting) 스택 추가', () {
-              context.push(AppRoutes.setting.path);
+              context.push(AppRoutesInfo.setting.path);
             }),
 
             /// 스택 추가 back 가능
             RouterMoveItem('pushNamed(/setting) 스택 추가', () {
-              context.pushNamed(AppRoutes.setting.name);
+              context.pushNamed(AppRoutesInfo.setting.name);
             }),
           ],
         ),

@@ -4,6 +4,7 @@ import '../../../../core/error/failures.dart';
 import 'local_counter_datasource.dart';
 
 class LocalCounterDataSourceImpl implements LocalCounterDataSource {
+
   final SharedPreferences prefs;
 
   LocalCounterDataSourceImpl(this.prefs);

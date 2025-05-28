@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
+import '../../../../domain/common/params/no_params.dart';
 import '../../../../domain/count/entities/counter.dart';
 import '../../../../domain/count/usecases/get_counter_value.dart';
 import '../../../../domain/count/usecases/increment_counter.dart';

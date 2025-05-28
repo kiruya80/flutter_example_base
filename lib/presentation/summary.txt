@@ -23,7 +23,7 @@ StatefulShellRoute는 **각 탭(브랜치)**가 자체적인 Navigator 스택을
 ✅ 전체 구성 요약 (클린 아키텍처 + Riverpod)
 🖼️ View (Widget)
    ↓
-🧠 ViewModel (LoginViewModel)
+🧠 ViewModel (AuthViewModel)
    ↓
 🧩 UseCase (Login)
    ↓

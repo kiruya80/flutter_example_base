@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
+import '../../../../domain/common/params/no_params.dart';
 import '../../../../domain/count/entities/counter.dart';
 import 'counter_provider.dart';
 

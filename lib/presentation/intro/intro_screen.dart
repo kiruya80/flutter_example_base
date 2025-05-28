@@ -3,6 +3,8 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/state/base_con_state.dart';
+
 class IntroPage extends ConsumerStatefulWidget {
   const IntroPage({super.key});
 
@@ -10,7 +12,7 @@ class IntroPage extends ConsumerStatefulWidget {
   ConsumerState<IntroPage> createState() => _IntroPageState();
 }
 
-class _IntroPageState extends ConsumerState<IntroPage> {
+class _IntroPageState extends BaseConState<IntroPage> {
   @override
   void initState() {
     super.initState();

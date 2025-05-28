@@ -1,4 +1,5 @@
-import '../../domain/post/entities/post.dart';
+
+import '../../../domain/post/entities/post.dart';
 
 class PostListState {
   final List<Post> posts;

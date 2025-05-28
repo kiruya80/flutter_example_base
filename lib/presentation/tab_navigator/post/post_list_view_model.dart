@@ -1,7 +1,8 @@
+import 'package:flutter_example_base/domain/common/params/no_params.dart';
 import 'package:flutter_example_base/domain/post/usecases/delete_post.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/error/failures.dart';
-import '../../domain/post/usecases/get_posts.dart';
+import '../../../core/error/failures.dart';
+import '../../../domain/post/usecases/get_posts.dart';
 import 'post_list_state.dart';
 
 ///
@@ -23,7 +24,7 @@ class PostListViewModel extends StateNotifier<PostListState> {
 
   Future<void> loadPosts() async {
     state = state.copyWith(isLoading: true, error: null);
-    final result = await getPosts();
+    final result = await getPosts(NoParams());
     result.fold(
       (Failure failure) {
         state = state.copyWith(isLoading: false, error: failure.message);

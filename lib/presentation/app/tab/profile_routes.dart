@@ -1,21 +1,21 @@
 import 'package:go_router/go_router.dart';
 
-import '../screens/detail_screen.dart';
-import '../screens/tab_navigator/profile_tab.dart';
-import '../../app/app_routes.dart';
+import '../../other/screens/detail_screen.dart';
+import '../../tab_navigator/profile/profile_tab.dart';
+import '../app_routes_info.dart';
 
 ///
 /// profile 모듈 전용 routes
 ///
 final List<GoRoute> profileTabRoutes = [
   GoRoute(
-    name: AppTabRoutes.profile.name,
-    path: AppTabRoutes.profile.path,
+    name: AppTabRoutesInfo.profile.name,
+    path: AppTabRoutesInfo.profile.path,
     pageBuilder: (context, state) => NoTransitionPage(child: ProfileTab()),
     routes: [
       GoRoute(
-        name: AppTabRoutes.profileDetail.name,
-        path: AppTabRoutes.profileDetail.path,
+        name: AppTabRoutesInfo.profileDetail.name,
+        path: AppTabRoutesInfo.profileDetail.path,
         builder: (context, state) {
           final id = state.pathParameters['id'];
           final title = state.uri.queryParameters['title'] ?? '';
