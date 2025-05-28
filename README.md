@@ -4,7 +4,7 @@ Flutter example base project.
 
 ## Getting Started
 
-[master] 기본 설정만 (yaml등)
+[master] 기본 설정만 (yaml등) 
 
 
 ## 안드로이드 스튜디오 버전
@@ -103,9 +103,9 @@ https://jsonplaceholder.typicode.com 에서 샘플 데이터 (예: Posts)를 GET
 
 riverpod_generator
 dart run build_runner watch
-flutter packages pub run build_runner build
-flutter pub run build_runner build --delete-conflicting-outputs
-flutter pub run build_runner build
+fvm flutter packages pub run build_runner build
+fvm flutter pub run build_runner build --delete-conflicting-outputs
+fvm flutter pub run build_runner build
 
 # 클린 아키텍쳐
 의존성 규칙

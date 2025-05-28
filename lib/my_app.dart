@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/presentation/routes/app_router.dart';
-import 'package:flutter_example_base/presentation/routes/app_routes.dart';
-import 'package:flutter_example_base/presentation/routes/tab_navigator/app_router.dart';
+import 'package:flutter_example_base/presentation/app/app_router.dart';
+import 'package:flutter_example_base/presentation/app/app_routes.dart';
 
-import 'package:flutter_example_base/presentation/screen/post_list_screen.dart';
-import 'package:flutter_example_base/core/providers/root_router_provider.dart';
-import 'package:flutter_example_base/utils/print_log.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import 'core/utils/print_log.dart';
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
@@ -23,7 +21,6 @@ class MyApp extends ConsumerWidget {
     //   home: const MyHomePage(title: 'Flutter Demo Home Page'),
     // );
 
-
     // return MaterialApp(
     //   title: 'Flutter Demo',
     //   theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
@@ -38,10 +35,13 @@ class MyApp extends ConsumerWidget {
     //   theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
     // );
 
+    // final router = ref.watch(rootRouterProvider);
+    // return MaterialApp.router(
+    //   routerConfig: router,
+    // );
 
-    final router = ref.watch(rootRouterProvider);
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: appRouter,
     );
   }
 }
@@ -88,7 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
 
 /// 바텀네비게이터
 class ScaffoldWithNavBar extends StatelessWidget {

@@ -18,3 +18,15 @@ context.pushNamed(...)  이름 기반 푸시    ✅           ✅ ✔️ 추천
 단,
 StatefulShellRoute는 **각 탭(브랜치)**가 자체적인 Navigator 스택을 갖습니다.
 즉, 각 브랜치마다 스택이 분리되어 관리되며 내부에서 이동할 땐 go()와 push()가 거의 동일하게 작동합니다
+
+
+✅ 전체 구성 요약 (클린 아키텍처 + Riverpod)
+🖼️ View (Widget)
+   ↓
+🧠 ViewModel (LoginViewModel)
+   ↓
+🧩 UseCase (Login)
+   ↓
+📦 Repository (AuthRepository)
+   ↓
+🌐 RemoteDataSource (Retrofit API)

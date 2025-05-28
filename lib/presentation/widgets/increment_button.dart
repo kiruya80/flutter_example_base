@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/count/counter_provider.dart';
+import '../other/providers/count/counter_provider.dart';
 
 class IncrementButton extends ConsumerWidget {
   const IncrementButton({super.key});

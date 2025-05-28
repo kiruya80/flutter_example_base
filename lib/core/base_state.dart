@@ -1,9 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:go_router/go_router.dart';
-
-import '../utils/print_log.dart';
 
 final RouteObserver<ModalRoute<void>> widgetRouteObserver = RouteObserver<ModalRoute<void>>();
 

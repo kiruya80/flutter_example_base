@@ -15,6 +15,14 @@ data/
     │   └── post_local_db.dart         <-- ✅ 로컬 DB 접근
     └── repositories/ post_repository_impl.dart (domain/repositories/post_repository.dart에 정의된 인터페이스를 만족시키는 구현체)
 
+✅ 1. data 계층 구성
+
+구성 요소:
+	•	models/: @JsonSerializable() 모델
+	•	datasources/: API 통신 (Retrofit + Dio)
+	•	repositories/: domain repository 구현
+	•	exceptions/, failures/: Failure 처리
+
 [UI] (presentation)
   ↳ postController (StateNotifier)
 

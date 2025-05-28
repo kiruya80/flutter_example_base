@@ -8,3 +8,28 @@ domain/
 Provider 정의 여부
 ❌ 절대 정의하지 않음
 Domain은 Riverpod이나 Flutter에 의존하지 않는 순수 Dart 계층이어야 하므로, Provider는 절대 들어가면 안 됩니다.
+
+레이어     클래스     @JsonSerializable 사용 여부     목적
+domain      User        ❌                           비즈니스 모델, 순수 로직
+data        UserDto     ✅                           API 응답 직렬화/역직렬화용 DTO
+
+🧠 핵심 요약
+구성요소        설명
+Entity          앱 핵심 모델 (순수 Dart 클래스)
+Repository      인터페이스만 정의 (외부 의존 X)
+Usecase         하나의 비즈니스 책임 수행
+
+
+✅ 요약 : 로그인, 글작성, 글 리스트
+lib/
+└── domain/
+    ├── entities/
+    │   ├── post.dart
+    │   └── user.dart
+    ├── repositories/
+    │   ├── auth_repository.dart
+    │   └── post_repository.dart
+    └── usecases/
+        ├── login_user.dart
+        ├── fetch_posts.dart
+        └── create_post.dart

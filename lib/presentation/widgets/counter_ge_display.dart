@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/print_log.dart';
-import '../providers/count/counter_ge_notifier.dart';
+import '../../core/utils/print_log.dart';
+import '../other/providers/count/counter_ge_notifier.dart';
 
 ///
 /// CounterGeNotifier 사용
