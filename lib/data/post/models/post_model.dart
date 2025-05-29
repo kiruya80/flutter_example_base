@@ -63,6 +63,8 @@ class PostModel {
   }
 
   factory PostModel.fromEntity(Post post) {
+    // Person.fromJson(json)
+
     return PostModel(
       id: post.id,
       title: post.title,

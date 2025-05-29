@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../application/providers/viewmodel/auth_viewmodel_providers.dart';
-import '../../../application/providers/viewmodel/post_viewmodel_providers.dart';
-import '../../app/app_routes_info.dart';
+import '../../../app/providers/viewmodel/auth_viewmodel_providers.dart';
+import '../../../app/providers/viewmodel/post_viewmodel_providers.dart';
+import '../../../app/routes/app_routes_info.dart';
 
 
 class PostListScreen extends ConsumerWidget {
@@ -35,7 +35,7 @@ class PostListScreen extends ConsumerWidget {
           final state = ref.read(authViewModelProvider);
           if (state.isLoggedIn == true) {
             // context.push('/postAdd');
-            context.pushNamed(AppTabRoutesInfo.postAdd.name);
+            context.pushNamed(AppRoutesInfo.postAdd.name);
           } else {
             // context.push('/login');
             context.pushNamed(AppRoutesInfo.login.name);

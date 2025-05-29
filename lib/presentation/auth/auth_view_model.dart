@@ -17,7 +17,7 @@ import 'auth_state.dart';
 ///
 /// 그래서 ViewModel은 절대 repository에 직접 접근하면 안 됩니다.
 ///
-// AuthViewModel
+//  AuthViewModel
 //    ↓ 의존
 //  Login (UseCase)
 //    ↓ 의존

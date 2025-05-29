@@ -1,11 +1,30 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/local/local_repository_providers.dart';
+import '../../../../app/di/shared_prefs_provider.dart';
+import '../../../../data/count/data_sources/local/local_counter_datasource.dart';
+import '../../../../data/count/data_sources/local/local_counter_datasource_impl.dart';
+import '../../../../data/count/repositories_impl/counter_repository_impl.dart';
 import '../../../../domain/count/entities/counter.dart';
+import '../../../../domain/count/repositories/counter_repository.dart';
 import '../../../../domain/count/usecases/get_counter_value.dart';
 import '../../../../domain/count/usecases/increment_counter.dart';
 import '../../../../domain/count/usecases/reset_counter.dart';
 import 'counter_state_notifier.dart';
+
+final localCounterDataSourceProvider = Provider<LocalCounterDataSource>((ref) {
+  final sharedPreferences = ref.watch(sharedPreferencesProvider);
+  return LocalCounterDataSourceImpl(sharedPreferences);
+});
+
+///
+/// 로컬 데이터 접근 프로바이더
+/// counter 사용
+///
+final counterRepositoryProvider = Provider<CounterRepository>((ref) {
+  final localDataSource = ref.watch(localCounterDataSourceProvider);
+  return CounterRepositoryImpl(localDataSource: localDataSource);
+});
+
 
 final incrementCounterProvider = Provider<IncrementCounter>((ref) {
   /// 레파지토리 프로바이더 가져오기

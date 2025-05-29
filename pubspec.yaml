@@ -20,7 +20,8 @@ dependencies:
   # [기본] https://monocsp.dev/79
   # Pub추가 / router / MIT / https://pub.dev/packages/freezed
   # 데이터 모델을 불변으로 만들어준다 객체 생성 후 변경 불가
-  #  freezed: ^3.0.6
+  # App추가 / freezed / MIT / https://pub.dev/packages/freezed_annotation
+  freezed_annotation: ^3.0.0
   # Pub추가 / router / MIT / https://pub.dev/packages/get_it
   # 의존성 주입
 #  get_it: ^8.0.3
@@ -32,8 +33,6 @@ dependencies:
   shared_preferences: ^2.5.3
   # App추가 / 로그 / MIT / https://pub.dev/packages/logger
   logger: ^2.5.0
-  # App추가 / freezed / MIT / https://pub.dev/packages/freezed_annotation
-  freezed_annotation: ^3.0.0
 
   # [route]
   # Pub추가 / router / BSD-3-Clause / https://pub.dev/packages/go_router

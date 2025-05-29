@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../widgets/counter_display.dart';
-import '../../widgets/counter_ge_display.dart';
-import '../../widgets/increment_button.dart';
 
 class CounterScreen extends ConsumerWidget {
   const CounterScreen({super.key});
@@ -23,7 +20,7 @@ class CounterScreen extends ConsumerWidget {
 
             Text('StateNotifierProvider 사용', style: Theme.of(context).textTheme.bodyLarge),
             const SizedBox(height: 10),
-            const CounterDisplay(),
+            // const CounterDisplay(),
 
             const SizedBox(height: 30),
             Text(
@@ -31,7 +28,7 @@ class CounterScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 10),
-            const CounterGeDisplay(),
+            // const CounterGeDisplay(),
             const SizedBox(height: 30),
 
             // ref.watch(counterNotifierProvider).when(
@@ -42,7 +39,7 @@ class CounterScreen extends ConsumerWidget {
           ],
         ),
       ),
-      floatingActionButton: const IncrementButton(),
+      // floatingActionButton: const IncrementButton(),
     );
   }
 }

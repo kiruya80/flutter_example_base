@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../application/providers/viewmodel/auth_viewmodel_providers.dart';
-import '../../core/state/base_con_state.dart';
+import '../../app/providers/viewmodel/auth_viewmodel_providers.dart';
+import '../../shared/state/base_con_state.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -31,7 +31,7 @@ class _LoginScreenState extends BaseConState<LoginScreen> {
     if (!mounted) return;
 
     if (success) {
-      // context.goNamed(AppTabRoutesInfo.posts.name);
+      // context.goNamed(AppRoutesInfo.posts.name);
       context.pop();
     } else {
       final error = ref.read(authViewModelProvider).errorMessage;

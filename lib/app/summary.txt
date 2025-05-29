@@ -1,0 +1,50 @@
+✅ 요약 : UI 화면 및 위젯
+
+•	application/은 **UI가 도메인 계층과 대화할 수 있게 하는 “중간자”**입니다.
+→ “presentation은 가볍게 유지하고, 복잡한 상태와 유스케이스 연결을 위임”
+
+lib/
+└── app/
+    ├── providers/   ← 전역 Riverpod provider 정의
+    ├── routes/      ← go_router 또는 RouteRegistry 등
+    ├── services/    ← 앱 전체에서 사용하는 서비스 추상화 또는 헬퍼 (예: navigation_service.dart)
+    ├── di/          ← 의존성 주입 모듈 정의 (필요 시 provider 정의 포함)
+    ├── config/      ← 환경설정, 앱 초기값, flavor 등  (ex. env.dart, constants.dart)
+
+
+lib/
+├── application/
+│   ├── router/
+│   │   └── router_provider.dart
+│   └── providers/
+│       └── auth_provider.dart
+├── data/
+│   ├── datasources/
+│   │   ├── auth_remote_datasource.dart
+│   │   └── post_remote_datasource.dart
+│   ├── models/
+│   │   ├── user_model.dart
+│   │   └── post_model.dart
+│   └── repositories_impl/
+│       ├── auth_repository_impl.dart
+│       └── post_repository_impl.dart
+├── domain/
+│   ├── entities/
+│   │   ├── user.dart
+│   │   └── post.dart
+│   ├── repositories/
+│   │   ├── auth_repository.dart
+│   │   └── post_repository.dart
+│   └── usecases/
+│       ├── login_usecase.dart
+│       ├── get_posts_usecase.dart
+│       └── create_post_usecase.dart
+├── presentation/
+│   ├── screens/
+│   │   ├── login_screen.dart
+│   │   ├── post_list_screen.dart
+│   │   └── post_create_screen.dart
+│   └── viewmodels/
+│       ├── auth_viewmodel.dart
+│       └── post_viewmodel.dart
+└── main.dart부에서 이동할 땐 go()와 push()가 거의 동일하게 작동합니다

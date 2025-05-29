@@ -1,25 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/state/base_state.dart';
+import '../../../app/routes/app_routes_info.dart';
 import '../../../core/utils/print_log.dart';
-import '../../app/app_routes_info.dart';
+import '../../../domain/common/entities/test_usual.dart';
+import '../../../shared/state/base_con_state.dart';
 import '../../widgets/router_move_item.dart';
 
-class HomeTab extends StatefulWidget {
+class HomeTab extends ConsumerStatefulWidget {
   const HomeTab({super.key});
 
   @override
-  State<HomeTab> createState() => _HomeTabState();
+  ConsumerState<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends BaseState<HomeTab> {
+class _HomeTabState extends BaseConState<HomeTab> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     QcLog.d('build ===== $isThisPageVisible');
 
+    TestUsual mTestUsual2 = TestUsual(id: '112233', isSelected: false);
+
+    TestUsual mTestUsual = TestUsual(id: '232323',isSelected: false,content: 'ccccc');
+    QcLog.d('mTestUsual ===== ${mTestUsual.toString()}');
+    var testUsual = mTestUsual.copyWith(content: 'lllllll');
+    QcLog.d('testUsual ===== ${testUsual.toJson()}');
+// JSON 직렬화
+    final json = mTestUsual.toJson();
+
+// 역직렬화
+    final postFromJson = TestUsual.fromJson(json);
+    QcLog.d('postFromJson ===== ${postFromJson.toJson()}');
+
     return Scaffold(
-      appBar: AppBar(title: Text(AppTabRoutesInfo.home.name)),
+      appBar: AppBar(title: Text(AppRoutesInfo.tabHome.name)),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/core/local/shared_prefs_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'app/di/shared_prefs_provider.dart';
 import 'my_app.dart';
 
 void main() async {

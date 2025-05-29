@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../application/providers/viewmodel/post_viewmodel_providers.dart';
-import '../../../core/state/base_con_state.dart';
+import '../../../app/providers/viewmodel/post_viewmodel_providers.dart';
+import '../../../shared/state/base_con_state.dart';
 
 class PostWriteScreen extends ConsumerStatefulWidget {
   const PostWriteScreen({super.key});

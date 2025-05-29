@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/state/base_state.dart';
 import '../../../core/utils/print_log.dart';
+import '../../shared/state/base_state.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});

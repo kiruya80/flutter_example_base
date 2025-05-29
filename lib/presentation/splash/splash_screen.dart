@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/state/base_con_state.dart';
+import '../../app/routes/app_routes_info.dart';
 import '../../core/utils/print_log.dart';
-import '../app/app_routes_info.dart';
+import '../../shared/state/base_con_state.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
@@ -25,7 +25,9 @@ class _SplashPageState extends BaseConState<SplashPage> {
   }
 
   Future<void> _init() async {
-    context.goNamed(AppTabRoutesInfo.home.name);
+    if (mounted) {
+      context.goNamed(AppRoutesInfo.tabHome.name);
+    }
   }
 
   @override

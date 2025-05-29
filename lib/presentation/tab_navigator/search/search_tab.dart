@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/domain/common/entities/route_info.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/state/base_state.dart';
 import '../../../../../core/utils/print_log.dart';
-import '../../app/app_routes_info.dart';
+import '../../../app/routes/app_routes_info.dart';
+import '../../../shared/state/base_con_state.dart';
 import '../../widgets/router_move_item.dart';
 
-class SearchTab extends StatefulWidget {
+class SearchTab extends ConsumerStatefulWidget {
   const SearchTab({super.key});
 
   @override
-  State<SearchTab> createState() => _SearchTabState();
+  ConsumerState<SearchTab> createState() => _SearchTabState();
 }
 
-class _SearchTabState extends BaseState<SearchTab> {
+class _SearchTabState extends BaseConState<SearchTab> {
   @override
   Widget build(BuildContext context) {
     QcLog.d('build ===== $isThisPageVisible');
 
-    final url = AppTabRoutesInfo.searchDetail.fullPath(
+    final url = AppRoutesInfo.searchDetail.fullPath(
       pathParams: {'id': '123'},
       queryParams: {'tab': 'settings'},
     );
@@ -27,13 +28,13 @@ class _SearchTabState extends BaseState<SearchTab> {
     /// fullPath ==== detail/123?tab=settings
     QcLog.d('fullPath ==== $url');
 
-    final url2 = AppTabRoutesInfo.searchDetailFullPath(id: '123', query: {'tab': 'settings'});
+    final url2 = AppRoutesInfo.searchDetailFullPath(id: '123', query: {'tab': 'settings'});
 
     /// searchDetailFullPath ==== /search/detail/123?tab=settings
     QcLog.d('searchDetailFullPath ==== $url2');
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppTabRoutesInfo.search.name)),
+      appBar: AppBar(title: Text(AppRoutesInfo.tabSearch.name)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -49,7 +50,7 @@ class _SearchTabState extends BaseState<SearchTab> {
             }),
 
             RouterMoveItem('go(/search/detail/123?query=ddddddd)', () {
-              context.go(AppTabRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
+              context.go(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
             }),
 
             const SizedBox(height: 20),
@@ -62,7 +63,7 @@ class _SearchTabState extends BaseState<SearchTab> {
 
             RouterMoveItem('push(/search/detail/123?query=ddddddd)', () {
               context
-                  .push(AppTabRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
+                  .push(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
             }),
 
             Text('home detail Go & Push'),

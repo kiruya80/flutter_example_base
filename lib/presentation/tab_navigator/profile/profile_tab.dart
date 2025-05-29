@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/state/base_state.dart';
 import '../../../../../core/utils/print_log.dart';
-import '../../app/app_routes_info.dart';
+import '../../../app/routes/app_routes_info.dart';
+import '../../../shared/state/base_con_state.dart';
 import '../../widgets/router_move_item.dart';
 
-class ProfileTab extends StatefulWidget {
+class ProfileTab extends ConsumerStatefulWidget {
   const ProfileTab({super.key});
 
   @override
-  State<ProfileTab> createState() => _ProfileTabState();
+  ConsumerState<ProfileTab> createState() => _ProfileTabState();
 }
 
-class _ProfileTabState extends BaseState<ProfileTab> {
+class _ProfileTabState extends BaseConState<ProfileTab> {
   @override
   Widget build(BuildContext context) {
     QcLog.d('build ===== $isThisPageVisible');
@@ -21,21 +22,21 @@ class _ProfileTabState extends BaseState<ProfileTab> {
     // print('현재 탭 인덱스: ${shellRouteState.currentIndex}');
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppTabRoutesInfo.profile.name)),
+      appBar: AppBar(title: Text(AppRoutesInfo.tabProfile.name)),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Text('context goNamed'),
             const SizedBox(height: 10),
             RouterMoveItem('goNamed(profileDetail)', () {
-              context.goNamed(AppTabRoutesInfo.profileDetail.name);
+              context.goNamed(AppRoutesInfo.profileDetail.name);
             }, isError: true),
             RouterMoveItem('goNamed(profileDetail, \npathParameters: {id: 123})', () {
-              context.goNamed(AppTabRoutesInfo.profileDetail.name, pathParameters: {'id': '123'});
+              context.goNamed(AppRoutesInfo.profileDetail.name, pathParameters: {'id': '123'});
             }),
             RouterMoveItem('goNamed(profileDetail, \nqueryParameters: {title: profile})', () {
               context.goNamed(
-                AppTabRoutesInfo.profileDetail.name,
+                AppRoutesInfo.profileDetail.name,
                 queryParameters: {'title': 'profile'},
               );
             }, isError: true),
@@ -43,7 +44,7 @@ class _ProfileTabState extends BaseState<ProfileTab> {
             Text('context pushNamed'),
             const SizedBox(height: 10),
             RouterMoveItem('push(/profile/detail, \npathParameters: {id: 123}', () {
-              context.pushNamed(AppTabRoutesInfo.profileDetail.name, pathParameters: {'id': '123'});
+              context.pushNamed(AppRoutesInfo.profileDetail.name, pathParameters: {'id': '123'});
             }),
           ],
         ),

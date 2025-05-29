@@ -3,7 +3,8 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/state/base_con_state.dart';
+import '../../app/routes/app_routes_info.dart';
+import '../../shared/state/base_con_state.dart';
 
 class IntroPage extends ConsumerStatefulWidget {
   const IntroPage({super.key});
@@ -26,7 +27,8 @@ class _IntroPageState extends BaseConState<IntroPage> {
   Future<void> _moveToSplash() async {
     await Future.delayed(const Duration(seconds: 2));
     if (mounted) {
-      context.go('/splash');
+      // context.go('/splash');
+      context.goNamed(AppRoutesInfo.splash.name);
     }
   }
 
