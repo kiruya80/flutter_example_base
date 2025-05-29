@@ -42,7 +42,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
       },
       (_) {
         // state = state.copyWith(isLoading: false);
-        state =  AuthState.loggedIn(User());
+        state =  AuthState.loggedIn(User(id: null));
         return true;
       },
     );

@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/utils/print_log.dart';
-import '../../shared/state/base_state.dart';
+import '../../shared/state/base_con_state.dart';
 
-class DetailScreen extends StatefulWidget {
+class DetailScreen extends ConsumerStatefulWidget {
   final String? id;
 
   /// path
@@ -15,10 +16,10 @@ class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key, this.id, this.title, this.query});
 
   @override
-  State<DetailScreen> createState() => _DetailScreenState();
+  ConsumerState<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends BaseState<DetailScreen> {
+class _DetailScreenState extends BaseConState<DetailScreen> {
   @override
   void initState() {
     super.initState();

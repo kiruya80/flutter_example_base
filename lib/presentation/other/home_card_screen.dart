@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/utils/print_log.dart';
-import '../../shared/state/base_state.dart';
+import '../../shared/state/base_con_state.dart';
 
-class HomeCardScreen extends StatefulWidget {
+class HomeCardScreen extends ConsumerStatefulWidget {
   final String? id;
 
   /// path
@@ -15,10 +16,10 @@ class HomeCardScreen extends StatefulWidget {
   const HomeCardScreen({super.key, this.id, this.title, this.query});
 
   @override
-  State<HomeCardScreen> createState() => _HomeCardScreenState();
+  ConsumerState<HomeCardScreen> createState() => _HomeCardScreenState();
 }
 
-class _HomeCardScreenState extends BaseState<HomeCardScreen> {
+class _HomeCardScreenState extends BaseConState<HomeCardScreen> {
   @override
   void initState() {
     super.initState();
