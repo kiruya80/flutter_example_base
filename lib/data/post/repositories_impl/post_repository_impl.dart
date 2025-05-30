@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_example_base/data/post/models/post_model_mapper.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/post/entities/post.dart';
 import '../../../domain/post/repositories/post_repository.dart';
@@ -23,7 +24,8 @@ class PostRepositoryImpl implements PostRepository {
   @override
   Future<Either<Failure, Post>> createPost(Post post) async {
     try {
-      final model = PostModel.fromEntity(post);
+      // final model = PostModel.fromEntity(post); post.toModel()
+      final model = post.toModel();
       final response = await api.createPost(model.toJson());
       return Right(response.toEntity());
     } catch (e) {
@@ -34,7 +36,8 @@ class PostRepositoryImpl implements PostRepository {
   @override
   Future<Either<Failure, Post>> updatePost(Post post) async {
     try {
-      final model = PostModel.fromEntity(post);
+      // final model = PostModel.fromEntity(post);
+      final model = post.toModel();
       final response = await api.updatePost(post.id ?? 123, model.toJson());
       return Right(response.toEntity());
     } catch (e) {

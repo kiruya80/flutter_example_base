@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_example_base/data/auth/models/auth_model_mapper.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/auth/entities/user.dart';
 import '../../../domain/auth/repositories/auth_repository.dart';
