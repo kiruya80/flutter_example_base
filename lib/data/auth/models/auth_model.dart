@@ -16,7 +16,6 @@ abstract class AuthModel with _$AuthModel {
   /// 	•	API 응답 → UserInfoModel.fromJson()
   factory AuthModel.fromJson(Map<String, dynamic> json) => _$AuthModelFromJson(json);
 
-
   // /// ✅ Model → Entity
   // /// 	•	model.toEntity() → UseCase로 전달
   // User toEntity() {

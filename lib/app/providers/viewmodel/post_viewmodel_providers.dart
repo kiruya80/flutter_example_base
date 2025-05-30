@@ -16,6 +16,6 @@ final postListViewModelProvider = StateNotifierProvider<PostListViewModel, PostL
 );
 
 final postWriteViewModelProvider = StateNotifierProvider<PostWriteViewModel, PostWriteState>((ref) {
-  final createPost = ref.watch(createPostUseCaseProvider);
-  return PostWriteViewModel(createPost);
+  // final createPost = ref.watch(createPostUseCaseProvider);
+  return PostWriteViewModel(ref.watch(createPostUseCaseProvider));
 });

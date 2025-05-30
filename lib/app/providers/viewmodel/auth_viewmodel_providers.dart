@@ -7,6 +7,5 @@ import '../usecase/auth_usecase_providers.dart';
 // 🔹 authViewModelProvider: ViewModel에 UseCase를 주입
 final authViewModelProvider = StateNotifierProvider<AuthViewModel, AuthState>((ref) {
   /// 유스케이스를 생성자로 보낸다
-  final login = ref.watch(loginUseCaseProvider);
-  return AuthViewModel(login);
+  return AuthViewModel(ref.watch(loginUseCaseProvider));
 });

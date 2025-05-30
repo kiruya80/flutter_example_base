@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 ///
-/// 라우터 옵져버 
+/// 라우터 옵져버
 ///
 class MyRouteObserver extends NavigatorObserver {
   @override

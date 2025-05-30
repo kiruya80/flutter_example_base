@@ -34,7 +34,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
   Future<bool> loginUser(int userId) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
 
-    final result = await login(LoginParams(id:'$userId'));
+    final result = await login(LoginParams(id: '$userId'));
     return result.fold(
       (Failure failure) {
         state = state.copyWith(isLoading: false, errorMessage: failure.message);
@@ -42,7 +42,7 @@ class AuthViewModel extends StateNotifier<AuthState> {
       },
       (_) {
         // state = state.copyWith(isLoading: false);
-        state =  AuthState.loggedIn(User(id: null));
+        state = AuthState.loggedIn(User(id: null));
         return true;
       },
     );

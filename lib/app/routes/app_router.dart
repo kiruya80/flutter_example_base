@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../my_app.dart';
@@ -13,11 +14,12 @@ import 'tab/tab_router.dart';
 
 class AppRouter {
   /// 🔐 navigator keys (탭 스택 유지용)
-  static final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  // static final rootNavigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> globalNavigatorKey = GlobalKey<NavigatorState>();
 
   static final appRouter = GoRouter(
     initialLocation: AppRoutesInfo.intro.path,
-    navigatorKey: _rootNavigatorKey,
+    navigatorKey: globalNavigatorKey,
     observers: [
       widgetRouteObserver, // 위젯에 정의된 옵져버
       MyRouteObserver(), // 👈 사용자 정의 옵저버
@@ -43,6 +45,7 @@ class AppRouter {
         path: AppRoutesInfo.setting.path,
         builder: (context, state) => const SettingScreen(),
       ),
+
       /// tab
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

@@ -1,4 +1,3 @@
-
 import '../../../domain/post/entities/post.dart';
 
 class PostListState {

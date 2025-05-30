@@ -50,7 +50,8 @@ class _SearchTabState extends BaseConState<SearchTab> {
             }),
 
             RouterMoveItem('go(/search/detail/123?query=ddddddd)', () {
-              context.go(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
+              context
+                  .go(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
             }),
 
             const SizedBox(height: 20),

@@ -7,7 +7,8 @@ import 'package:go_router/go_router.dart';
 
 final RouteObserver<ModalRoute<void>> conWidgetRouteObserver = RouteObserver<ModalRoute<void>>();
 
-abstract class BaseConState<T extends ConsumerStatefulWidget> extends ConsumerState<T> with RouteAware {
+abstract class BaseConState<T extends ConsumerStatefulWidget> extends ConsumerState<T>
+    with RouteAware {
   String _location = '';
   bool _didPop = false;
 

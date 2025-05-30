@@ -20,33 +20,6 @@ void main() async {
       overrides: [
         /// 여기에 선언하는게 필수는 아님 테스트등 사용시
         sharedPreferencesProvider.overrideWithValue(prefs), // ✅ 여기서 실제 주입
-        // localCounterDataSourceProvider.overrideWith(
-        //   (ref) => LocalCounterDataSourceImpl(
-        //     ref.watch(sharedPreferencesProvider).requireValue,
-        //   ),
-        // ),
-        // localCounterDataSourceProvider.overrideWith((ref) {
-        //   return  LocalCounterDataSourceImpl(
-        //     ref.watch(sharedPreferencesProvider).requireValue,
-        //   );
-        // }),
-        // counterRepositoryProvider.overrideWith((ref) {
-        //   final localDataSource = ref.read(localCounterDataSourceProvider);
-        //   return CounterRepositoryImpl(localDataSource: localDataSource);
-        // }),
-        // incrementCounterProvider.overrideWith((ref) {
-        //   final repository = ref.read(counterRepositoryProvider);
-        //   return IncrementCounter(repository);
-        // }),
-        // getCounterValueProvider.overrideWith((ref) {
-        //   final repository = ref.read(counterRepositoryProvider);
-        //   return GetCounterValue(repository);
-        // }),
-        // counterNotifierProvider.overrideWith((ref) {
-        //   final increment = ref.read(incrementCounterProvider);
-        //   final getValue = ref.read(getCounterValueProvider);
-        //   return CounterNotifier(increment, getValue)..getValue();
-        // }),
       ],
       child: const MyApp(),
     ),

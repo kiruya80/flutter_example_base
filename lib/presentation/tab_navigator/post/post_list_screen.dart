@@ -6,7 +6,6 @@ import '../../../app/providers/viewmodel/auth_viewmodel_providers.dart';
 import '../../../app/providers/viewmodel/post_viewmodel_providers.dart';
 import '../../../app/routes/app_routes_info.dart';
 
-
 class PostListScreen extends ConsumerWidget {
   const PostListScreen({super.key});
 

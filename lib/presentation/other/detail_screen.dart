@@ -29,7 +29,6 @@ class _DetailScreenState extends BaseConState<DetailScreen> {
   Future<void> _loadDataSafely() async {
     await Future.delayed(const Duration(seconds: 2));
 
-
     // ✅ 안전하게 상태 업데이트
     if (!isThisPageVisible) return;
 

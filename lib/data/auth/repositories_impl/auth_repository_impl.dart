@@ -14,16 +14,13 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, User>> login(String id, {String? password}) async {
     try {
-
       /// todo 샘플은 로그인 api가 없어서 테스트용으로
-      PostModel postModel = PostModel(
-          id: 123, userId: 9999, title: id, body: id
-      );
+      PostModel postModel = PostModel(id: 123, userId: 9999, title: id, body: id);
       final response = await api.login(postModel.toJson());
       // final response = await api.login({'email': email, 'password': password});
       return Right(response.toEntity());
     } catch (e) {
-      return Left(ServerFailure( e.toString()));
+      return Left(ServerFailure(e.toString()));
     }
   }
 

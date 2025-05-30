@@ -1,3 +1,4 @@
+import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_example_base/domain/common/params/no_params.dart';
 import 'package:flutter_example_base/domain/post/usecases/delete_post.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,8 +24,11 @@ class PostListViewModel extends StateNotifier<PostListState> {
   }
 
   Future<void> loadPosts() async {
+    // state = const AsyncLoading();
     state = state.copyWith(isLoading: true, error: null);
     final result = await getPosts(NoParams());
+    QcLog.d('result ===== ${result.runtimeType} , ${result.toString()}');
+
     result.fold(
       (Failure failure) {
         state = state.copyWith(isLoading: false, error: failure.message);

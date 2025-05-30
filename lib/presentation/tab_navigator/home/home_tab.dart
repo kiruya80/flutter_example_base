@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/presentation /providers/global_loading.dart';
 import '../../../app/routes/app_routes_info.dart';
+import '../../../core/presentation /widgets/loading_dialog_manager.dart';
 import '../../../core/utils/print_log.dart';
 import '../../../domain/common/entities/test_usual.dart';
 import '../../../shared/state/base_con_state.dart';
@@ -16,7 +18,6 @@ class HomeTab extends ConsumerStatefulWidget {
 }
 
 class _HomeTabState extends BaseConState<HomeTab> {
-
   @override
   void initState() {
     super.initState();
@@ -28,7 +29,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
 
     TestUsual mTestUsual2 = TestUsual(id: '112233', isSelected: false);
 
-    TestUsual mTestUsual = TestUsual(id: '232323',isSelected: false,content: 'ccccc');
+    TestUsual mTestUsual = TestUsual(id: '232323', isSelected: false, content: 'ccccc');
     QcLog.d('mTestUsual ===== ${mTestUsual.toString()}');
     var testUsual = mTestUsual.copyWith(content: 'lllllll');
     QcLog.d('testUsual ===== ${testUsual.toJson()}');
@@ -38,12 +39,18 @@ class _HomeTabState extends BaseConState<HomeTab> {
 // 역직렬화
     final postFromJson = TestUsual.fromJson(json);
     QcLog.d('postFromJson ===== ${postFromJson.toJson()}');
-
     return Scaffold(
       appBar: AppBar(title: Text(AppRoutesInfo.tabHome.name)),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            RouterMoveItem('LoadingDialogManager load', () async {
+              LoadingDialogManager.show();
+              await Future.delayed(const Duration(seconds: 5));
+              LoadingDialogManager.hide();
+            }),
+            const SizedBox(height: 40),
+
             Text('context Go & Push'),
             const SizedBox(height: 10),
             RouterMoveItem('go(/home/detail)', () {

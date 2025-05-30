@@ -7,13 +7,12 @@ part of 'test_usual.dart';
 // **************************************************************************
 
 _TestUsual _$TestUsualFromJson(Map<String, dynamic> json) => _TestUsual(
-  id: json['id'] as String,
-  isSelected: json['isSelected'] as bool,
-  content: json['content'] as String?,
-);
+      id: json['id'] as String,
+      isSelected: json['isSelected'] as bool,
+      content: json['content'] as String?,
+    );
 
-Map<String, dynamic> _$TestUsualToJson(_TestUsual instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TestUsualToJson(_TestUsual instance) => <String, dynamic>{
       'id': instance.id,
       'isSelected': instance.isSelected,
       'content': instance.content,
