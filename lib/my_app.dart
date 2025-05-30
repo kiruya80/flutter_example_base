@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/presentation/widgets/dialog_queue_listener.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'core/presentation /providers/global_loading.dart';
 import 'app/routes/app_router.dart';
 import 'core/utils/print_log.dart';
 
@@ -44,7 +44,15 @@ class MyApp extends ConsumerWidget {
       title: 'Post App',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
       builder: (context, child) {
-        return child!;
+        // return child!;
+
+            // return DialogQueueListener(child: child!); // 여기에 적용
+
+        // 여기의 context는 아직 Navigator가 아닐 수 있으므로
+        // 반드시 child 안쪽에서 사용해야 함
+        return DialogQueueListener(
+          child: child ?? const SizedBox.shrink(),
+        );
       },
     );
   }
