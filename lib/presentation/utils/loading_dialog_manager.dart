@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/core/utils/print_log.dart';
 
 import '../../app/routes/app_router.dart';
 
@@ -14,6 +15,7 @@ class LoadingDialogManager {
     if (_isShowing) return;
     _isShowing = true;
 
+    QcLog.d('loading show =====');
     showDialog(
       // context: AppRouter.globalNavigatorKey.currentState!.overlay!.context,
       context: AppRouter.globalNavigatorKey.currentContext!,
@@ -32,6 +34,7 @@ class LoadingDialogManager {
 
   static void hide() {
     if (_isShowing) {
+      QcLog.d('loading hide =====');
       AppRouter.globalNavigatorKey.currentState?.pop();
       _isShowing = false;
     }

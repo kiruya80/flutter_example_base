@@ -95,46 +95,43 @@ class _HomeTabState extends BaseConState<HomeTab> {
               ref.read(dialogQueueProvider.notifier).clear();
               QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
 
-
-
               final loading = ref.read(globalLoadingProvider.notifier);
               loading.state = true;
               LoadingDialogManager.show();
 
               // 다이얼로그 요청 추가
               ref.read(dialogQueueProvider.notifier).enqueue(
-                DialogRequest(
-                    title: '알림',
-                    message: '작업이 완료되었습니다.',
-                    onConfirmed: () {
-                      QcLog.d('onConfirmed ==== 알림 ');
-                    }),
-              );
-              await Future.delayed(const Duration(seconds: 3));
+                    DialogRequest(
+                        title: '알림',
+                        message: '작업이 완료되었습니다.',
+                        onConfirmed: () {
+                          QcLog.d('onConfirmed ==== 알림 ');
+                        }),
+                  );
+              // await Future.delayed(const Duration(seconds: 3));
               ref.read(dialogQueueProvider.notifier).enqueue(
-                DialogRequest(
-                    title: '알림22222',
-                    message: '작업이 완료되었습니다.22222',
-                    onConfirmed: () {
-                      QcLog.d('onConfirmed ==== 알림22222 ');
-                    }),
-              );
-
-
-
+                    DialogRequest(
+                        title: '알림22222',
+                        message: '작업이 완료되었습니다.22222',
+                        onConfirmed: () {
+                          QcLog.d('onConfirmed ==== 알림22222 ');
+                        }),
+                  );
 
               await Future.delayed(const Duration(seconds: 3));
               loading.state = false;
               LoadingDialogManager.hide();
 
-
-
-
-
               // ref.read(dialogQueueProvider.notifier).enqueue(
               //   DialogRequest(title: '안내', message: '로딩이 완료되었습니다.'),
               // );
-              QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
+
+
+              final loading2 = ref.read(globalLoadingProvider.notifier);
+
+
+
+              QcLog.d('Queue length ==== ${loading2.state} ,  ${ref.read(dialogQueueProvider.notifier).length}');
 // 다이얼로그 처리 후 큐 제거
 //             ref.read(dialogQueueProvider.notifier).dequeue();
             }),

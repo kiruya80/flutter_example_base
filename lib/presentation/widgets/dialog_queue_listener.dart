@@ -1,8 +1,11 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/app/services/loading/dialog_queue_manager.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/providers/dialog_queue_manager.dart';
+import '../../app/providers/global_loading_provider.dart';
 import '../../app/routes/app_router.dart';
 
 ///
@@ -36,16 +39,38 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
     super.initState();
     QcLog.d('initState ==== ');
     // WidgetsBinding.instance.addPostFrameCallback((_) => _processQueue());
+
+    // 각각의 상태를 별도로 listen
+    ref.listen<Queue<DialogRequest>>(
+        dialogQueueProvider, (previous, next) => _maybeShowDialog(previous, next));
+    ref.listen<bool>(globalLoadingProvider, (previous, next) => _maybeShowDialog(previous, next));
+  }
+
+  void _maybeShowDialog(previous, next) async {
+    QcLog.d('_maybeShowDialog ==== ');
+
+    if (_isShowing) return;
+
+    final isLoading = ref.read(globalLoadingProvider);
+    final queue = ref.read(dialogQueueProvider);
+
+    // 로딩 중이거나 큐가 비어 있으면 리턴
+    if (isLoading || queue.isEmpty) return;
+    QcLog.d(
+        'build listen ===== loading ${isLoading} | _isShowing :  $_isShowing,  ${previous?.isEmpty},  ${next.isEmpty}');
+    if (_isShowing || next.isEmpty || isLoading == true) return;
+    processQueue(next.first);
   }
 
   @override
   Widget build(BuildContext context) {
     //   ref.listen(dialogQueueProvider, (_, __) => _processQueue());
-    ref.listen(dialogQueueProvider, (previous, next) async {
-      QcLog.d('build listen ===== $_isShowing,  ${previous?.isEmpty},  ${next.isEmpty}');
-      if (_isShowing || next.isEmpty) return;
-      processQueue(next.first);
-    });
+
+    // ref.listen(dialogQueueProvider, (previous, next) async {
+    //   QcLog.d('build listen ===== loading ${loading.state} | _isShowing :  $_isShowing,  ${previous?.isEmpty},  ${next.isEmpty}');
+    //   if (_isShowing || next.isEmpty || loading.state == true) return;
+    //   processQueue(next.first);
+    // });
 
     return widget.child;
   }
