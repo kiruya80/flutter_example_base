@@ -20,8 +20,6 @@ import '../../routes/app_router.dart';
 class DialogQueueManager extends StateNotifier<Queue<DialogRequest>> {
   DialogQueueManager() : super(Queue());
 
-  bool _isDialogShowing = false;
-
   ///
   /// 1.	enqueue()를 호출하면 DialogRequest가 큐에 추가됨.
   ///	2.	현재 다이얼로그가 표시 중이지 않다면, 자동으로 showDialog()가 실행됨.
@@ -52,37 +50,6 @@ class DialogQueueManager extends StateNotifier<Queue<DialogRequest>> {
   bool get isEmpty => state.isEmpty;
 
   int get length => state.length;
-
-  void _tryShowNext() {
-    QcLog.d('_tryShowNext ====  $_isDialogShowing , ${state.isEmpty}');
-    if (_isDialogShowing || state.isEmpty) return;
-
-    final request = state.first;
-    _isDialogShowing = true;
-
-    QcLog.d('_tryShowNext showDialog ====  $_isDialogShowing , ${state.isEmpty}');
-    showDialog(
-      // context: AppRouter.globalNavigatorKey.currentState!.overlay!.context,
-      context: AppRouter.globalNavigatorKey.currentContext!,
-      barrierDismissible: false,
-      builder: (_) => AlertDialog(
-        title: Text(request.title),
-        content: Text(request.message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Navigator.of(rootNavigatorKey.currentContext!).pop();
-              AppRouter.globalNavigatorKey.currentState?.pop();
-              _isDialogShowing = false;
-              dequeue();
-              _tryShowNext();
-            },
-            child: const Text('확인'),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 // app/services/dialog_request.dart
@@ -92,9 +59,5 @@ class DialogRequest {
   final String message;
   final VoidCallback? onConfirmed;
 
-  DialogRequest({
-    required this.title,
-    required this.message,
-    this.onConfirmed,
-  });
+  DialogRequest({required this.title, required this.message, this.onConfirmed});
 }

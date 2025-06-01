@@ -34,43 +34,53 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
     // _processQueue();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    QcLog.d('initState ==== ');
-    // WidgetsBinding.instance.addPostFrameCallback((_) => _processQueue());
-
-    // 각각의 상태를 별도로 listen
-    ref.listen<Queue<DialogRequest>>(
-        dialogQueueProvider, (previous, next) => _maybeShowDialog(previous, next));
-    ref.listen<bool>(globalLoadingProvider, (previous, next) => _maybeShowDialog(previous, next));
+  void _maybeToggleLoading(bool isLoading) {
+    QcLog.d('_maybeToggleLoading ====  $isLoading');
+    if (isLoading == false) {
+      /// 로딩이 종료되었으면 다이얼로그 큐 확인하기
+      final queue = ref.read(dialogQueueProvider);
+      QcLog.d('dialogQueueProvider ====  $queue , ${queue.isNotEmpty} ${queue.toString()}');
+      if (queue.isNotEmpty == true) {
+        _maybeShowDialog(queue);
+      }
+    }
   }
 
-  void _maybeShowDialog(previous, next) async {
-    QcLog.d('_maybeShowDialog ==== ');
+  void _maybeShowDialog(Queue<DialogRequest> next) async {
+    QcLog.d('_maybeShowDialog ==== ${next.first}');
 
     if (_isShowing) return;
 
-    final isLoading = ref.read(globalLoadingProvider);
     final queue = ref.read(dialogQueueProvider);
+    final isLoading = ref.read(globalLoadingProvider);
+    QcLog.d('_maybeShowDialog 22 ==== ${queue.first}');
 
     // 로딩 중이거나 큐가 비어 있으면 리턴
     if (isLoading || queue.isEmpty) return;
     QcLog.d(
-        'build listen ===== loading ${isLoading} | _isShowing :  $_isShowing,  ${previous?.isEmpty},  ${next.isEmpty}');
+      'build listen ===== loading ${isLoading} | _isShowing :  $_isShowing,   ${next.isEmpty}',
+    );
     if (_isShowing || next.isEmpty || isLoading == true) return;
     processQueue(next.first);
   }
 
   @override
   Widget build(BuildContext context) {
-    //   ref.listen(dialogQueueProvider, (_, __) => _processQueue());
+    ref.listen(globalLoadingProvider, (previous, next) {
+      QcLog.d('listen ==== globalLoadingProvider ====   $previous , $next');
+      _maybeToggleLoading(next);
+    });
 
-    // ref.listen(dialogQueueProvider, (previous, next) async {
-    //   QcLog.d('build listen ===== loading ${loading.state} | _isShowing :  $_isShowing,  ${previous?.isEmpty},  ${next.isEmpty}');
-    //   if (_isShowing || next.isEmpty || loading.state == true) return;
-    //   processQueue(next.first);
-    // });
+    ref.listen(dialogQueueProvider, (previous, next) async {
+      final isLoading = ref.read(globalLoadingProvider);
+      QcLog.d('_maybeShowDialog 22 ==== ${isLoading}');
+
+      QcLog.d(
+        'build listen ===== loading : $isLoading | _isShowing :  $_isShowing,  ${previous?.isEmpty},  ${next.isEmpty}',
+      );
+      if (_isShowing || next.isEmpty || isLoading) return;
+      processQueue(next.first);
+    });
 
     return widget.child;
   }
@@ -83,20 +93,21 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
       // context: AppRouter.globalNavigatorKey.currentState!.overlay!.context,
       context: AppRouter.globalNavigatorKey.currentContext!,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text(dialog.title),
-        content: Text(dialog.message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Navigator.of(context).pop();
-              AppRouter.globalNavigatorKey.currentState?.pop();
-              dialog.onConfirmed?.call(); // 확인 시 콜백 실행
-            },
-            child: const Text('확인'),
+      builder:
+          (context) => AlertDialog(
+            title: Text(dialog.title),
+            content: Text(dialog.message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  // Navigator.of(context).pop();
+                  AppRouter.globalNavigatorKey.currentState?.pop();
+                  dialog.onConfirmed?.call(); // 확인 시 콜백 실행
+                },
+                child: const Text('확인'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
 
     setState(() {
@@ -106,37 +117,37 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
     });
   }
 
-  void _processQueue() async {
-    final queue = ref.read(dialogQueueProvider);
-
-    if (!_isShowing && queue.isNotEmpty) {
-      _isShowing = true;
-
-      final request = queue.first;
-
-      await showDialog(
-        // context: AppRouter.globalNavigatorKey.currentState!.overlay!.context,
-        context: AppRouter.globalNavigatorKey.currentContext!,
-        builder: (_) => AlertDialog(
-          title: Text(request.title),
-          content: Text(request.message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Navigator.of(context).pop();
-                AppRouter.globalNavigatorKey.currentState?.pop();
-              },
-              child: const Text('확인'),
-            )
-          ],
-        ),
-      );
-
-      ref.read(dialogQueueProvider.notifier).dequeue();
-
-      _isShowing = false;
-
-      WidgetsBinding.instance.addPostFrameCallback((_) => _processQueue());
-    }
-  }
+  // void _processQueue() async {
+  //   final queue = ref.read(dialogQueueProvider);
+  //
+  //   if (!_isShowing && queue.isNotEmpty) {
+  //     _isShowing = true;
+  //
+  //     final request = queue.first;
+  //
+  //     await showDialog(
+  //       // context: AppRouter.globalNavigatorKey.currentState!.overlay!.context,
+  //       context: AppRouter.globalNavigatorKey.currentContext!,
+  //       builder: (_) => AlertDialog(
+  //         title: Text(request.title),
+  //         content: Text(request.message),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               // Navigator.of(context).pop();
+  //               AppRouter.globalNavigatorKey.currentState?.pop();
+  //             },
+  //             child: const Text('확인'),
+  //           )
+  //         ],
+  //       ),
+  //     );
+  //
+  //     ref.read(dialogQueueProvider.notifier).dequeue();
+  //
+  //     _isShowing = false;
+  //
+  //     WidgetsBinding.instance.addPostFrameCallback((_) => _processQueue());
+  //   }
+  // }
 }

@@ -20,9 +20,45 @@ class HomeTab extends ConsumerStatefulWidget {
 }
 
 class _HomeTabState extends BaseConState<HomeTab> {
+  late void Function() _cancelLoadingListener;
+
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // ref.listen(dialogQueueProvider, (previous, next) {
+      //   QcLog.d('listen ==== dialogQueueProvider ====  $previous , $next');
+      // });
+
+      // ref.listen(globalLoadingProvider, (previous, next) {
+      //   QcLog.d('listen ==== globalLoadingProvider ====   $previous , $next');
+      // });
+
+      // ref.listenManual(dialogQueueProvider, (previous, next) {
+      //   QcLog.d('listen ==== dialogQueueProvider ====   $previous , $next');
+      // });
+      // ref.listenManual(globalLoadingProvider, (previous, next) {
+      //   QcLog.d('listen ==== globalLoadingProvider ====   $previous , $next');
+      // });
+
+      // _cancelDialogListener = ref.listenManual<Queue<DialogRequest>>(
+      //   dialogQueueProvider,
+      //       (previous, next) {
+      //     QcLog.d('📌 DialogQueue 변경 감지: $next');
+      //     _tryShowNextDialog();
+      //   },
+      // );
+      //
+      // _cancelLoadingListener = ref.listenManual<bool>(
+      //   globalLoadingProvider,
+      //       (previous, next) {
+      //     QcLog.d('📌 로딩 상태 변경 감지: $next');
+      //     _isLoading = next;
+      //     _tryShowNextDialog();
+      //   },
+      // );
+    });
   }
 
   @override
@@ -35,10 +71,18 @@ class _HomeTabState extends BaseConState<HomeTab> {
     QcLog.d('mTestUsual ===== ${mTestUsual.toString()}');
     var testUsual = mTestUsual.copyWith(content: 'lllllll');
     QcLog.d('testUsual ===== ${testUsual.toJson()}');
-// JSON 직렬화
+    // JSON 직렬화
     final json = mTestUsual.toJson();
 
-// 역직렬화
+    // ref.listen(dialogQueueProvider, (previous, next) {
+    //   QcLog.d('listen ==== dialogQueueProvider ====  $previous , $next');
+    // });
+    //
+    // ref.listen(globalLoadingProvider, (previous, next) {
+    //   QcLog.d('listen ==== globalLoadingProvider ====   $previous , $next');
+    // });
+
+    // 역직렬화
     final postFromJson = TestUsual.fromJson(json);
     QcLog.d('postFromJson ===== ${postFromJson.toJson()}');
     return Scaffold(
@@ -47,93 +91,93 @@ class _HomeTabState extends BaseConState<HomeTab> {
         child: Column(
           children: [
             RouterMoveItem('로딩 매니져', () async {
-              // LoadingDialogManager.show();
-              // await Future.delayed(const Duration(seconds: 5));
-              // LoadingDialogManager.hide();
-
-              final loading = ref.read(globalLoadingProvider.notifier);
-              loading.state = true;
+              ref.read(globalLoadingProvider.notifier).state = true;
               LoadingDialogManager.show();
               await Future.delayed(const Duration(seconds: 5));
-              loading.state = false;
+              ref.read(globalLoadingProvider.notifier).state = false;
               LoadingDialogManager.hide();
+              QcLog.d('loading state ===  ${ref.read(globalLoadingProvider.notifier).state}');
             }),
             const SizedBox(height: 20),
 
+            ///
+            ///
+            ///
             RouterMoveItem('다이얼로그 큐 매니져', () async {
               ref.read(dialogQueueProvider.notifier).clear();
               QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
               // 다이얼로그 요청 추가
-              ref.read(dialogQueueProvider.notifier).enqueue(
+              ref
+                  .read(dialogQueueProvider.notifier)
+                  .enqueue(
                     DialogRequest(
-                        title: '알림',
-                        message: '작업이 완료되었습니다.',
-                        onConfirmed: () {
-                          QcLog.d('onConfirmed ==== 알림 ');
-                        }),
+                      title: '알림',
+                      message: '작업이 완료되었습니다.',
+                      onConfirmed: () {
+                        QcLog.d('onConfirmed ==== 알림 ');
+                      },
+                    ),
                   );
               await Future.delayed(const Duration(seconds: 3));
-              ref.read(dialogQueueProvider.notifier).enqueue(
+              ref
+                  .read(dialogQueueProvider.notifier)
+                  .enqueue(
                     DialogRequest(
-                        title: '알림22222',
-                        message: '작업이 완료되었습니다.22222',
-                        onConfirmed: () {
-                          QcLog.d('onConfirmed ==== 알림22222 ');
-                        }),
+                      title: '알림22222',
+                      message: '작업이 완료되었습니다.22222',
+                      onConfirmed: () {
+                        QcLog.d('onConfirmed ==== 알림22222 ');
+                      },
+                    ),
                   );
 
-              // ref.read(dialogQueueProvider.notifier).enqueue(
-              //   DialogRequest(title: '안내', message: '로딩이 완료되었습니다.'),
-              // );
               QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
-// 다이얼로그 처리 후 큐 제거
-//             ref.read(dialogQueueProvider.notifier).dequeue();
             }),
             const SizedBox(height: 20),
 
+            ///
+            ///
+            ///
             RouterMoveItem('로딩 & 다이얼로그 큐 매니져', () async {
               ref.read(dialogQueueProvider.notifier).clear();
               QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
 
-              final loading = ref.read(globalLoadingProvider.notifier);
-              loading.state = true;
+              ref.read(globalLoadingProvider.notifier).state = true;
               LoadingDialogManager.show();
 
               // 다이얼로그 요청 추가
-              ref.read(dialogQueueProvider.notifier).enqueue(
+              ref
+                  .read(dialogQueueProvider.notifier)
+                  .enqueue(
                     DialogRequest(
-                        title: '알림',
-                        message: '작업이 완료되었습니다.',
-                        onConfirmed: () {
-                          QcLog.d('onConfirmed ==== 알림 ');
-                        }),
+                      title: '알림',
+                      message: '작업이 완료되었습니다.',
+                      onConfirmed: () {
+                        QcLog.d('onConfirmed ==== 알림 ');
+                      },
+                    ),
                   );
-              // await Future.delayed(const Duration(seconds: 3));
-              ref.read(dialogQueueProvider.notifier).enqueue(
+              ref
+                  .read(dialogQueueProvider.notifier)
+                  .enqueue(
                     DialogRequest(
-                        title: '알림22222',
-                        message: '작업이 완료되었습니다.22222',
-                        onConfirmed: () {
-                          QcLog.d('onConfirmed ==== 알림22222 ');
-                        }),
+                      title: '알림22222',
+                      message: '작업이 완료되었습니다.22222',
+                      onConfirmed: () {
+                        QcLog.d('onConfirmed ==== 알림22222 ');
+                      },
+                    ),
                   );
+              QcLog.d('Queue length ==== 로딩중상태 다이얼로그 추가');
 
               await Future.delayed(const Duration(seconds: 3));
-              loading.state = false;
               LoadingDialogManager.hide();
+              ref.read(globalLoadingProvider.notifier).state = false;
 
-              // ref.read(dialogQueueProvider.notifier).enqueue(
-              //   DialogRequest(title: '안내', message: '로딩이 완료되었습니다.'),
-              // );
+              QcLog.d('loading state ===  ${ref.read(globalLoadingProvider.notifier).state}');
 
-
-              final loading2 = ref.read(globalLoadingProvider.notifier);
-
-
-
-              QcLog.d('Queue length ==== ${loading2.state} ,  ${ref.read(dialogQueueProvider.notifier).length}');
-// 다이얼로그 처리 후 큐 제거
-//             ref.read(dialogQueueProvider.notifier).dequeue();
+              // 다이얼로그 처리 후 큐 제거
+              //             ref.read(dialogQueueProvider.notifier).dequeue();
             }),
             const SizedBox(height: 40),
 

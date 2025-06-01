@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 
@@ -25,7 +26,16 @@ class LoadingDialogManager {
           canPop: !_isShowing, // 로딩 중이면 뒤로 가기 불가
           child: Dialog(
             backgroundColor: Colors.transparent,
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(
+              child: InkWell(
+                onLongPress: () {
+                  if (kDebugMode) {
+                    hide();
+                  }
+                },
+                child: CircularProgressIndicator(),
+              ),
+            ),
           ),
         );
       },
@@ -35,8 +45,8 @@ class LoadingDialogManager {
   static void hide() {
     if (_isShowing) {
       QcLog.d('loading hide =====');
-      AppRouter.globalNavigatorKey.currentState?.pop();
       _isShowing = false;
+      AppRouter.globalNavigatorKey.currentState?.pop();
     }
   }
 }
