@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/presentation/widgets/dialog_queue_listener.dart';
+import 'package:flutter_example_base/presentation/dialog/dialog_queue_listener.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../app/providers/dialog_queue_manager.dart';
 import '../../app/routes/app_routes_info.dart';
-import '../../app/services/loading/dialog_queue_manager.dart';
 import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
-import '../widgets/router_move_item.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
