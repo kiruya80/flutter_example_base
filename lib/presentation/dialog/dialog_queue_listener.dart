@@ -17,7 +17,6 @@ class DialogQueueListener extends ConsumerStatefulWidget {
   ConsumerState<DialogQueueListener> createState() => _DialogQueueListenerState();
 }
 
-
 class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
   bool _isShowingDialog = false;
 
@@ -25,7 +24,7 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
   void initState() {
     super.initState();
 
-    dialogController.register(
+    DialogController.instance.register(
       showLoading: _showLoading,
       hideLoading: _hideLoading,
       enqueueDialog: (request) {
@@ -35,12 +34,10 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
   }
 
   void _showLoading() {
-    QcLog.d('_showLoading ===== ${dialogController.isLoadingVisible}');
-    // if (dialogController.isLoadingVisible) return;
-    // dialogController.isLoadingVisible = true;
-    ref
-        .read(globalLoadingProvider.notifier)
-        .state = true;
+    QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingVisible}');
+    // if (DialogController.instance.isLoadingVisible) return;
+    // DialogController.instance.isLoadingVisible = true;
+    // ref.read(globalLoadingProvider.notifier).state = true;
 
     showDialog(
       context: AppRouter.globalNavigatorKey.currentContext!,
@@ -50,18 +47,22 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
   }
 
   void _hideLoading() {
-    QcLog.d('_showLoading ===== ${dialogController.isAnyDialogVisible}');
-    if (!dialogController.isAnyDialogVisible) return;
-
+    QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingDisable}');
+    if (DialogController.instance.isLoadingDisable == false) {
+      return;
+    }
+    QcLog.d(
+      'canPop ====='
+      ' ${Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).canPop()}'
+      ' , ${Navigator.of(AppRouter.globalNavigatorKey.currentContext!).canPop()}',
+    );
     if (Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).canPop()) {
       Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).pop();
     }
 
-    dialogController.markLoadingHidden(); // ✅ 안전하게 상태 변경
-    // dialogController.isLoadingVisible = false;
-    ref
-        .read(globalLoadingProvider.notifier)
-        .state = false;
+    DialogController.instance.markLoadingHidden(); // ✅ 안전하게 상태 변경
+    // DialogController.instance.isLoadingVisible = false;
+    ref.read(globalLoadingProvider.notifier).state = false;
   }
 
   void _tryShowNextDialog() {
@@ -72,13 +73,13 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
 
     final request = queue.first;
     _isShowingDialog = true;
-    dialogController.markDialogVisible();
+    DialogController.instance.markDialogVisible();
 
     showDialog(
       context: AppRouter.globalNavigatorKey.currentContext!,
       barrierDismissible: false,
-      builder: (_) =>
-          AlertDialog(
+      builder:
+          (_) => AlertDialog(
             title: Text(request.title),
             content: Text(request.message),
             actions: [
@@ -101,7 +102,7 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
           ),
     ).then((_) {
       ref.read(dialogQueueProvider.notifier).dequeue();
-      dialogController.markDialogHidden();
+      DialogController.instance.markDialogHidden();
       _isShowingDialog = false;
       _tryShowNextDialog(); // 다음 다이얼로그가 있으면 또 표시
     });
@@ -128,7 +129,6 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
   }
 }
 
-
 // class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
 //   bool _isShowingDialog = false;
 //
@@ -136,7 +136,7 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
 //   void initState() {
 //     super.initState();
 //
-//     dialogController.register(
+//     DialogController.instance.register(
 //       showLoading: _showLoading,
 //       hideLoading: _hideLoading,
 //       enqueueDialog: (request) {
@@ -272,7 +272,7 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
 //     super.initState();
 //
 //     // register controller methods
-//     dialogController.register(
+//     DialogController.instance.register(
 //       showLoading: _showLoading,
 //       hideLoading: _dismissDialog,
 //       showDialog: _showDialog,

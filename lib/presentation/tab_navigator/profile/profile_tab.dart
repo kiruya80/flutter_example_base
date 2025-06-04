@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/utils/print_log.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../shared/state/base_con_state.dart';
+import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
 class ProfileTab extends ConsumerStatefulWidget {
@@ -26,8 +27,8 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text('context goNamed'),
-            const SizedBox(height: 10),
+            ItemTitle('context goNamed'),
+
             RouterMoveItem('goNamed(profileDetail)', () {
               context.goNamed(AppRoutesInfo.profileDetail.name);
             }, isError: true),
@@ -40,9 +41,10 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
                 queryParameters: {'title': 'profile'},
               );
             }, isError: true),
-            const SizedBox(height: 20),
-            Text('context pushNamed'),
-            const SizedBox(height: 10),
+
+
+
+            ItemTitle('context pushNamed'),
             RouterMoveItem('push(/profile/detail, \npathParameters: {id: 123}', () {
               context.pushNamed(AppRoutesInfo.profileDetail.name, pathParameters: {'id': '123'});
             }),

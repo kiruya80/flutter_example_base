@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/utils/print_log.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../shared/state/base_con_state.dart';
+import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
 class SearchTab extends ConsumerStatefulWidget {
@@ -38,8 +39,7 @@ class _SearchTabState extends BaseConState<SearchTab> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text('context Go path'),
-            const SizedBox(height: 10),
+            ItemTitle('context Go path'),
 
             RouterMoveItem('go(/search/detail)', () {
               context.go('/search/detail');
@@ -53,10 +53,8 @@ class _SearchTabState extends BaseConState<SearchTab> {
               context
                   .go(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
             }),
-
-            const SizedBox(height: 20),
-            Text('context push'),
-            const SizedBox(height: 10),
+ 
+            ItemTitle('context push'),
 
             RouterMoveItem('push(/search/detail/123)', () {
               context.push('/search/detail/123');
@@ -67,8 +65,8 @@ class _SearchTabState extends BaseConState<SearchTab> {
                   .push(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
             }),
 
-            Text('home detail Go & Push'),
-            const SizedBox(height: 10),
+
+            ItemTitle('홈의 상세 페이지 이동 [go & push]'),
 
             /// 브랜치로 전환(현재탭 스택 제거) home 이동후 detail 이동
             /// 뒤로가기시 홈으로 가능

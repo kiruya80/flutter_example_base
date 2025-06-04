@@ -20,18 +20,20 @@ class PostListViewModel extends StateNotifier<PostListState> {
   final DeletePost deletePost;
 
   PostListViewModel(this.getPosts, this.deletePost) : super(PostListState.initial()) {
-    loadPosts();
+    // loadPosts();
   }
 
   Future<void> loadPosts() async {
     // state = const AsyncLoading();
     state = state.copyWith(isLoading: true, error: null);
+
+    // await Future.delayed(Duration(seconds: 1));
     final result = await getPosts(NoParams());
     QcLog.d('result ===== ${result.runtimeType} , ${result.toString()}');
 
     result.fold(
       (Failure failure) {
-        state = state.copyWith(isLoading: false, error: failure.message);
+        state = state.copyWith(isLoading: false, error: failure);
       },
       (posts) {
         state = state.copyWith(isLoading: false, posts: posts);

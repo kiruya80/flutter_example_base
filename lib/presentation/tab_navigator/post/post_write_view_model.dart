@@ -10,7 +10,7 @@ class PostWriteViewModel extends StateNotifier<PostWriteState> {
   PostWriteViewModel(this.createPost) : super(PostWriteState.initial());
 
   Future<bool> submit(String title, String body) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isLoading: true, error: null);
 
     // final userId = await SharedPrefsUtil.getUserId();
     // if (userId == null) {
@@ -21,7 +21,7 @@ class PostWriteViewModel extends StateNotifier<PostWriteState> {
     final result = await createPost(Post(id: 123, userId: 9999, title: title, body: body));
     return result.fold(
       (Failure failure) {
-        state = state.copyWith(isLoading: false, errorMessage: failure.message);
+        state = state.copyWith(isLoading: false, error: failure);
         return false;
       },
       (_) {

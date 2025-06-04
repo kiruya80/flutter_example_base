@@ -30,8 +30,9 @@ class _DetailScreenState extends BaseConState<DetailScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     // ✅ 안전하게 상태 업데이트
-    if (!isThisPageVisible) return;
-
+    if (isThisPageVisible == false) {
+      return;
+    }
     showDialog(context: context, builder: (_) => const AlertDialog(content: Text('데이터 도착')));
   }
 

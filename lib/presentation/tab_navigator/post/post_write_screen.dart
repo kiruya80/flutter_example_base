@@ -40,7 +40,7 @@ class _PostWriteScreenState extends BaseConState<PostWriteScreen> {
       // context.go('/posts');
       context.pop();
     } else {
-      final error = ref.read(postWriteViewModelProvider).errorMessage;
+      final error = ref.read(postWriteViewModelProvider).error?.message;
       _showError(error ?? '작성 실패');
     }
   }
@@ -72,7 +72,7 @@ class _PostWriteScreenState extends BaseConState<PostWriteScreen> {
               maxLines: 5,
             ),
             const SizedBox(height: 20),
-            state.isLoading
+            state.isLoading == true
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: _onSubmit,

@@ -8,6 +8,7 @@ import '../../providers/dialog_queue_provider.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../core/utils/print_log.dart';
 import '../../../shared/state/base_con_state.dart';
+import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
 class HomeTab extends ConsumerStatefulWidget {
@@ -79,21 +80,17 @@ class _HomeTabState extends BaseConState<HomeTab> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            RouterMoveItem('로딩 매니져 dialogController', () async {
-              dialogController.showLoading();
+            ItemTitle('로딩 매니져'),
+            RouterMoveItem('showLoading & hideLoading', () async {
+              DialogController.instance.showLoading();
               await Future.delayed(const Duration(seconds: 5));
-              dialogController.hideLoading();
+              DialogController.instance.hideLoading();
             }),
-            const SizedBox(height: 20),
-            // RouterMoveItem('로딩 매니져 globalLoadingProvider', () async {
-            //   ref.read(globalLoadingProvider.notifier).state = true;
-            //   await Future.delayed(const Duration(seconds: 5));
-            //   ref.read(globalLoadingProvider.notifier).state = false;
-            // }),
-            // const SizedBox(height: 20),
 
-            RouterMoveItem('showAppDialog dialogController', () async {
-              dialogController.showAppDialog(
+
+            ItemTitle('일반 다이얼로그 5초 후 중복'),
+            RouterMoveItem('showAppDialog & showAppDialog', () async {
+              DialogController.instance.showAppDialog(
                 title: '알림',
                 message: '작업이 완료되었습니다.',
                 type: DialogRequestType.info,
@@ -101,7 +98,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
               );
               await Future.delayed(const Duration(seconds: 3));
 
-              dialogController.showAppDialog(
+              DialogController.instance.showAppDialog(
                 title: '알림22222',
                 message: '작업이 완료되었습니다.22222',
                 type: DialogRequestType.info,
@@ -110,37 +107,50 @@ class _HomeTabState extends BaseConState<HomeTab> {
 
               QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
             }),
-            const SizedBox(height: 20),
 
-            RouterMoveItem('showAppDialog dialogQueueProvider', () async {
-              // 다이얼로그 요청 추가
-              ref
-                  .read(dialogQueueProvider.notifier)
-                  .enqueue(
-                    DialogRequest(
-                      title: '알림',
-                      message: '작업이 완료되었습니다.',
-                      onConfirmed: () {
-                        QcLog.d('onConfirmed ==== 알림 ');
-                      },
-                    ),
-                  );
-              await Future.delayed(const Duration(seconds: 3));
-              ref
-                  .read(dialogQueueProvider.notifier)
-                  .enqueue(
-                    DialogRequest(
-                      title: '알림22222',
-                      message: '작업이 완료되었습니다.22222',
-                      onConfirmed: () {
-                        QcLog.d('onConfirmed ==== 알림22222 ');
-                      },
-                    ),
-                  );
+            ItemTitle('로딩 5초 후 일반 다이얼로그'),
+            RouterMoveItem('showLoading & showAppDialog', () async {
+              DialogController.instance.showLoading();
+
+              DialogController.instance.showAppDialog(
+                title: '알림',
+                message: '작업이 완료되었습니다.',
+                type: DialogRequestType.info,
+                onConfirmed: () => print('확인 클릭됨'),
+              );
+              await Future.delayed(const Duration(seconds: 5));
+              DialogController.instance.hideLoading();
 
               QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
             }),
-            const SizedBox(height: 20),
+            // RouterMoveItem('showAppDialog dialogQueueProvider', () async {
+            //   // 다이얼로그 요청 추가
+            //   ref
+            //       .read(dialogQueueProvider.notifier)
+            //       .enqueue(
+            //         DialogRequest(
+            //           title: '알림',
+            //           message: '작업이 완료되었습니다.',
+            //           onConfirmed: () {
+            //             QcLog.d('onConfirmed ==== 알림 ');
+            //           },
+            //         ),
+            //       );
+            //   await Future.delayed(const Duration(seconds: 3));
+            //   ref
+            //       .read(dialogQueueProvider.notifier)
+            //       .enqueue(
+            //         DialogRequest(
+            //           title: '알림22222',
+            //           message: '작업이 완료되었습니다.22222',
+            //           onConfirmed: () {
+            //             QcLog.d('onConfirmed ==== 알림22222 ');
+            //           },
+            //         ),
+            //       );
+            //
+            //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
+            // }),
 
             // RouterMoveItem('로딩 매니져', () async {
             //   ref.read(globalLoadingProvider.notifier).state = true;
@@ -150,7 +160,6 @@ class _HomeTabState extends BaseConState<HomeTab> {
             //   LoadingDialogManager.hide();
             //   QcLog.d('loading state ===  ${ref.read(globalLoadingProvider.notifier).state}');
             // }),
-            const SizedBox(height: 20),
 
             ///
             ///
@@ -237,8 +246,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
             ///
             ///
             ///
-            Text('context Go & Push'),
-            const SizedBox(height: 10),
+            ItemTitle('context Go & Push'),
             RouterMoveItem('go(/home/detail)', () {
               // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
               //     context.pushNamed('details', pathParameters: {'id': '123'});
@@ -266,9 +274,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
               context.push('/home/homeCard');
             }),
 
-            const SizedBox(height: 20),
-            Text('Setting go & push'),
-            const SizedBox(height: 10),
+            ItemTitle('Setting go & push'),
 
             /// 스택 리셋 back 불가
             RouterMoveItem('go(/setting) 스택 리셋', () {
