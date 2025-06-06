@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
@@ -5,9 +6,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/routes/app_router.dart';
 import 'dialog_controller.dart';
-import '../providers/dialog_queue_provider.dart';
-import '../providers/global_loading_provider.dart';
+import 'dialog_request.dart';
 
+///
+/// DialogQueueListener – 큐 리스너 위젯
+///
+/// 	•	MaterialApp.router의 builder에 넣어 전역 다이얼로그 큐 소비
+/// 	•	ref.listen으로 dialogQueue가 바뀔 때 자동으로 다이얼로그 띄움
+///
 class DialogQueueListener extends ConsumerStatefulWidget {
   final Widget child;
 
@@ -18,115 +24,276 @@ class DialogQueueListener extends ConsumerStatefulWidget {
 }
 
 class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
-  bool _isShowingDialog = false;
-
   @override
-  void initState() {
-    super.initState();
-
-    DialogController.instance.register(
-      showLoading: _showLoading,
-      hideLoading: _hideLoading,
-      enqueueDialog: (request) {
-        ref.read(dialogQueueProvider.notifier).enqueue(request);
-      },
-    );
-  }
-
-  void _showLoading() {
-    QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingVisible}');
-    // if (DialogController.instance.isLoadingVisible) return;
-    // DialogController.instance.isLoadingVisible = true;
-    // ref.read(globalLoadingProvider.notifier).state = true;
-
-    showDialog(
-      context: AppRouter.globalNavigatorKey.currentContext!,
-      barrierDismissible: false,
-      builder: (_) => const Center(child: CircularProgressIndicator()),
-    );
-  }
-
-  void _hideLoading() {
-    QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingDisable}');
-    if (DialogController.instance.isLoadingDisable == false) {
-      return;
-    }
-    QcLog.d(
-      'canPop ====='
-      ' ${Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).canPop()}'
-      ' , ${Navigator.of(AppRouter.globalNavigatorKey.currentContext!).canPop()}',
-    );
-    if (Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).canPop()) {
-      Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).pop();
-    }
-
-    DialogController.instance.markLoadingHidden(); // ✅ 안전하게 상태 변경
-    // DialogController.instance.isLoadingVisible = false;
-    ref.read(globalLoadingProvider.notifier).state = false;
-  }
-
-  void _tryShowNextDialog() {
-    final isLoading = ref.read(globalLoadingProvider);
-    final queue = ref.read(dialogQueueProvider);
-
-    if (_isShowingDialog || isLoading || queue.isEmpty) return;
-
-    final request = queue.first;
-    _isShowingDialog = true;
-    DialogController.instance.markDialogVisible();
-
-    showDialog(
-      context: AppRouter.globalNavigatorKey.currentContext!,
-      barrierDismissible: false,
-      builder:
-          (_) => AlertDialog(
-            title: Text(request.title),
-            content: Text(request.message),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
-                  request.onConfirmed?.call();
-                },
-                child: const Text('확인'),
-              ),
-              if (request.onCancelled != null)
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
-                    request.onCancelled?.call();
-                  },
-                  child: const Text('취소'),
-                ),
-            ],
-          ),
-    ).then((_) {
-      ref.read(dialogQueueProvider.notifier).dequeue();
-      DialogController.instance.markDialogHidden();
-      _isShowingDialog = false;
-      _tryShowNextDialog(); // 다음 다이얼로그가 있으면 또 표시
-    });
-  }
-
-  @override
-  void dispose() {
-    // _loadingSub.close();
-    // _dialogSub.close();
-    super.dispose();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Future.microtask(_processQueue);
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(globalLoadingProvider, (prev, next) {
-      if (!next) _tryShowNextDialog();
-    });
+    ref.listen(dialogQueueProvider, (previous, next) => _processQueue());
 
-    ref.listen(dialogQueueProvider, (prev, next) {
-      _tryShowNextDialog();
+    ref.listen<List<DialogRequest>>(dialogQueueProvider, (prev, next) async {
+      QcLog.d(
+        'ref.listen dialogQueueProvider ==== ${next.isNotEmpty} & ${prev?.length} , ${next.length} ,'
+        '${ref.read(isDialogShowingProvider)}',
+      );
+      if (ref.read(isDialogShowingProvider)) return;
+      if (next.isEmpty) return;
+
+      final request = next.first;
+      await _showDialogByType(AppRouter.globalNavigatorKey.currentContext!, request);
     });
 
     return widget.child;
   }
+
+  Future<void> _processQueue() async {
+    QcLog.d('_processQueue ====  ');
+    final isShowing = ref.read(isDialogShowingProvider);
+    final queue = ref.read(dialogQueueProvider);
+
+    if (isShowing || queue.isEmpty) return;
+    final request = queue.first;
+
+    ref.read(isDialogShowingProvider.notifier).state = true;
+    if (request.type == DialogType.loading) {
+      ref.read(isLoadingDialogShowingProvider.notifier).state = true;
+    }
+
+    await _showDialogByType(AppRouter.globalNavigatorKey.currentContext!, request);
+
+    // 다이얼로그 닫힌 후 상태 정리
+    // ref.read(dialogQueueProvider.notifier).state = queue.skip(1).toList();
+    // ref.read(isDialogShowingProvider.notifier).state = false;
+    // if (request.type == DialogType.loading) {
+    //   ref.read(isLoadingDialogShowingProvider.notifier).state = false;
+    // }
+
+    QcLog.d('다이얼로그 종료 후 큐 갱신 ==== ');
+
+    /// 다이얼로그 상태 false 업데이트
+    ref.read(isDialogShowingProvider.notifier).state = false;
+
+    /// 다이얼로그 큐 또는 로딩 다이얼로그 false 업데이트
+    if (request.type == DialogType.loading) {
+      ref.read(isLoadingDialogShowingProvider.notifier).state = false;
+    } else {
+      final queue = ref.read(dialogQueueProvider);
+      ref.read(dialogQueueProvider.notifier).state = queue.skip(1).toList();
+    }
+  }
+
+  Future<void> _showDialogByType(BuildContext context, DialogRequest request) async {
+    QcLog.d('_showDialogByType  ==== ${request.toString()}');
+    ref.read(isDialogShowingProvider.notifier).state = true;
+    switch (request.type) {
+      case DialogType.loading:
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) =>   Center(child: GestureDetector(
+              onLongPress: () {
+                if (kDebugMode) {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: CircularProgressIndicator())),
+        );
+        break;
+      case DialogType.error:
+      case DialogType.success:
+        await showDialog(
+          context: context,
+          builder:
+              (_) => AlertDialog(
+                title: Text(request.title ?? ''),
+                content: Text(request.message ?? ''),
+                actions: [
+                  if (request.onCancelled != null)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        request.onCancelled?.call();
+                      },
+                      child: const Text('취소'),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      request.onConfirmed?.call();
+                    },
+                    child: const Text('확인'),
+                  ),
+                ],
+              ),
+        );
+        break;
+      case DialogType.custom:
+      case DialogType.info:
+        await showDialog(
+          context: context,
+          builder:
+              (_) => AlertDialog(
+                title: Text(request.title ?? '알림'),
+                content: Text(request.message ?? ''),
+                actions: [
+                  if (request.onCancelled != null)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        request.onCancelled?.call();
+                      },
+                      child: const Text('취소'),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      request.onConfirmed?.call();
+                    },
+                    child: const Text('확인'),
+                  ),
+                ],
+              ),
+        );
+        break;
+
+      case DialogType.confirm:
+        await showDialog(
+          context: context,
+          builder:
+              (_) => AlertDialog(
+                title: Text(request.title ?? ''),
+                content: request.customWidget ?? Text(request.message ?? ''),
+                actions: [
+                  if (request.onCancelled != null)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        request.onCancelled?.call();
+                      },
+                      child: const Text('취소'),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      request.onConfirmed?.call();
+                    },
+                    child: const Text('확인'),
+                  ),
+                ],
+              ),
+        );
+        break;
+    }
+  }
+
+  // bool _isShowingDialog = false;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   DialogController.instance.register(
+  //     showLoading: _showLoading,
+  //     hideLoading: _hideLoading,
+  //     enqueueDialog: (request) {
+  //       ref.read(dialogQueueProvider.notifier).enqueue(request);
+  //     },
+  //   );
+  // }
+  //
+  // void _showLoading() {
+  //   QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingVisible}');
+  //   // if (DialogController.instance.isLoadingVisible) return;
+  //   // DialogController.instance.isLoadingVisible = true;
+  //   // ref.read(globalLoadingProvider.notifier).state = true;
+  //
+  //   showDialog(
+  //     context: AppRouter.globalNavigatorKey.currentContext!,
+  //     barrierDismissible: false,
+  //     builder: (_) => const Center(child: CircularProgressIndicator()),
+  //   );
+  // }
+  //
+  // void _hideLoading() {
+  //   QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingDisable}');
+  //   if (DialogController.instance.isLoadingDisable == false) {
+  //     return;
+  //   }
+  //
+  //   if (Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).canPop()) {
+  //     Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).pop();
+  //   }
+  //
+  //   DialogController.instance.markLoadingHidden(); // ✅ 안전하게 상태 변경
+  //   // DialogController.instance.isLoadingVisible = false;
+  //   ref.read(globalLoadingProvider.notifier).state = false;
+  // }
+  //
+  // void _tryShowNextDialog() {
+  //   final isLoading = ref.read(globalLoadingProvider);
+  //   final queue = ref.read(dialogQueueProvider);
+  //
+  //   if (_isShowingDialog || isLoading || queue.isEmpty) return;
+  //
+  //   final request = queue.first;
+  //   _isShowingDialog = true;
+  //   DialogController.instance.markDialogVisible();
+  //
+  //   showDialog(
+  //     context: AppRouter.globalNavigatorKey.currentContext!,
+  //     barrierDismissible: false,
+  //     builder:
+  //         (_) => AlertDialog(
+  //           title: Text(request.title ?? ''),
+  //           content: Text(request.message?? ''),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () {
+  //                 Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
+  //                 request.onConfirmed?.call();
+  //               },
+  //               child: const Text('확인'),
+  //             ),
+  //             if (request.onCancelled != null)
+  //               TextButton(
+  //                 onPressed: () {
+  //                   Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
+  //                   request.onCancelled?.call();
+  //                 },
+  //                 child: const Text('취소'),
+  //               ),
+  //           ],
+  //         ),
+  //   ).then((_) {
+  //     ref.read(dialogQueueProvider.notifier).dequeue();
+  //     DialogController.instance.markDialogHidden();
+  //     _isShowingDialog = false;
+  //     _tryShowNextDialog(); // 다음 다이얼로그가 있으면 또 표시
+  //   });
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   // _loadingSub.close();
+  //   // _dialogSub.close();
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // Widget build(BuildContext context) {
+  //   ref.listen(globalLoadingProvider, (prev, next) {
+  //     if (!next) _tryShowNextDialog();
+  //   });
+  //
+  //   ref.listen(dialogQueueProvider, (prev, next) {
+  //     _tryShowNextDialog();
+  //   });
+  //
+  //   return widget.child;
+  // }
 }
 
 // class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {

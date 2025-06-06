@@ -8,8 +8,10 @@ class RouteInfo {
   final String name;
   final String path;
   final String? prefixPath; // 탭 경로 등 앞에 붙일 경로
+  final Map<String, dynamic>? pathParams;
+  final Map<String, dynamic>? queryParams;
 
-  const RouteInfo(this.name, this.path, {this.prefixPath});
+  const RouteInfo(this.name, this.path, {this.prefixPath, this.pathParams, this.queryParams});
 }
 
 extension RouteInfoHelper on RouteInfo {

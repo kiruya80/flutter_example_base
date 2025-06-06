@@ -7,58 +7,82 @@ import '../../../presentation/dialog/dialog_controller.dart';
 
 ///
 /// 1. mixin
+///  ㄴ BaseUiStatus의 상태 값에 따라 다이얼로그
+///  mixin이나 ViewModel은 “무엇을 띄울지”까지만 결정
+///
+///  	•	첫 번째 제네릭 <T>는 ViewModel의 상태 (PostListState)를 의미하고
+/// 	•	두 번째 제네릭 <W>는 ConsumerStatefulWidget (즉 화면 위젯 클래스, PostListScreen)를 의미합니다.
+///
+///  	•	LoadingListenerMixin, ErrorListenerMixin, NavigationListenerMixin
+/// 	•	각각 isLoading, error, navigateTo를 수신하여 적절한 다이얼로그 또는 네비게이션 실행
+///
+///  LoadingListenerMixin, ErrorListenerMixin, NavigationListenerMixin – 상태 리스너 믹스인
+///
+/// 위젯에서 ViewModel/mixin > settup에서 프로바이더를 설정하고
+/// 프로바이더 listener로 감지
+///
+/// 예: ViewModel에서 로딩 시작 → mixin에서 감지 → dialogController.enqueue
+///
+/// → DialogQueueListener 감지 → showDialog(CircularProgressIndicator) 실행
+///
+/// → DialogController.enqueue(dialogRequest) → DialogQueueListener 감지 → showDialog(...)
 ///
 // mixin LoadingListenerMixin<T>  {
-mixin LoadingListenerMixin<T extends StatefulWidget> on State<T> {
-  late ProviderSubscription<BaseUiStatus> _subscription;
-  // ProviderSubscription? _loadingSubscription;
+mixin LoadingListenerMixin<T extends BaseUiStatus, W extends ConsumerStatefulWidget>
+    on ConsumerState<W> {
+  late ProviderSubscription<T> _subscription;
 
-  void setupLoadingListener(WidgetRef ref, ProviderListenable<BaseUiStatus> provider) {
-    _subscription = ref.listenManual<BaseUiStatus>(
-      provider,
-          (_, next) {
-        if (next.isLoading) {
-          DialogController.instance.showLoading();
-        } else {
-          DialogController.instance.hideLoading();
+  void setupLoadingListener(WidgetRef ref, ProviderListenable<T> provider) {
+    _subscription = ref.listenManual<T>(provider, (prev, next) {
+      QcLog.d('LoadingListenerMixin listenManual ==== ${prev?.isLoading} , ${next.isLoading}');
+      final wasLoading = prev?.isLoading ?? false;
+      final isLoading = next.isLoading;
+
+      if (wasLoading == false && isLoading == true) {
+        DialogController(ref).showLoading();
+      }
+
+      if (prev?.isLoading == true && next.isLoading == false) {
+        final isLoading = ref.read(isLoadingDialogShowingProvider);
+        if (isLoading) {
+          Navigator.of(context, rootNavigator: true).pop();
+          // Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).pop();
         }
-      },
-    );
+        DialogController(ref).hideLoading();
+      }
+    });
   }
 
   @override
   void dispose() {
-    QcLog.d('dispose === ');
     _subscription.close();
     super.dispose();
   }
-
-  // void setupLoadingListener(WidgetRef ref, ProviderListenable<T> provider) {
-  //   _loadingSubscription = ref.listenManual<T>(provider, (previous, next) {
-  //     final wasLoading = _getIsLoading(previous);
-  //     final isLoading = _getIsLoading(next);
-  //
-  //     if (wasLoading != isLoading) {
-  //       if (isLoading) {
-  //         DialogController.instance.showLoading();
-  //       } else {
-  //         DialogController.instance.hideLoading();
-  //       }
-  //     }
-  //   });
-  // }
-
-  // void disposeLoadingListener() {
-  //   _loadingSubscription?.close();
-  // }
-  // bool _getIsLoading(dynamic state) {
-  //   try {
-  //     return state?.isLoading == true;
-  //   } catch (_) {
-  //     return false;
-  //   }
-  // }
 }
+
+// mixin LoadingListenerMixin<T extends StatefulWidget> on State<T> {
+//   late ProviderSubscription<BaseUiStatus> _subscription;
+//
+//   void setupLoadingListener(WidgetRef ref, ProviderListenable<BaseUiStatus> provider) {
+//     _subscription = ref.listenManual<BaseUiStatus>(
+//       provider,
+//           (_, next) {
+//         if (next.isLoading) {
+//           DialogController.instance.showLoading();
+//         } else {
+//           DialogController.instance.hideLoading();
+//         }
+//       },
+//     );
+//   }
+//
+//   @override
+//   void dispose() {
+//     QcLog.d('dispose === ');
+//     _subscription.close();
+//     super.dispose();
+//   }
+// }
 
 ///
 /// 2. ProviderLoadingListener

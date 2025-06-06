@@ -1,4 +1,5 @@
 import '../../../core/error/failures.dart';
+import '../../../domain/common/entities/route_info.dart';
 import '../../../domain/post/entities/post.dart';
 import '../../../app/base/base_ui_status.dart';
 
@@ -11,7 +12,7 @@ class PostListState extends BaseUiStatus {
   @override
   final Failure? error;
   @override
-  final String? navigateTo;
+  final RouteInfo? navigateTo;
 
   final List<Post> posts;
 
@@ -25,7 +26,7 @@ class PostListState extends BaseUiStatus {
   PostListState copyWith({
     bool? isLoading,
     Failure? error,
-    String? navigateTo,
+    RouteInfo? navigateTo,
     List<Post>? posts,
   }) {
     return PostListState(

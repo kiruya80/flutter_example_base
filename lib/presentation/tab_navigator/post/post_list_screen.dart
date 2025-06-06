@@ -11,6 +11,8 @@ import '../../../app/providers/viewmodel/post_viewmodel_providers.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../shared/state/base_con_state.dart';
 import '../../../app/base/mixin/error_listener_mixin.dart';
+import '../../dialog/dialog_controller.dart';
+import '../../dialog/dialog_request.dart';
 
 class PostListScreen extends ConsumerStatefulWidget {
   const PostListScreen({super.key});
@@ -19,30 +21,29 @@ class PostListScreen extends ConsumerStatefulWidget {
   ConsumerState<PostListScreen> createState() => _PostListScreenState();
 }
 
-class _PostListScreenState extends BaseConState<PostListScreen>
-    // with LoadingListenerMixin<PostListState> {
-    with ErrorListenerMixin, LoadingListenerMixin, NavigationListenerMixin {
+class _PostListScreenState
+    extends
+        BaseConState<
+          PostListScreen
+        > // with ErrorListenerMixin, LoadingListenerMixin, NavigationListenerMixin {
+    with
+        ErrorListenerMixin<PostListState, PostListScreen>,
+        NavigationListenerMixin<PostListState, PostListScreen>,
+        LoadingListenerMixin<PostListState, PostListScreen> {
   @override
   void initState() {
     super.initState();
 
     // ✅ 로딩 리스너 등록
-    // proSub = ProviderLoadingListener.listenManual(ref, postListViewModelProvider);
-    // setupLoadingListener(ref, postListViewModelProvider);
     setupErrorListener(ref, postListViewModelProvider);
     setupLoadingListener(ref, postListViewModelProvider);
     setupNavigationListener(ref, postListViewModelProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(postListViewModelProvider.notifier).loadPosts();
+      // ref.read(postListViewModelProvider.notifier).dialogTest();
     });
   }
-
-  // @override
-  // void dispose() {
-  //   disposeLoadingListener(); // ✅ 반드시 해제
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +71,28 @@ class _PostListScreenState extends BaseConState<PostListScreen>
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          FloatingActionButton(
+            onPressed: () {
+              DialogController(ref).showDialog(
+                DialogRequest(type: DialogType.confirm, title: "일반", message: '다이얼로그 띄우기',
+                onCancelled: () {
+                  QcLog.d('onCancelled');
+                },
+                onConfirmed: () {
+                  QcLog.d('onConfirmed');
+                }),
+              );
+            },
+            child: const Icon(Icons.access_time_rounded),
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            onPressed: () {
+              ref.read(postListViewModelProvider.notifier).dialogTest();
+            },
+            child: const Icon(Icons.access_time_rounded),
+          ),
+          SizedBox(height: 10),
           FloatingActionButton(
             onPressed: () {
               ref.read(postListViewModelProvider.notifier).loadPosts();

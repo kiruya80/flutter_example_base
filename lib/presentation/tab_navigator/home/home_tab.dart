@@ -80,49 +80,55 @@ class _HomeTabState extends BaseConState<HomeTab> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ItemTitle('로딩 매니져'),
-            RouterMoveItem('showLoading & hideLoading', () async {
-              DialogController.instance.showLoading();
-              await Future.delayed(const Duration(seconds: 5));
-              DialogController.instance.hideLoading();
-            }),
+            // ItemTitle('로딩 매니져'),
+            // RouterMoveItem('showLoading & hideLoading', () async {
+            //   DialogController.instance.showLoading();
+            //   await Future.delayed(const Duration(seconds: 5));
+            //   DialogController.instance.hideLoading();
+            // }),
 
 
-            ItemTitle('일반 다이얼로그 5초 후 중복'),
-            RouterMoveItem('showAppDialog & showAppDialog', () async {
-              DialogController.instance.showAppDialog(
-                title: '알림',
-                message: '작업이 완료되었습니다.',
-                type: DialogRequestType.info,
-                onConfirmed: () => print('확인 클릭됨'),
-              );
-              await Future.delayed(const Duration(seconds: 3));
+            // ItemTitle('일반 다이얼로그 5초 후 중복'),
+            // RouterMoveItem('showAppDialog & showAppDialog', () async {
+            //   DialogController.instance.showAppDialog(
+            //     title: '알림',
+            //     message: '작업이 완료되었습니다.',
+            //     type: DialogType.info,
+            //     onConfirmed: () => print('확인 클릭됨'),
+            //   );
+            //   await Future.delayed(const Duration(seconds: 3));
+            //
+            //   DialogController.instance.showAppDialog(
+            //     title: '알림22222',
+            //     message: '작업이 완료되었습니다.22222',
+            //     type: DialogType.info,
+            //     onConfirmed: () => print('확인 클릭됨'),
+            //   );
+            //
+            //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
+            // }),
 
-              DialogController.instance.showAppDialog(
-                title: '알림22222',
-                message: '작업이 완료되었습니다.22222',
-                type: DialogRequestType.info,
-                onConfirmed: () => print('확인 클릭됨'),
-              );
+            // ItemTitle('로딩 5초 후 일반 다이얼로그'),
+            // RouterMoveItem('showLoading & showAppDialog', () async {
+            //   DialogController.instance.showLoading();
+            //
+            //   DialogController.instance.showAppDialog(
+            //     title: '알림',
+            //     message: '작업이 완료되었습니다.',
+            //     type: DialogType.info,
+            //     onConfirmed: () => print('확인 클릭됨'),
+            //   );
+            //   await Future.delayed(const Duration(seconds: 5));
+            //   DialogController.instance.hideLoading();
+            //
+            //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
+            // }),
 
-              QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
-            }),
 
-            ItemTitle('로딩 5초 후 일반 다이얼로그'),
-            RouterMoveItem('showLoading & showAppDialog', () async {
-              DialogController.instance.showLoading();
 
-              DialogController.instance.showAppDialog(
-                title: '알림',
-                message: '작업이 완료되었습니다.',
-                type: DialogRequestType.info,
-                onConfirmed: () => print('확인 클릭됨'),
-              );
-              await Future.delayed(const Duration(seconds: 5));
-              DialogController.instance.hideLoading();
-
-              QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
-            }),
+            ///
+            ///
+            ///
             // RouterMoveItem('showAppDialog dialogQueueProvider', () async {
             //   // 다이얼로그 요청 추가
             //   ref

@@ -1,8 +1,8 @@
-import 'package:flutter_example_base/core/utils/print_log.dart';
-import 'package:flutter_example_base/domain/common/params/no_params.dart';
 import 'package:flutter_example_base/domain/post/usecases/delete_post.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/error/failures.dart';
+import '../../../core/utils/print_log.dart';
+import '../../../domain/common/params/no_params.dart';
 import '../../../domain/post/usecases/get_posts.dart';
 import 'post_list_state.dart';
 
@@ -27,7 +27,8 @@ class PostListViewModel extends StateNotifier<PostListState> {
     // state = const AsyncLoading();
     state = state.copyWith(isLoading: true, error: null);
 
-    // await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
+
     final result = await getPosts(NoParams());
     QcLog.d('result ===== ${result.runtimeType} , ${result.toString()}');
 
@@ -39,5 +40,12 @@ class PostListViewModel extends StateNotifier<PostListState> {
         state = state.copyWith(isLoading: false, posts: posts);
       },
     );
+  }
+
+  Future<void> dialogTest() async {
+    state = state.copyWith(error: CacheFailure('CacheFailure 에러'));
+
+    await Future.delayed(Duration(seconds: 1));
+    state = state.copyWith(error: ServerFailure('ServerFailure 두번째 에러'));
   }
 }
