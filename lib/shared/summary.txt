@@ -1,0 +1,11 @@
+✅ 요약 : shared/ [UI(presentation)에서 사용하는 범용적]
+
+•	역할: 기능 간 공유 가능한 UI 위젯/컴포넌트 또는 범용적 도우미
+•   공통 위젯/컴포넌트
+•	예시:
+    •	SharedButton, SharedTextField
+    •	common_dialog.dart
+    •	responsive_layout.dart
+•	포함하면 좋은 것:
+    •	다이얼로그, 버튼, 카드, 아이콘 등 UI 컴포넌트
+    •	mixin, listener 등도 여기에 둘 수 있음 (또는 별도 presentation/common 으로 분리 가능)

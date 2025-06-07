@@ -1,4 +1,12 @@
-✅ 요약 : UI 화면 및 위젯
+✅ 요약 : app/ [앱만을 위한 핵심 구성 요소]
+
+•	역할: 앱의 최상위 구성 요소 (앱 진입점, 라우팅, DI 세팅 등)
+•	예시:
+    •	main.dart
+    •	app.dart
+    •	router.dart, route_config.dart
+    •	provider_observer.dart
+
 
 •	application/은 **UI가 도메인 계층과 대화할 수 있게 하는 “중간자”**입니다.
 → “presentation은 가볍게 유지하고, 복잡한 상태와 유스케이스 연결을 위임”

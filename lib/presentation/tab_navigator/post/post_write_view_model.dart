@@ -18,7 +18,9 @@ class PostWriteViewModel extends StateNotifier<PostWriteState> {
     //   return false;
     // }
 
-    final result = await createPost(Post(id: 123, userId: 9999, title: title, body: body));
+    final result = await createPost(
+      Post(id: 123, userId: 9999, title: title, body: body),
+    );
     return result.fold(
       (Failure failure) {
         state = state.copyWith(isLoading: false, error: failure);

@@ -28,18 +28,22 @@ class DialogRequest {
 
   factory DialogRequest.loading() => DialogRequest(type: DialogType.loading);
 
-  factory DialogRequest.error(String msg) => DialogRequest(type: DialogType.error, message: msg);
+  factory DialogRequest.error(String msg) =>
+      DialogRequest(type: DialogType.error, message: msg);
 
   factory DialogRequest.success(String msg) =>
       DialogRequest(type: DialogType.success, message: msg);
 
-  factory DialogRequest.confirm(String msg, VoidCallback onConfirm, VoidCallback onCancel) =>
-      DialogRequest(
-        type: DialogType.confirm,
-        message: msg,
-        onConfirmed: onConfirm,
-        onCancelled: onCancel,
-      );
+  factory DialogRequest.confirm(
+    String msg,
+    VoidCallback onConfirm,
+    VoidCallback onCancel,
+  ) => DialogRequest(
+    type: DialogType.confirm,
+    message: msg,
+    onConfirmed: onConfirm,
+    onCancelled: onCancel,
+  );
 
   factory DialogRequest.custom(Widget widget) =>
       DialogRequest(type: DialogType.custom, customWidget: widget);

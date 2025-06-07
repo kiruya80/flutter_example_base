@@ -11,16 +11,11 @@ final dioProvider = Provider<Dio>((ref) {
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       // contentType: 'application/json',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
     ),
   );
 
-  dio.interceptors.add(LogInterceptor(
-    requestBody: true,
-    responseBody: true,
-  ));
+  dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
 
   return dio;
 });

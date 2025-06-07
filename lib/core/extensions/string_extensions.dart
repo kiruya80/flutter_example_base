@@ -2,7 +2,6 @@
 /// String extension
 ///
 extension StringHelper on String? {
-
   ///
   /// null이 아니고 비어있지 않으면 true
   ///

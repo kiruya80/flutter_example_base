@@ -6,7 +6,8 @@ part of 'post_ge_auto_list_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postGeAutoListNotifierHash() => r'd6f685689d8ade0086194bf0a5e13ee6492fd764';
+String _$postGeAutoListNotifierHash() =>
+    r'd6f685689d8ade0086194bf0a5e13ee6492fd764';
 
 ///
 /// 초기값으로 api 호출
@@ -26,17 +27,21 @@ String _$postGeAutoListNotifierHash() => r'd6f685689d8ade0086194bf0a5e13ee6492fd
 ///
 /// Copied from [PostGeAutoListNotifier].
 @ProviderFor(PostGeAutoListNotifier)
-final postGeAutoListNotifierProvider = AutoDisposeAsyncNotifierProvider<PostGeAutoListNotifier,
-    AsyncValue<Either<Failure, List<Post>>>>.internal(
+final postGeAutoListNotifierProvider = AutoDisposeAsyncNotifierProvider<
+  PostGeAutoListNotifier,
+  AsyncValue<Either<Failure, List<Post>>>
+>.internal(
   PostGeAutoListNotifier.new,
   name: r'postGeAutoListNotifierProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$postGeAutoListNotifierHash,
+      const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$postGeAutoListNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$PostGeAutoListNotifier
-    = AutoDisposeAsyncNotifier<AsyncValue<Either<Failure, List<Post>>>>;
+typedef _$PostGeAutoListNotifier =
+    AutoDisposeAsyncNotifier<AsyncValue<Either<Failure, List<Post>>>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,4 +1,4 @@
-import 'package:flutter_example_base/domain/common/entities/route_info.dart';
+import 'package:flutter_example_base/app/routes/route_helper.dart';
 
 import '../../core/route/route_registry.dart';
 
@@ -28,10 +28,16 @@ class AppRoutesInfo {
 
   static final postAdd = RouteRegistry.register('postAdd', 'postAdd');
 
-  static final profileDetail = RouteRegistry.register('profileDetail', 'detail/:id');
+  static final profileDetail = RouteRegistry.register(
+    'profileDetail',
+    'detail/:id',
+  );
 
   // 파라미터가 필요한 경로 예시
-  static final searchDetail = RouteRegistry.register('searchDetail', 'detail/:id');
+  static final searchDetail = RouteRegistry.register(
+    'searchDetail',
+    'detail/:id',
+  );
 
   static final homeCard = RouteRegistry.register('homeCard', 'homeCard');
 
@@ -52,24 +58,33 @@ class AppRoutesInfo {
   // static String searchDetailPath(String id) =>'${search.path}/${searchDetail.pathWithParams({'id': id})}';
   // static String searchDetailPath(String id) => '${home.path}/${detail.path}?id=$id';
   /// go() 전용 경로 만들기
-  static String searchDetailPath({required String id, Map<String, String> queryParams = const {}}) {
-    return searchDetail.fullPath(pathParams: {'id': id}, queryParams: queryParams);
+  static String searchDetailPath({
+    required String id,
+    Map<String, String> queryParams = const {},
+  }) {
+    return searchDetail.fullPath(
+      pathParams: {'id': id},
+      queryParams: queryParams,
+    );
   }
 
   /// 예: /search/detail/123?tab=review&sort=asc
-  static String searchDetailFullPath({required String id, Map<String, String> query = const {}}) {
+  static String searchDetailFullPath({
+    required String id,
+    Map<String, String> query = const {},
+  }) {
     final path = searchDetail.pathWithParams({'id': id});
     final queryStr = searchDetail.queryString(query);
     return '${tabSearch.path}/$path$queryStr';
   }
 
-// static String profileDetailPath({
-//   required String id,
-//   Map<String, String> queryParams = const {},
-// }) {
-//   return profileDetail.fullPath(
-//     pathParams: {'id': id},
-//     queryParams: queryParams,
-//   );
-// }
+  // static String profileDetailPath({
+  //   required String id,
+  //   Map<String, String> queryParams = const {},
+  // }) {
+  //   return profileDetail.fullPath(
+  //     pathParams: {'id': id},
+  //     queryParams: queryParams,
+  //   );
+  // }
 }

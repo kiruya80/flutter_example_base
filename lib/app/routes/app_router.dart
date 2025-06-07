@@ -15,7 +15,8 @@ import 'tab/tab_router.dart';
 class AppRouter {
   /// 🔐 navigator keys (탭 스택 유지용)
   // static final rootNavigatorKey = GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> globalNavigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> globalNavigatorKey =
+      GlobalKey<NavigatorState>();
 
   static final appRouter = GoRouter(
     initialLocation: AppRoutesInfo.intro.path,

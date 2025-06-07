@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/app/routes/route_helper.dart';
 import 'package:flutter_example_base/domain/common/entities/route_info.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +30,10 @@ class _SearchTabState extends BaseConState<SearchTab> {
     /// fullPath ==== detail/123?tab=settings
     QcLog.d('fullPath ==== $url');
 
-    final url2 = AppRoutesInfo.searchDetailFullPath(id: '123', query: {'tab': 'settings'});
+    final url2 = AppRoutesInfo.searchDetailFullPath(
+      id: '123',
+      query: {'tab': 'settings'},
+    );
 
     /// searchDetailFullPath ==== /search/detail/123?tab=settings
     QcLog.d('searchDetailFullPath ==== $url2');
@@ -50,10 +54,14 @@ class _SearchTabState extends BaseConState<SearchTab> {
             }),
 
             RouterMoveItem('go(/search/detail/123?query=ddddddd)', () {
-              context
-                  .go(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
+              context.go(
+                AppRoutesInfo.searchDetailFullPath(
+                  id: '123',
+                  query: {'query': 'ddddddd'},
+                ),
+              );
             }),
- 
+
             ItemTitle('context push'),
 
             RouterMoveItem('push(/search/detail/123)', () {
@@ -61,10 +69,13 @@ class _SearchTabState extends BaseConState<SearchTab> {
             }),
 
             RouterMoveItem('push(/search/detail/123?query=ddddddd)', () {
-              context
-                  .push(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
+              context.push(
+                AppRoutesInfo.searchDetailFullPath(
+                  id: '123',
+                  query: {'query': 'ddddddd'},
+                ),
+              );
             }),
-
 
             ItemTitle('홈의 상세 페이지 이동 [go & push]'),
 

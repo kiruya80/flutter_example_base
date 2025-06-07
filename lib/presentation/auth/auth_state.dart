@@ -13,21 +13,14 @@ class AuthState {
     this.errorMessage,
   });
 
-  factory AuthState.initial() => const AuthState(
-        isLoading: false,
-        isLoggedIn: false,
-      );
+  factory AuthState.initial() =>
+      const AuthState(isLoading: false, isLoggedIn: false);
 
-  factory AuthState.loggedOut() => AuthState(
-        isLoggedIn: false,
-        isLoading: false,
-      );
+  factory AuthState.loggedOut() =>
+      AuthState(isLoggedIn: false, isLoading: false);
 
-  factory AuthState.loggedIn(User user) => AuthState(
-        isLoggedIn: true,
-        user: user,
-        isLoading: false,
-      );
+  factory AuthState.loggedIn(User user) =>
+      AuthState(isLoggedIn: true, user: user, isLoading: false);
 
   AuthState copyWith({
     bool? isLoggedIn,

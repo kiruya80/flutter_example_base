@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'dialog_request.dart';
-
-// final dialogController = DialogController();
+import '../../app/routes/app_router.dart';
+import '../../domain/common/entities/dialog_request.dart';
+import '../utils/print_log.dart';
 
 ///
 /// 팝업 제어용 클래스
@@ -24,43 +25,94 @@ final isDialogShowingProvider = StateProvider<bool>((ref) => false);
 final isLoadingDialogShowingProvider = StateProvider<bool>((ref) => false);
 
 class DialogController {
-  // static final DialogController instance = DialogController._();
-  // DialogController._(this.ref);
   final WidgetRef ref;
 
   DialogController(this.ref);
 
   ///
+  ///  큐에 넣기 (일반, 로딩)
+  ///
   ///   DialogController(
   ///           ref,
   ///         ).showDialog(DialogRequest(type: DialogType.error, title: "에러", message: next.error!.message));
   ///
-  void showDialog(DialogRequest request) {
-    // final isShowing = ref.read(isDialogShowingProvider);
-    final isLoading = ref.read(isLoadingDialogShowingProvider);
-
-    // 로딩 중에는 일반 다이얼로그 띄우지 않음
-    if (isLoading && request.type != DialogType.loading) return;
-
+  void enqueue(DialogRequest request) {
+    QcLog.d('enqueue ======= ${request.toString()}');
     final queue = ref.read(dialogQueueProvider);
     ref.read(dialogQueueProvider.notifier).state = [...queue, request];
   }
 
+  ///
+  /// 로딩 띄우기
+  ///
   void showLoading({String? message}) {
+    /// 로딩이 있는 경우는 패스
     final isLoading = ref.read(isLoadingDialogShowingProvider);
     if (isLoading) return;
 
-    ref.read(isLoadingDialogShowingProvider.notifier).state = true;
-    showDialog(DialogRequest(type: DialogType.loading, message: message));
+    /// 큐에 넣기
+    enqueue(DialogRequest(type: DialogType.loading, message: message));
   }
 
+  ///
+  /// 로딩 지우기
+  ///
   void hideLoading() {
-    ref.read(isLoadingDialogShowingProvider.notifier).state = false;
+    /// 로딩이 없는 경우는 패스
+    final isLoading = ref.read(isLoadingDialogShowingProvider);
+    if (isLoading == false) return;
+
+    /// 큐가 있는 경우 큐에서 빼기
+    if (ref.read(dialogQueueProvider).isNotEmpty) {
+      ref.read(dialogQueueProvider.notifier).state =
+          ref.read(dialogQueueProvider).skip(1).toList();
+    }
+
+    /// 로딩 빼기
+    _popDialogIfShowing(DialogType.loading);
+
+    /// 상태 변경
     ref.read(isDialogShowingProvider.notifier).state = false;
+    ref.read(isLoadingDialogShowingProvider.notifier).state = false;
   }
 
   void dismissCurrentDialog() {
+    if (ref.read(dialogQueueProvider).isNotEmpty) {
+      ref.read(dialogQueueProvider.notifier).state =
+          ref.read(dialogQueueProvider).skip(1).toList();
+    }
     ref.read(isDialogShowingProvider.notifier).state = false;
+  }
+
+  ///
+  /// 로딩 팝업 닫기
+  ///
+  void _popDialogIfShowing(DialogType type) {
+    final context = AppRouter.globalNavigatorKey.currentContext!;
+    if (context.mounted && ref.read(isDialogShowingProvider)) {
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  ///
+  /// 큐에서 꺼내기
+  ///
+  void dequeue() {
+    QcLog.d(
+      'dequeue ====  ${ref.read(dialogQueueProvider.notifier).state.length}',
+    );
+    final queue = [...ref.read(dialogQueueProvider)];
+
+    if (queue.isNotEmpty) {
+      queue.removeAt(0);
+      ref.read(dialogQueueProvider.notifier).state = queue;
+    }
+  }
+
+  void clear() {
+    ref.read(dialogQueueProvider.notifier).state = [];
+    ref.read(isDialogShowingProvider.notifier).state = false;
+    ref.read(isLoadingDialogShowingProvider.notifier).state = false;
   }
 
   // void enqueue(DialogRequest request) {
@@ -70,14 +122,6 @@ class DialogController {
   //   ref.read(dialogQueueProvider.notifier).state = queue;
   // }
   //
-  // void dequeue() {
-  //   final queue = [...ref.read(dialogQueueProvider)];
-  //   QcLog.d('dequeue ==== ${queue.length}');
-  //   if (queue.isNotEmpty) {
-  //     queue.removeAt(0);
-  //     ref.read(dialogQueueProvider.notifier).state = queue;
-  //   }
-  // }
   //
   // DialogRequest? get currentDialog {
   //   final queue = ref.read(dialogQueueProvider);

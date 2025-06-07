@@ -1,6 +1,6 @@
 import '../../../core/error/failures.dart';
-import '../../../app/base/base_ui_status.dart';
 import '../../../domain/common/entities/route_info.dart';
+import '../../../shared/base/base_ui_status.dart';
 
 class PostWriteState extends BaseUiStatus {
   @override
@@ -12,7 +12,11 @@ class PostWriteState extends BaseUiStatus {
 
   PostWriteState({this.isLoading = false, this.error, this.navigateTo});
 
-  PostWriteState copyWith({bool? isLoading, Failure? error, RouteInfo? navigateTo}) {
+  PostWriteState copyWith({
+    bool? isLoading,
+    Failure? error,
+    RouteInfo? navigateTo,
+  }) {
     return PostWriteState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
@@ -20,7 +24,8 @@ class PostWriteState extends BaseUiStatus {
     );
   }
 
-  factory PostWriteState.initial() => PostWriteState(isLoading: false, error: null);
+  factory PostWriteState.initial() =>
+      PostWriteState(isLoading: false, error: null);
 
   // PostWriteState({super.isLoading, super.error});
   //

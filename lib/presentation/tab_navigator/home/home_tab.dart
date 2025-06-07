@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../dialog/dialog_controller.dart';
-import '../../dialog/dialog_request.dart';
+import '../../../core/controller/dialog_controller.dart';
+import '../../../domain/common/entities/dialog_request.dart';
 import '../../providers/dialog_queue_provider.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../core/utils/print_log.dart';
@@ -87,7 +87,6 @@ class _HomeTabState extends BaseConState<HomeTab> {
             //   DialogController.instance.hideLoading();
             // }),
 
-
             // ItemTitle('일반 다이얼로그 5초 후 중복'),
             // RouterMoveItem('showAppDialog & showAppDialog', () async {
             //   DialogController.instance.showAppDialog(
@@ -123,8 +122,6 @@ class _HomeTabState extends BaseConState<HomeTab> {
             //
             //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
             // }),
-
-
 
             ///
             ///

@@ -42,17 +42,17 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: AppRouter.appRouter,
       title: 'Post App',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
       builder: (context, child) {
         // return child!;
 
-            // return DialogQueueListener(child: child!); // 여기에 적용
+        // return DialogQueueListener(child: child!); // 여기에 적용
 
         // 여기의 context는 아직 Navigator가 아닐 수 있으므로
         // 반드시 child 안쪽에서 사용해야 함
-        return DialogQueueListener(
-          child: child ?? const SizedBox.shrink(),
-        );
+        return DialogQueueListener(child: child ?? const SizedBox.shrink());
       },
     );
   }

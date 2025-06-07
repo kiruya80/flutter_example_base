@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'test_usual.freezed.dart';
+
 part 'test_usual.g.dart';
 
 @freezed
@@ -12,5 +13,6 @@ abstract class TestUsual with _$TestUsual {
     String? content,
   }) = _TestUsual;
 
-  factory TestUsual.fromJson(Map<String, dynamic> json) => _$TestUsualFromJson(json);
+  factory TestUsual.fromJson(Map<String, dynamic> json) =>
+      _$TestUsualFromJson(json);
 }

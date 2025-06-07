@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../base_ui_status.dart';
-import '../../../presentation/dialog/dialog_controller.dart';
+import '../../core/controller/dialog_controller.dart';
+import '../base/base_ui_status.dart';
 
 ///
 /// 1. mixin
@@ -28,26 +28,28 @@ import '../../../presentation/dialog/dialog_controller.dart';
 /// → DialogController.enqueue(dialogRequest) → DialogQueueListener 감지 → showDialog(...)
 ///
 // mixin LoadingListenerMixin<T>  {
-mixin LoadingListenerMixin<T extends BaseUiStatus, W extends ConsumerStatefulWidget>
+mixin LoadingListenerMixin<
+  T extends BaseUiStatus,
+  W extends ConsumerStatefulWidget
+>
     on ConsumerState<W> {
   late ProviderSubscription<T> _subscription;
 
   void setupLoadingListener(WidgetRef ref, ProviderListenable<T> provider) {
     _subscription = ref.listenManual<T>(provider, (prev, next) {
-      QcLog.d('LoadingListenerMixin listenManual ==== ${prev?.isLoading} , ${next.isLoading}');
-      final wasLoading = prev?.isLoading ?? false;
+      QcLog.d(
+        'LoadingListenerMixin listenManual ==== ${prev?.isLoading} , ${next.isLoading} / ${next.error}',
+      );
+      // final wasLoading = prev?.isLoading ?? false;
       final isLoading = next.isLoading;
 
-      if (wasLoading == false && isLoading == true) {
+      // if (wasLoading == false && isLoading == true) {
+      if (isLoading == true) {
         DialogController(ref).showLoading();
       }
 
-      if (prev?.isLoading == true && next.isLoading == false) {
-        final isLoading = ref.read(isLoadingDialogShowingProvider);
-        if (isLoading) {
-          Navigator.of(context, rootNavigator: true).pop();
-          // Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).pop();
-        }
+      // if (wasLoading == true && isLoading == false) {
+      if (isLoading == false) {
         DialogController(ref).hideLoading();
       }
     });

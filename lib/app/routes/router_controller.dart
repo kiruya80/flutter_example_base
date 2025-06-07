@@ -1,0 +1,19 @@
+import 'package:flutter/cupertino.dart';
+
+import '../../domain/common/entities/route_info.dart';
+import 'app_router.dart';
+
+///
+///  router 컨트럴러
+///
+class RouterController {
+  static final RouterController instance = RouterController._();
+
+  RouterController._();
+
+  Future<void> pushName(RouteInfo routeInfo) async {
+    Navigator.of(
+      AppRouter.globalNavigatorKey.currentContext!,
+    ).pushNamed(routeInfo.path, arguments: routeInfo.queryParams);
+  }
+}

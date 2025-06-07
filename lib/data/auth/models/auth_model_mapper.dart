@@ -7,23 +7,13 @@ import 'auth_model.dart';
 /// ✅ Entity → Model 변환
 extension AuthModelMapper on AuthModel {
   User toEntity() {
-    return User(
-      id: id,
-      title: title,
-      body: body,
-      userId: userId,
-    );
+    return User(id: id, title: title, body: body, userId: userId);
   }
 }
 
 /// ✅ Model → Entity 변환
 extension UserEntityMapper on User {
   AuthModel toModel() {
-    return AuthModel(
-      id: id,
-      title: title,
-      body: body,
-      userId: userId,
-    );
+    return AuthModel(id: id, title: title, body: body, userId: userId);
   }
 }

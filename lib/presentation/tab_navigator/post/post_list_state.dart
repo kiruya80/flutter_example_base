@@ -1,7 +1,7 @@
 import '../../../core/error/failures.dart';
 import '../../../domain/common/entities/route_info.dart';
 import '../../../domain/post/entities/post.dart';
-import '../../../app/base/base_ui_status.dart';
+import '../../../shared/base/base_ui_status.dart';
 
 ///
 ///
@@ -16,7 +16,7 @@ class PostListState extends BaseUiStatus {
 
   final List<Post> posts;
 
-    PostListState({
+  PostListState({
     this.isLoading = false,
     this.error,
     this.navigateTo,
@@ -37,7 +37,8 @@ class PostListState extends BaseUiStatus {
     );
   }
 
-  factory PostListState.initial() =>   PostListState(posts: [], isLoading: false, error: null);
+  factory PostListState.initial() =>
+      PostListState(posts: [], isLoading: false, error: null);
   // final List<Post> posts;
   //
   // PostListState({required this.posts, super.isLoading, super.error});
@@ -51,5 +52,4 @@ class PostListState extends BaseUiStatus {
   //     error: error ?? this.error,
   //   );
   // }
-
 }

@@ -38,22 +38,22 @@ class _SplashPageState extends BaseConState<SplashPage> {
         child: Column(
           children: [
             CircularProgressIndicator(),
-//             RouterMoveItem('dialogQueueProvider add', () async {
-//               // 다이얼로그 요청 추가
-//               ref.read(dialogQueueProvider.notifier).enqueue(
-//                     DialogRequest(title: '알림', message: '작업이 완료되었습니다.'),
-//                   );
-//               ref.read(dialogQueueProvider.notifier).enqueue(
-//                     DialogRequest(title: '알림2', message: '작업이 완료되었습니다.22'),
-//                   );
-//
-//               ref.read(dialogQueueProvider.notifier).enqueue(
-//                     DialogRequest(title: '안내', message: '로딩이 완료되었습니다.'),
-//                   );
-//               QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier)..length}');
-// // 다이얼로그 처리 후 큐 제거
-// //             ref.read(dialogQueueProvider.notifier).dequeue();
-//             }),
+            //             RouterMoveItem('dialogQueueProvider add', () async {
+            //               // 다이얼로그 요청 추가
+            //               ref.read(dialogQueueProvider.notifier).enqueue(
+            //                     DialogRequest(title: '알림', message: '작업이 완료되었습니다.'),
+            //                   );
+            //               ref.read(dialogQueueProvider.notifier).enqueue(
+            //                     DialogRequest(title: '알림2', message: '작업이 완료되었습니다.22'),
+            //                   );
+            //
+            //               ref.read(dialogQueueProvider.notifier).enqueue(
+            //                     DialogRequest(title: '안내', message: '로딩이 완료되었습니다.'),
+            //                   );
+            //               QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier)..length}');
+            // // 다이얼로그 처리 후 큐 제거
+            // //             ref.read(dialogQueueProvider.notifier).dequeue();
+            //             }),
           ],
         ),
       ),

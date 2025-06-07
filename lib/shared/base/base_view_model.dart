@@ -28,11 +28,7 @@ abstract class BaseViewModel<T extends BaseUiStatus> extends StateNotifier<T> {
     state = updateState(navigateTo: route);
   }
 
-  T updateState({
-    bool? isLoading,
-    Failure? error,
-    String? navigateTo,
-  });
+  T updateState({bool? isLoading, Failure? error, String? navigateTo});
 
   // BaseViewModel(T state) : super(state);
   //

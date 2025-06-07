@@ -26,5 +26,6 @@ sealed class TestPerson with _$TestPerson {
     required int age,
   }) = _TestPerson;
 
-  factory TestPerson.fromJson(Map<String, dynamic> json) => _$TestPersonFromJson(json);
+  factory TestPerson.fromJson(Map<String, dynamic> json) =>
+      _$TestPersonFromJson(json);
 }

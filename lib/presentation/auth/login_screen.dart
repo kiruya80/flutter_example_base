@@ -27,7 +27,9 @@ class _LoginScreenState extends BaseConState<LoginScreen> {
       return;
     }
 
-    final success = await ref.read(authViewModelProvider.notifier).loginUser(userId);
+    final success = await ref
+        .read(authViewModelProvider.notifier)
+        .loginUser(userId);
     if (!mounted) return;
 
     if (success) {
@@ -66,9 +68,9 @@ class _LoginScreenState extends BaseConState<LoginScreen> {
             state.isLoading == true
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
-                    onPressed: _onLoginPressed,
-                    child: const Text('로그인'),
-                  ),
+                  onPressed: _onLoginPressed,
+                  child: const Text('로그인'),
+                ),
           ],
         ),
       ),

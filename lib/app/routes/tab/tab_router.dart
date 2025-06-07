@@ -16,45 +16,4 @@ class TabRouter {
     StatefulShellBranch(routes: profileTabRoutes),
     StatefulShellBranch(routes: searchTabRoutes),
   ];
-//
-// final StatefulShellRoute statefulShellRoute = StatefulShellRoute.indexedStack(
-//   builder: (context, state, navigationShell) {
-//     return ScaffoldWithNavBar(shell: navigationShell);
-//   },
-//   branches: tabBranches,
-//
-//   /// default
-//   // branches: [
-//   //   StatefulShellBranch(
-//   //     routes: [
-//   //       GoRoute(
-//   //         path: '/home',
-//   //         builder: (context, state) => HomeTab(),
-//   //         routes: [
-//   //           GoRoute(
-//   //             path: 'detail',
-//   //             builder: (context, state) => DetailScreen(),
-//   //           ),
-//   //         ],
-//   //       ),
-//   //     ],
-//   //   ),
-//   //   StatefulShellBranch(
-//   //     routes: [
-//   //       GoRoute(
-//   //         path: '/search',
-//   //         builder: (context, state) => SearchTab(),
-//   //       ),
-//   //     ],
-//   //   ),
-//   //   StatefulShellBranch(
-//   //     routes: [
-//   //       GoRoute(
-//   //         path: '/profile',
-//   //         builder: (context, state) => ProfileTab(),
-//   //       ),
-//   //     ],
-//   //   ),
-//   // ],
-// );
 }

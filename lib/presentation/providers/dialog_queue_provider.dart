@@ -2,15 +2,16 @@ import 'dart:collection';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../dialog/dialog_request.dart';
+import '../../domain/common/entities/dialog_request.dart';
 
 // final dialogQueueProvider = StateNotifierProvider<DialogQueueManager, Queue<DialogRequest>>(
 //   (ref) => DialogQueueManager(),
 // );
 
-final dialogQueueProvider = StateNotifierProvider<DialogQueueNotifier, Queue<DialogRequest>>(
-  (ref) => DialogQueueNotifier(),
-);
+final dialogQueueProvider =
+    StateNotifierProvider<DialogQueueNotifier, Queue<DialogRequest>>(
+      (ref) => DialogQueueNotifier(),
+    );
 
 ///
 /// 일반 다이얼로그 큐 (FIFO)

@@ -14,5 +14,6 @@ abstract class PostModel with _$PostModel {
   }) = _PostModel;
 
   /// fromJson 생성자
-  factory PostModel.fromJson(Map<String, dynamic> json) => _$PostModelFromJson(json);
+  factory PostModel.fromJson(Map<String, dynamic> json) =>
+      _$PostModelFromJson(json);
 }

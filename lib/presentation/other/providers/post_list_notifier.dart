@@ -6,7 +6,8 @@ import '../../../data/post/providers/post_repository_provider.dart';
 import '../../../domain/post/entities/post.dart';
 import '../../../domain/post/repositories/post_repository.dart';
 
-class PostListNotifier extends StateNotifier<AsyncValue<Either<Failure, List<Post>>>> {
+class PostListNotifier
+    extends StateNotifier<AsyncValue<Either<Failure, List<Post>>>> {
   final PostRepository repository;
 
   PostListNotifier(this.repository) : super(const AsyncLoading()) {
@@ -36,8 +37,10 @@ class PostListNotifier extends StateNotifier<AsyncValue<Either<Failure, List<Pos
   }
 }
 
-final postListNotifierProvider =
-    StateNotifierProvider<PostListNotifier, AsyncValue<Either<Failure, List<Post>>>>((ref) {
+final postListNotifierProvider = StateNotifierProvider<
+  PostListNotifier,
+  AsyncValue<Either<Failure, List<Post>>>
+>((ref) {
   final repo = ref.read(postRepositoryProvider);
   return PostListNotifier(repo);
 });

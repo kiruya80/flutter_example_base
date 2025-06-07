@@ -8,22 +8,6 @@ import '../app_routes_info.dart';
 ///
 /// home 모듈 전용 routes
 ///
-final List<GoRoute> homeRoutes = [
-  // GoRoute(
-  //     name: AppRoutes.home.name,
-  //     path: AppRoutes.home.path,
-  //     builder: (context, state) => const HomeScreen()),
-  // GoRoute(
-  //   name: AppRoutes.detail.name,
-  //   path: AppRoutes.detail.path,
-  //   builder: (context, state) {
-  //     final id = state.pathParameters['id']!;
-  //     return DetailScreen(id: id);
-  //   },
-  // ),
-];
-
-///
 /// 홈탭
 /// 	•	GoRoute 내부의 path: 'xxx' 는 상대경로 ,
 /// 	•	/ 없이 쓰면 상위 경로와 자동 조합

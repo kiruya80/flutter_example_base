@@ -5,8 +5,8 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/routes/app_router.dart';
-import 'dialog_controller.dart';
-import 'dialog_request.dart';
+import '../../core/controller/dialog_controller.dart';
+import '../../domain/common/entities/dialog_request.dart';
 
 ///
 /// DialogQueueListener – 큐 리스너 위젯
@@ -20,72 +20,72 @@ class DialogQueueListener extends ConsumerStatefulWidget {
   const DialogQueueListener({super.key, required this.child});
 
   @override
-  ConsumerState<DialogQueueListener> createState() => _DialogQueueListenerState();
+  ConsumerState<DialogQueueListener> createState() =>
+      _DialogQueueListenerState();
 }
 
 class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Future.microtask(_processQueue);
+    Future.microtask(_handleNextDialog);
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(dialogQueueProvider, (previous, next) => _processQueue());
-
-    ref.listen<List<DialogRequest>>(dialogQueueProvider, (prev, next) async {
-      QcLog.d(
-        'ref.listen dialogQueueProvider ==== ${next.isNotEmpty} & ${prev?.length} , ${next.length} ,'
-        '${ref.read(isDialogShowingProvider)}',
-      );
-      if (ref.read(isDialogShowingProvider)) return;
-      if (next.isEmpty) return;
-
-      final request = next.first;
-      await _showDialogByType(AppRouter.globalNavigatorKey.currentContext!, request);
-    });
+    ref.listen(dialogQueueProvider, (previous, next) => _handleNextDialog());
 
     return widget.child;
   }
 
-  Future<void> _processQueue() async {
-    QcLog.d('_processQueue ====  ');
+  Future<void> _handleNextDialog() async {
     final isShowing = ref.read(isDialogShowingProvider);
+    final isLoading = ref.read(isLoadingDialogShowingProvider);
     final queue = ref.read(dialogQueueProvider);
+    QcLog.d(
+      '_handleNextDialog ====  $isShowing ,$isLoading / ${queue.length} ',
+    );
 
-    if (isShowing || queue.isEmpty) return;
+    queue.forEach((item) {
+      debugPrint('🟢 queue : ${item.toString()}');
+    });
+
+    if (isShowing || isLoading || queue.isEmpty) return;
     final request = queue.first;
+    QcLog.d('request ====  ${request.type}');
 
     ref.read(isDialogShowingProvider.notifier).state = true;
     if (request.type == DialogType.loading) {
       ref.read(isLoadingDialogShowingProvider.notifier).state = true;
     }
 
-    await _showDialogByType(AppRouter.globalNavigatorKey.currentContext!, request);
-
-    // 다이얼로그 닫힌 후 상태 정리
-    // ref.read(dialogQueueProvider.notifier).state = queue.skip(1).toList();
-    // ref.read(isDialogShowingProvider.notifier).state = false;
-    // if (request.type == DialogType.loading) {
-    //   ref.read(isLoadingDialogShowingProvider.notifier).state = false;
-    // }
+    await _showDialogByType(
+      AppRouter.globalNavigatorKey.currentContext!,
+      request,
+    );
 
     QcLog.d('다이얼로그 종료 후 큐 갱신 ==== ');
 
-    /// 다이얼로그 상태 false 업데이트
-    ref.read(isDialogShowingProvider.notifier).state = false;
-
     /// 다이얼로그 큐 또는 로딩 다이얼로그 false 업데이트
     if (request.type == DialogType.loading) {
-      ref.read(isLoadingDialogShowingProvider.notifier).state = false;
+      DialogController(ref).hideLoading();
     } else {
-      final queue = ref.read(dialogQueueProvider);
-      ref.read(dialogQueueProvider.notifier).state = queue.skip(1).toList();
+      ref.read(isDialogShowingProvider.notifier).state = false;
+      DialogController(ref).dequeue();
     }
+    QcLog.d(
+      'dequeue END ===   ${ref.read(dialogQueueProvider.notifier).state.length}',
+    );
+
+    // 약간의 delay로 UI 안정화 후 다음 다이얼로그 실행
+    await Future.delayed(Duration(milliseconds: 50));
+    _handleNextDialog();
   }
 
-  Future<void> _showDialogByType(BuildContext context, DialogRequest request) async {
+  Future<void> _showDialogByType(
+    BuildContext context,
+    DialogRequest request,
+  ) async {
     QcLog.d('_showDialogByType  ==== ${request.toString()}');
     ref.read(isDialogShowingProvider.notifier).state = true;
     switch (request.type) {
@@ -93,13 +93,17 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
         await showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (_) =>   Center(child: GestureDetector(
-              onLongPress: () {
-                if (kDebugMode) {
-                  Navigator.of(context).pop();
-                }
-              },
-              child: CircularProgressIndicator())),
+          builder:
+              (_) => Center(
+                child: GestureDetector(
+                  onLongPress: () {
+                    if (kDebugMode) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: CircularProgressIndicator(),
+                ),
+              ),
         );
         break;
       case DialogType.error:

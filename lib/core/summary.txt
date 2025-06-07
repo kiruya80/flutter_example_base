@@ -1,4 +1,15 @@
-✅ 요약 : UI 화면 및 위젯
+✅ 요약 : core/ [독립적]
+
+•	역할: 앱 전체에서 재사용 가능한 비즈니스 독립적인 공통 코드 (유틸, 공통 타입, 상수 등)
+•   도메인에 종속되지 않는 공통 유틸/타입
+
+•	예시:
+    •	failure.dart, result.dart
+    •	constants.dart, theme.dart
+    •	extensions/, utils/
+•	포함하면 좋은 것:
+    •	Exception, Failure, Either, BaseViewModel
+    •	BaseUiStatus, DialogController 등
 
 lib/
 ├── application/

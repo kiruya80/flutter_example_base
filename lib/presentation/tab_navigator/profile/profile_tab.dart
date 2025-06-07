@@ -32,22 +32,36 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
             RouterMoveItem('goNamed(profileDetail)', () {
               context.goNamed(AppRoutesInfo.profileDetail.name);
             }, isError: true),
-            RouterMoveItem('goNamed(profileDetail, \npathParameters: {id: 123})', () {
-              context.goNamed(AppRoutesInfo.profileDetail.name, pathParameters: {'id': '123'});
-            }),
-            RouterMoveItem('goNamed(profileDetail, \nqueryParameters: {title: profile})', () {
-              context.goNamed(
-                AppRoutesInfo.profileDetail.name,
-                queryParameters: {'title': 'profile'},
-              );
-            }, isError: true),
-
-
+            RouterMoveItem(
+              'goNamed(profileDetail, \npathParameters: {id: 123})',
+              () {
+                context.goNamed(
+                  AppRoutesInfo.profileDetail.name,
+                  pathParameters: {'id': '123'},
+                );
+              },
+            ),
+            RouterMoveItem(
+              'goNamed(profileDetail, \nqueryParameters: {title: profile})',
+              () {
+                context.goNamed(
+                  AppRoutesInfo.profileDetail.name,
+                  queryParameters: {'title': 'profile'},
+                );
+              },
+              isError: true,
+            ),
 
             ItemTitle('context pushNamed'),
-            RouterMoveItem('push(/profile/detail, \npathParameters: {id: 123}', () {
-              context.pushNamed(AppRoutesInfo.profileDetail.name, pathParameters: {'id': '123'});
-            }),
+            RouterMoveItem(
+              'push(/profile/detail, \npathParameters: {id: 123}',
+              () {
+                context.pushNamed(
+                  AppRoutesInfo.profileDetail.name,
+                  pathParameters: {'id': '123'},
+                );
+              },
+            ),
           ],
         ),
       ),

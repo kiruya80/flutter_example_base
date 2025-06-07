@@ -4,8 +4,5 @@ class PaginatedParams extends BaseParams {
   final int page;
   final int limit;
 
-  PaginatedParams({
-    required this.page,
-    required this.limit,
-  });
+  PaginatedParams({required this.page, required this.limit});
 }
