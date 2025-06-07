@@ -6,6 +6,8 @@ import 'app_router.dart';
 ///
 ///  router 컨트럴러
 ///
+/// 추후 딥링크도 적용되게
+///
 class RouterController {
   static final RouterController instance = RouterController._();
 

@@ -98,7 +98,7 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
                 child: GestureDetector(
                   onLongPress: () {
                     if (kDebugMode) {
-                      Navigator.of(context).pop();
+                      DialogController(ref).hideLoading();
                     }
                   },
                   child: CircularProgressIndicator(),
@@ -107,35 +107,60 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
         );
         break;
       case DialogType.error:
+        await showDialog(
+          context: context,
+          builder:
+              (_) => AlertDialog(
+            title: Text(request.title ?? '에러'),
+            content: Text(request.message ?? ''),
+            actions: [
+              if (request.onCancel != null)
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    request.onCancel?.call();
+                  },
+                  child: const Text('취소'),
+                ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  request.onConfirm?.call();
+                },
+                child: const Text('확인'),
+              ),
+            ],
+          ),
+        );
+        break;
       case DialogType.success:
         await showDialog(
           context: context,
           builder:
               (_) => AlertDialog(
-                title: Text(request.title ?? ''),
-                content: Text(request.message ?? ''),
-                actions: [
-                  if (request.onCancelled != null)
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        request.onCancelled?.call();
-                      },
-                      child: const Text('취소'),
-                    ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      request.onConfirmed?.call();
-                    },
-                    child: const Text('확인'),
-                  ),
-                ],
+            title: Text(request.title ?? '에러'),
+            content: Text(request.message ?? ''),
+            actions: [
+              if (request.onCancel != null)
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    request.onCancel?.call();
+                  },
+                  child: const Text('취소'),
+                ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  request.onConfirm?.call();
+                },
+                child: const Text('확인'),
               ),
+            ],
+          ),
         );
         break;
-      case DialogType.custom:
-      case DialogType.info:
+      case DialogType.confirm:
         await showDialog(
           context: context,
           builder:
@@ -143,18 +168,18 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
                 title: Text(request.title ?? '알림'),
                 content: Text(request.message ?? ''),
                 actions: [
-                  if (request.onCancelled != null)
+                  if (request.onCancel != null)
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        request.onCancelled?.call();
+                        request.onCancel?.call();
                       },
                       child: const Text('취소'),
                     ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      request.onConfirmed?.call();
+                      request.onConfirm?.call();
                     },
                     child: const Text('확인'),
                   ),
@@ -163,7 +188,7 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
         );
         break;
 
-      case DialogType.confirm:
+      case DialogType.custom:
         await showDialog(
           context: context,
           builder:
@@ -171,18 +196,18 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
                 title: Text(request.title ?? ''),
                 content: request.customWidget ?? Text(request.message ?? ''),
                 actions: [
-                  if (request.onCancelled != null)
+                  if (request.onCancel != null)
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        request.onCancelled?.call();
+                        request.onCancel?.call();
                       },
                       child: const Text('취소'),
                     ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
-                      request.onConfirmed?.call();
+                      request.onConfirm?.call();
                     },
                     child: const Text('확인'),
                   ),
@@ -257,15 +282,15 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
   //             TextButton(
   //               onPressed: () {
   //                 Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
-  //                 request.onConfirmed?.call();
+  //                 request.onConfirm?.call();
   //               },
   //               child: const Text('확인'),
   //             ),
-  //             if (request.onCancelled != null)
+  //             if (request.onCancel != null)
   //               TextButton(
   //                 onPressed: () {
   //                   Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
-  //                   request.onCancelled?.call();
+  //                   request.onCancel?.call();
   //                 },
   //                 child: const Text('취소'),
   //               ),
@@ -400,14 +425,14 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
 //           TextButton(
 //             onPressed: () {
 //               Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
-//               request.onCancelled?.call();
+//               request.onCancelonCancel?.call();
 //             },
 //             child: const Text('취소'),
 //           ),
 //         TextButton(
 //           onPressed: () {
 //             Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
-//             request.onConfirmed?.call();
+//             request.onConfirm?.call();
 //           },
 //           child: const Text('확인'),
 //         ),
@@ -529,7 +554,7 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
 //               TextButton(
 //                 onPressed: () {
 //                   Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
-//                   request.onConfirmed?.call();
+//                   request.onConfirmonConfirm?.call();
 //                 },
 //                 child: const Text('확인'),
 //               ),

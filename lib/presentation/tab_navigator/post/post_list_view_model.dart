@@ -44,13 +44,13 @@ class PostListViewModel extends StateNotifier<PostListState> {
   }
 
   Future<void> dialogDelayed() async {
-    state = state.copyWith(error: CacheFailure('CacheFailure 에러'));
+    state = state.copyWith(error: CacheFailure('1번째 에러 1초뒤 팝업 추가'));
 
     await Future.delayed(Duration(seconds: 1));
-    state = state.copyWith(error: ServerFailure('ServerFailure 2번째 에러'));
+    state = state.copyWith(error: ServerFailure('2번째 에러 1초뒤 팝업 추가'));
 
     await Future.delayed(Duration(seconds: 1));
-    state = state.copyWith(error: ServerFailure('ServerFailure 3번째 에러'));
+    state = state.copyWith(error: ServerFailure('3번째 에러 1초뒤 팝업 추가'));
   }
 
   Future<void> dialogLoadError() async {

@@ -8,17 +8,17 @@ import '../../domain/common/entities/route_info.dart';
 ///
 ///
 abstract class BaseUiStatus {
-  // final bool? isLoading;
-  // final Failure? error;
-  // final String? navigateTo;
-  //
-  // const BaseUiStatus({
-  //   this.isLoading,
-  //   this.error,
-  //   this.navigateTo,
-  // });
+  final bool? isLoading;
+  final Failure? error;
+  final RouteInfo? navigateTo;
 
-  bool get isLoading;
-  Failure? get error;
-  RouteInfo? get navigateTo;
+  const BaseUiStatus({
+    this.isLoading,
+    this.error,
+    this.navigateTo,
+  });
+
+  // bool get isLoading;
+  // Failure? get error;
+  // RouteInfo? get navigateTo;
 }

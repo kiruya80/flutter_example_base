@@ -1,16 +1,20 @@
+import '../../core/error/failures.dart';
 import '../../domain/auth/entities/user.dart';
+import '../../domain/common/entities/route_info.dart';
+import '../../shared/base/base_ui_status.dart';
 
-class AuthState {
+class AuthState extends BaseUiStatus {
   final bool? isLoggedIn;
   final User? user;
-  final bool? isLoading;
   final String? errorMessage;
 
   const AuthState({
     this.isLoggedIn,
     this.user,
-    this.isLoading,
     this.errorMessage,
+    super.isLoading,
+    super.error,
+    super.navigateTo,
   });
 
   factory AuthState.initial() =>
@@ -25,14 +29,20 @@ class AuthState {
   AuthState copyWith({
     bool? isLoggedIn,
     User? user,
-    bool? isLoading,
     String? errorMessage,
+
+    bool? isLoading,
+    Failure? error,
+    RouteInfo? navigateTo,
   }) {
     return AuthState(
       isLoggedIn: isLoading ?? this.isLoggedIn,
       user: user ?? this.user,
-      isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage ?? this.errorMessage,
+
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+      navigateTo: navigateTo ?? this.navigateTo,
     );
   }
 }

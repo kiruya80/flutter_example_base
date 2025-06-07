@@ -51,11 +51,65 @@ class _PostListScreenState extends BaseConState<PostListScreen>
       body: SafeArea(
         child: Column(
           children: [
-            ItemTitle('api & dialog'),
+            Column(
+              children: [
+                ItemTitle('api & dialog'),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ElevatedButton(
+                        child: Text('loadPosts'),
+                        onPressed: () {
+                          ref
+                              .read(postListViewModelProvider.notifier)
+                              .loadPosts();
+                        },
+                      ),
+
+                      ElevatedButton(
+                        child: Text('일반 dialog'),
+                        onPressed: () {
+                          DialogController(ref).enqueue(
+                            DialogRequest.confirm(
+                              '다이얼로그 띄우기',
+                              onCancel: () {
+                                QcLog.d('onCancelled');
+                              },
+                              onConfirm: () {
+                                QcLog.d('onConfirm');
+                              },
+                            ),
+                          );
+                        },
+                      ),
+
+                      ElevatedButton(
+                        child: Text('error dialog'),
+                        onPressed: () {
+                          ref
+                              .read(postListViewModelProvider.notifier)
+                              .dialogLoadError();
+                        },
+                      ),
+
+                      ElevatedButton(
+                        child: Text('Delayed dialog'),
+                        onPressed: () {
+                          ref
+                              .read(postListViewModelProvider.notifier)
+                              .dialogDelayed();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10),
+              ],
+            ),
             Expanded(
               child:
                   state.isLoading == true
-                      // ? const Center(child: CircularProgressIndicator())
                       ? Container()
                       : state.error != null
                       ? Center(child: Text('Error: ${state.error?.message}'))
@@ -73,64 +127,19 @@ class _PostListScreenState extends BaseConState<PostListScreen>
           ],
         ),
       ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              DialogController(ref).enqueue(
-                DialogRequest(
-                  type: DialogType.confirm,
-                  title: "일반",
-                  message: '다이얼로그 띄우기',
-                  onCancelled: () {
-                    QcLog.d('onCancelled');
-                  },
-                  onConfirmed: () {
-                    QcLog.d('onConfirmed');
-                  },
-                ),
-              );
-            },
-            child: Text('일반 dialog', textAlign: TextAlign.center),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: () {
-              ref.read(postListViewModelProvider.notifier).dialogLoadError();
-            },
-            child: Text('error dialog', textAlign: TextAlign.center),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: () {
-              ref.read(postListViewModelProvider.notifier).dialogDelayed();
-            },
-            child: Text('dialog Delayed', textAlign: TextAlign.center),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: () {
-              ref.read(postListViewModelProvider.notifier).loadPosts();
-            },
-            child: Text('Reload', textAlign: TextAlign.center),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: () {
-              final state = ref.read(authViewModelProvider);
-              if (state.isLoggedIn == true) {
-                // context.push('/postAdd');
-                context.pushNamed(AppRoutesInfo.postAdd.name);
-              } else {
-                // context.push('/login');
-                context.pushNamed(AppRoutesInfo.login.name);
-              }
-            },
-            child: const Icon(Icons.add),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'fab_tab1',
+        onPressed: () {
+          final state = ref.read(authViewModelProvider);
+          if (state.isLoggedIn == true) {
+            // context.push('/postAdd');
+            context.pushNamed(AppRoutesInfo.postAdd.name);
+          } else {
+            // context.push('/login');
+            context.pushNamed(AppRoutesInfo.login.name);
+          }
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

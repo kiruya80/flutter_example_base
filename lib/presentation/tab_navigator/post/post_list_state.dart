@@ -7,49 +7,31 @@ import '../../../shared/base/base_ui_status.dart';
 ///
 ///
 class PostListState extends BaseUiStatus {
-  @override
-  final bool isLoading;
-  @override
-  final Failure? error;
-  @override
-  final RouteInfo? navigateTo;
-
   final List<Post> posts;
 
-  PostListState({
-    this.isLoading = false,
-    this.error,
-    this.navigateTo,
+  const PostListState({
     this.posts = const [],
+    super.isLoading,
+    super.error,
+    super.navigateTo,
   });
 
   PostListState copyWith({
+    List<Post>? posts,
+
     bool? isLoading,
     Failure? error,
     RouteInfo? navigateTo,
-    List<Post>? posts,
   }) {
     return PostListState(
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
-      navigateTo: navigateTo,
       posts: posts ?? this.posts,
+
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+      navigateTo: navigateTo ?? this.navigateTo,
     );
   }
 
   factory PostListState.initial() =>
       PostListState(posts: [], isLoading: false, error: null);
-  // final List<Post> posts;
-  //
-  // PostListState({required this.posts, super.isLoading, super.error});
-  //
-  // factory PostListState.initial() => PostListState(posts: [], isLoading: false, error: null);
-  //
-  // PostListState copyWith({List<Post>? posts, bool? isLoading, Failure? error}) {
-  //   return PostListState(
-  //     posts: posts ?? this.posts,
-  //     isLoading: isLoading ?? this.isLoading,
-  //     error: error ?? this.error,
-  //   );
-  // }
 }

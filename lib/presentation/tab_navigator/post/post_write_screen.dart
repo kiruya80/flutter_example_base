@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/presentation/tab_navigator/post/post_write_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/viewmodel/post_viewmodel_providers.dart';
+import '../../../shared/mixin/error_listener_mixin.dart';
+import '../../../shared/mixin/loading_listener_mixin.dart';
+import '../../../shared/mixin/navigation_listener_mixin.dart';
 import '../../../shared/state/base_con_state.dart';
 
 class PostWriteScreen extends ConsumerStatefulWidget {
@@ -12,7 +16,11 @@ class PostWriteScreen extends ConsumerStatefulWidget {
   ConsumerState<PostWriteScreen> createState() => _PostWriteScreenState();
 }
 
-class _PostWriteScreenState extends BaseConState<PostWriteScreen> {
+class _PostWriteScreenState extends BaseConState<PostWriteScreen>
+    with
+        ErrorListenerMixin<PostWriteState, PostWriteScreen>,
+        NavigationListenerMixin<PostWriteState, PostWriteScreen>,
+        LoadingListenerMixin<PostWriteState, PostWriteScreen> {
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
 
@@ -21,6 +29,20 @@ class _PostWriteScreenState extends BaseConState<PostWriteScreen> {
     _titleController.dispose();
     _bodyController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // ✅ 로딩 리스너 등록
+    setupErrorListener(ref, postWriteViewModelProvider);
+    setupLoadingListener(ref, postWriteViewModelProvider);
+    setupNavigationListener(ref, postWriteViewModelProvider);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // ref.read(postListViewModelProvider.notifier).loadPosts();
+    });
   }
 
   Future<void> _onSubmit() async {
@@ -40,10 +62,13 @@ class _PostWriteScreenState extends BaseConState<PostWriteScreen> {
 
     if (success) {
       // context.go('/posts');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('새글을 작성했습니다.'), backgroundColor: Colors.blue));
       context.pop();
     } else {
-      final error = ref.read(postWriteViewModelProvider).error?.message;
-      _showError(error ?? '작성 실패');
+      // final error = ref.read(postWriteViewModelProvider).error?.message;
+      // _showError(error ?? '작성 실패');
     }
   }
 
@@ -75,7 +100,8 @@ class _PostWriteScreenState extends BaseConState<PostWriteScreen> {
             ),
             const SizedBox(height: 20),
             state.isLoading == true
-                ? const CircularProgressIndicator()
+                // ? const CircularProgressIndicator()
+            ?Container()
                 : ElevatedButton(
                   onPressed: _onSubmit,
                   child: const Text('작성 완료'),

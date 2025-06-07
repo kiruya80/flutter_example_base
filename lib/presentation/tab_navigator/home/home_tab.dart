@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/controller/dialog_controller.dart';
-import '../../../domain/common/entities/dialog_request.dart';
-import '../../providers/dialog_queue_provider.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../core/utils/print_log.dart';
 import '../../../shared/state/base_con_state.dart';
@@ -25,39 +22,8 @@ class _HomeTabState extends BaseConState<HomeTab> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // ref.listen(dialogQueueProvider, (previous, next) {
-      //   QcLog.d('listen ==== dialogQueueProvider ====  $previous , $next');
-      // });
-
-      // ref.listen(globalLoadingProvider, (previous, next) {
-      //   QcLog.d('listen ==== globalLoadingProvider ====   $previous , $next');
-      // });
-
-      // ref.listenManual(dialogQueueProvider, (previous, next) {
-      //   QcLog.d('listen ==== dialogQueueProvider ====   $previous , $next');
-      // });
-      // ref.listenManual(globalLoadingProvider, (previous, next) {
-      //   QcLog.d('listen ==== globalLoadingProvider ====   $previous , $next');
-      // });
-
-      // _cancelDialogListener = ref.listenManual<Queue<DialogRequest>>(
-      //   dialogQueueProvider,
-      //       (previous, next) {
-      //     QcLog.d('📌 DialogQueue 변경 감지: $next');
-      //     _tryShowNextDialog();
-      //   },
-      // );
-      //
-      // _cancelLoadingListener = ref.listenManual<bool>(
-      //   globalLoadingProvider,
-      //       (previous, next) {
-      //     QcLog.d('📌 로딩 상태 변경 감지: $next');
-      //     _isLoading = next;
-      //     _tryShowNextDialog();
-      //   },
-      // );
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // });
   }
 
   @override
@@ -80,172 +46,6 @@ class _HomeTabState extends BaseConState<HomeTab> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // ItemTitle('로딩 매니져'),
-            // RouterMoveItem('showLoading & hideLoading', () async {
-            //   DialogController.instance.showLoading();
-            //   await Future.delayed(const Duration(seconds: 5));
-            //   DialogController.instance.hideLoading();
-            // }),
-
-            // ItemTitle('일반 다이얼로그 5초 후 중복'),
-            // RouterMoveItem('showAppDialog & showAppDialog', () async {
-            //   DialogController.instance.showAppDialog(
-            //     title: '알림',
-            //     message: '작업이 완료되었습니다.',
-            //     type: DialogType.info,
-            //     onConfirmed: () => print('확인 클릭됨'),
-            //   );
-            //   await Future.delayed(const Duration(seconds: 3));
-            //
-            //   DialogController.instance.showAppDialog(
-            //     title: '알림22222',
-            //     message: '작업이 완료되었습니다.22222',
-            //     type: DialogType.info,
-            //     onConfirmed: () => print('확인 클릭됨'),
-            //   );
-            //
-            //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
-            // }),
-
-            // ItemTitle('로딩 5초 후 일반 다이얼로그'),
-            // RouterMoveItem('showLoading & showAppDialog', () async {
-            //   DialogController.instance.showLoading();
-            //
-            //   DialogController.instance.showAppDialog(
-            //     title: '알림',
-            //     message: '작업이 완료되었습니다.',
-            //     type: DialogType.info,
-            //     onConfirmed: () => print('확인 클릭됨'),
-            //   );
-            //   await Future.delayed(const Duration(seconds: 5));
-            //   DialogController.instance.hideLoading();
-            //
-            //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
-            // }),
-
-            ///
-            ///
-            ///
-            // RouterMoveItem('showAppDialog dialogQueueProvider', () async {
-            //   // 다이얼로그 요청 추가
-            //   ref
-            //       .read(dialogQueueProvider.notifier)
-            //       .enqueue(
-            //         DialogRequest(
-            //           title: '알림',
-            //           message: '작업이 완료되었습니다.',
-            //           onConfirmed: () {
-            //             QcLog.d('onConfirmed ==== 알림 ');
-            //           },
-            //         ),
-            //       );
-            //   await Future.delayed(const Duration(seconds: 3));
-            //   ref
-            //       .read(dialogQueueProvider.notifier)
-            //       .enqueue(
-            //         DialogRequest(
-            //           title: '알림22222',
-            //           message: '작업이 완료되었습니다.22222',
-            //           onConfirmed: () {
-            //             QcLog.d('onConfirmed ==== 알림22222 ');
-            //           },
-            //         ),
-            //       );
-            //
-            //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
-            // }),
-
-            // RouterMoveItem('로딩 매니져', () async {
-            //   ref.read(globalLoadingProvider.notifier).state = true;
-            //   LoadingDialogManager.show();
-            //   await Future.delayed(const Duration(seconds: 5));
-            //   ref.read(globalLoadingProvider.notifier).state = false;
-            //   LoadingDialogManager.hide();
-            //   QcLog.d('loading state ===  ${ref.read(globalLoadingProvider.notifier).state}');
-            // }),
-
-            ///
-            ///
-            ///
-            // RouterMoveItem('다이얼로그 큐 매니져', () async {
-            //   ref.read(dialogQueueProvider.notifier).clear();
-            //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
-            //   // 다이얼로그 요청 추가
-            //   ref
-            //       .read(dialogQueueProvider.notifier)
-            //       .enqueue(
-            //         DialogRequest(
-            //           title: '알림',
-            //           message: '작업이 완료되었습니다.',
-            //           onConfirmed: () {
-            //             QcLog.d('onConfirmed ==== 알림 ');
-            //           },
-            //         ),
-            //       );
-            //   await Future.delayed(const Duration(seconds: 3));
-            //   ref
-            //       .read(dialogQueueProvider.notifier)
-            //       .enqueue(
-            //         DialogRequest(
-            //           title: '알림22222',
-            //           message: '작업이 완료되었습니다.22222',
-            //           onConfirmed: () {
-            //             QcLog.d('onConfirmed ==== 알림22222 ');
-            //           },
-            //         ),
-            //       );
-            //
-            //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
-            // }),
-            // const SizedBox(height: 20),
-            //
-            // ///
-            // ///
-            // ///
-            // RouterMoveItem('로딩 & 다이얼로그 큐 매니져', () async {
-            //   ref.read(dialogQueueProvider.notifier).clear();
-            //   QcLog.d('Queue length ==== ${ref.read(dialogQueueProvider.notifier).length}');
-            //
-            //   ref.read(globalLoadingProvider.notifier).state = true;
-            //   final _loadingDialog = LoadingDialogManager();
-            //   await _loadingDialog.show(context);
-            //
-            //   // 다이얼로그 요청 추가
-            //   ref
-            //       .read(dialogQueueProvider.notifier)
-            //       .enqueue(
-            //         DialogRequest(
-            //           title: '알림',
-            //           message: '작업이 완료되었습니다.',
-            //           onConfirmed: () {
-            //             QcLog.d('onConfirmed ==== 알림 ');
-            //           },
-            //         ),
-            //       );
-            //   ref
-            //       .read(dialogQueueProvider.notifier)
-            //       .enqueue(
-            //         DialogRequest(
-            //           title: '알림22222',
-            //           message: '작업이 완료되었습니다.22222',
-            //           onConfirmed: () {
-            //             QcLog.d('onConfirmed ==== 알림22222 ');
-            //           },
-            //         ),
-            //       );
-            //   QcLog.d('Queue length ==== 로딩중상태 다이얼로그 추가');
-            //
-            //   await Future.delayed(const Duration(seconds: 3));
-            //   _loadingDialog.dismiss();
-            //   ref.read(globalLoadingProvider.notifier).state = false;
-            //
-            //   QcLog.d('loading state ===  ${ref.read(globalLoadingProvider.notifier).state}');
-            //
-            //   // 다이얼로그 처리 후 큐 제거
-            //   //             ref.read(dialogQueueProvider.notifier).dequeue();
-            // }),
-            // const SizedBox(height: 40),
-
             ///
             ///
             ///

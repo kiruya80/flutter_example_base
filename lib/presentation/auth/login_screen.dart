@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../app/providers/viewmodel/auth_viewmodel_providers.dart';
+import '../../shared/mixin/error_listener_mixin.dart';
+import '../../shared/mixin/loading_listener_mixin.dart';
+import '../../shared/mixin/navigation_listener_mixin.dart';
 import '../../shared/state/base_con_state.dart';
+import 'auth_state.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -11,8 +15,26 @@ class LoginScreen extends ConsumerStatefulWidget {
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends BaseConState<LoginScreen> {
+class _LoginScreenState extends BaseConState<LoginScreen>
+    with
+        ErrorListenerMixin<AuthState, LoginScreen>,
+        NavigationListenerMixin<AuthState, LoginScreen>,
+        LoadingListenerMixin<AuthState, LoginScreen> {
   final _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // ✅ 로딩 리스너 등록
+    setupErrorListener(ref, authViewModelProvider);
+    setupLoadingListener(ref, authViewModelProvider);
+    setupNavigationListener(ref, authViewModelProvider);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // ref.read(postListViewModelProvider.notifier).loadPosts();
+    });
+  }
 
   @override
   void dispose() {
@@ -34,10 +56,13 @@ class _LoginScreenState extends BaseConState<LoginScreen> {
 
     if (success) {
       // context.goNamed(AppRoutesInfo.posts.name);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('로그인 성공.'), backgroundColor: Colors.blue));
       context.pop();
     } else {
-      final error = ref.read(authViewModelProvider).errorMessage;
-      _showError(error ?? '로그인 실패');
+      // final error = ref.read(authViewModelProvider).errorMessage;
+      // _showError(error ?? '로그인 실패');
     }
   }
 
@@ -66,7 +91,7 @@ class _LoginScreenState extends BaseConState<LoginScreen> {
             ),
             const SizedBox(height: 16),
             state.isLoading == true
-                ? const CircularProgressIndicator()
+                ? Container()
                 : ElevatedButton(
                   onPressed: _onLoginPressed,
                   child: const Text('로그인'),
