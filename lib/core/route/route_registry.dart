@@ -17,6 +17,6 @@ class RouteRegistry {
 
     _names.add(name);
     _paths.add(path);
-    return RouteInfo(name, path, prefixPath: prefixPath);
+    return RouteInfo(name:name, path:path, prefixPath: prefixPath);
   }
 }
