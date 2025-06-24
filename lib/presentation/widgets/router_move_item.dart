@@ -44,7 +44,7 @@ class RouterMoveItem extends StatelessWidget {
             ],
           ),
           SizedBox(
-            width: double.infinity,
+            width: double.maxFinite,
             child: Divider(
               color: Colors.blueGrey.withValues(alpha: 0.5),
               thickness: 1.0,

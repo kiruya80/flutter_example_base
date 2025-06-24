@@ -28,20 +28,57 @@ class DialogRequest {
 
   factory DialogRequest.loading() => DialogRequest(type: DialogType.loading);
 
-  factory DialogRequest.error(String msg, {VoidCallback? onConfirm}) =>
-      DialogRequest(type: DialogType.error, message: msg, onConfirm: onConfirm);
+  factory DialogRequest.error({
+    String? title,
+    String? msg,
+    VoidCallback? onConfirm,
+  }) =>
+      DialogRequest(
+        type: DialogType.error,
+        title: title,
+        message: msg,
+        onConfirm: onConfirm,
+      );
 
-  factory DialogRequest.success(String msg, {VoidCallback? onConfirm}) =>
-      DialogRequest(type: DialogType.success, message: msg, onConfirm: onConfirm);
+  factory DialogRequest.success(
+    String msg, {
+    String? title,
+    VoidCallback? onConfirm,
+  }) =>
+      DialogRequest(
+        type: DialogType.success,
+        title: title,
+        message: msg,
+        onConfirm: onConfirm,
+      );
 
-  factory DialogRequest.confirm(String msg, {VoidCallback? onConfirm, VoidCallback? onCancel}) =>
+  factory DialogRequest.confirm(
+    String msg, {
+    String? title,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+  }) =>
       DialogRequest(
         type: DialogType.confirm,
+        title: title,
         message: msg,
         onConfirm: onConfirm,
         onCancel: onCancel,
       );
 
-  factory DialogRequest.custom(Widget widget) =>
-      DialogRequest(type: DialogType.custom, customWidget: widget);
+  factory DialogRequest.custom(
+    Widget widget, {
+    String? title,
+    String? msg,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+  }) =>
+      DialogRequest(
+        type: DialogType.custom,
+        title: title,
+        customWidget: widget,
+        message: msg,
+        onConfirm: onConfirm,
+        onCancel: onCancel,
+      );
 }

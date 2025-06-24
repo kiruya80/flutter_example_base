@@ -27,6 +27,9 @@ class _PostListScreenState extends BaseConState<PostListScreen>
         ErrorListenerMixin<PostListState, PostListScreen>,
         NavigationListenerMixin<PostListState, PostListScreen>,
         LoadingListenerMixin<PostListState, PostListScreen> {
+  // 100개의 샘플 텍스트 리스트 생성
+  final items = List.generate(100, (index) => 'Item ${index + 1}');
+
   @override
   void initState() {
     super.initState();
@@ -61,12 +64,9 @@ class _PostListScreenState extends BaseConState<PostListScreen>
                       ElevatedButton(
                         child: Text('loadPosts'),
                         onPressed: () {
-                          ref
-                              .read(postListViewModelProvider.notifier)
-                              .loadPosts();
+                          ref.read(postListViewModelProvider.notifier).loadPosts();
                         },
                       ),
-
                       ElevatedButton(
                         child: Text('일반 dialog'),
                         onPressed: () {
@@ -83,22 +83,41 @@ class _PostListScreenState extends BaseConState<PostListScreen>
                           );
                         },
                       ),
-
                       ElevatedButton(
                         child: Text('error dialog'),
                         onPressed: () {
-                          ref
-                              .read(postListViewModelProvider.notifier)
-                              .dialogLoadError();
+                          ref.read(postListViewModelProvider.notifier).dialogLoadError();
                         },
                       ),
-
                       ElevatedButton(
                         child: Text('Delayed dialog'),
                         onPressed: () {
-                          ref
-                              .read(postListViewModelProvider.notifier)
-                              .dialogDelayed();
+                          ref.read(postListViewModelProvider.notifier).dialogDelayed();
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text('custom dialog'),
+                        onPressed: () {
+                          DialogController(ref).enqueue(
+                            DialogRequest.custom(
+                              ListView.builder(
+                                itemCount: items.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    leading: CircleAvatar(child: Text('${index + 1}')),
+                                    title: Text(items[index]),
+                                    subtitle: Text('This is item number ${index + 1}'),
+                                  );
+                                },
+                              ),
+                              onCancel: () {
+                                QcLog.d('onCancelled');
+                              },
+                              onConfirm: () {
+                                QcLog.d('onConfirm');
+                              },
+                            ),
+                          );
                         },
                       ),
                     ],
@@ -108,21 +127,20 @@ class _PostListScreenState extends BaseConState<PostListScreen>
               ],
             ),
             Expanded(
-              child:
-                  state.isLoading == true
-                      ? Container()
-                      : state.error != null
+              child: state.isLoading == true
+                  ? Container()
+                  : state.error != null
                       ? Center(child: Text('Error: ${state.error?.message}'))
                       : ListView.builder(
-                        itemCount: state.posts.length,
-                        itemBuilder: (context, index) {
-                          final post = state.posts[index];
-                          return ListTile(
-                            title: Text(post.title ?? ''),
-                            subtitle: Text(post.body ?? ''),
-                          );
-                        },
-                      ),
+                          itemCount: state.posts.length,
+                          itemBuilder: (context, index) {
+                            final post = state.posts[index];
+                            return ListTile(
+                              title: Text(post.title ?? ''),
+                              subtitle: Text(post.body ?? ''),
+                            );
+                          },
+                        ),
             ),
           ],
         ),
