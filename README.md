@@ -312,6 +312,21 @@ AsyncValue<T>           AsyncNotifier<T>        ✅ 가능                ✅ �
 Future<T>               AsyncNotifier<T>        ✅ 가능                ✅ 가능
 Future<AsyncValue<T>>   ❌ 내부 자동 처리      ❌ 불가능              ❌ reset 등 안 
 
- 
- 
+## OS 변경점
+AOS 16 - 머티리얼 3 익스프레시브 (flutter에서 아직 미지원)
+
+iOS 26 - 리퀴드 글래스 (flutter에서 아직 미지원)
+
+## 안드로이드 변경점
+Flutter 3.32부터 useMaterial3: true
+android 16의 Expressive는 아직 flutter에서 미지원
+
+Android 14(API 34)부터 앱이 전체 화면을 사용할 수 있도록 디자인할 것을 권장하고 있으며, 
+Android 16(API 36)부터는 화면 방향 강제 고정 제한과 함께, 
+상단의 상태바(Status Bar)·하단 내비게이션 바(Navigation Bar)까지 포함한 
+전체 영역을 앱이 활용해야 한다는 흐름으로 변화하고 있습니다.
+ㄴ 전체 화면 (edge-to-edge) 사용 권장
+
+
+
 

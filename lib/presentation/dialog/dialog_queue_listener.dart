@@ -43,9 +43,7 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
     final isShowing = ref.read(isDialogShowingProvider);
     final isLoading = ref.read(isLoadingDialogShowingProvider);
     final queue = ref.read(dialogQueueProvider);
-    QcLog.d(
-      '_handleNextDialog ====  $isShowing ,$isLoading / ${queue.length} ',
-    );
+    QcLog.d('_handleNextDialog ====  $isShowing ,$isLoading / ${queue.length} ');
 
     queue.forEach((item) {
       debugPrint('🟢 queue : ${item.toString()}');
@@ -60,10 +58,7 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
       ref.read(isLoadingDialogShowingProvider.notifier).state = true;
     }
 
-    await _showDialogByType(
-      AppRouter.globalNavigatorKey.currentContext!,
-      request,
-    );
+    await _showDialogByType(AppRouter.globalNavigatorKey.currentContext!, request);
 
     QcLog.d('다이얼로그 종료 후 큐 갱신 ==== ');
 
@@ -74,19 +69,14 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
       ref.read(isDialogShowingProvider.notifier).state = false;
       DialogController(ref).dequeue();
     }
-    QcLog.d(
-      'dequeue END ===   ${ref.read(dialogQueueProvider.notifier).state.length}',
-    );
+    QcLog.d('dequeue END ===   ${ref.read(dialogQueueProvider.notifier).state.length}');
 
     // 약간의 delay로 UI 안정화 후 다음 다이얼로그 실행
     await Future.delayed(Duration(milliseconds: 50));
     _handleNextDialog();
   }
 
-  Future<void> _showDialogByType(
-    BuildContext context,
-    DialogRequest request,
-  ) async {
+  Future<void> _showDialogByType(BuildContext context, DialogRequest request) async {
     QcLog.d('_showDialogByType  ==== ${request.type}');
     ref.read(isDialogShowingProvider.notifier).state = true;
     switch (request.type) {
@@ -94,244 +84,271 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
         await showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (_) => Center(
-            child: GestureDetector(
-              onLongPress: () {
-                if (kDebugMode) {
-                  DialogController(ref).hideLoading();
-                }
-              },
-              child: CircularProgressIndicator(),
-            ),
-          ),
+          builder:
+              (_) => Center(
+                child: GestureDetector(
+                  onLongPress: () {
+                    if (kDebugMode) {
+                      DialogController(ref).hideLoading();
+                    }
+                  },
+                  child: CircularProgressIndicator(),
+                ),
+              ),
         );
         break;
       case DialogType.error:
         await showDialog(
           context: context,
-          builder: (_) => AlertDialog(
-            title: Text(request.title ?? '에러'),
-            content: Text(request.message ?? '오류가 발생했습니다.'),
-            actions: [
-              if (request.onCancel != null)
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    request.onCancel?.call();
-                  },
-                  child: const Text('취소'),
+          builder:
+              (_) => AlertDialog(
+                title: Text(request.title ?? '에러'),
+                content: Container(
+                  width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
+                  child: Text(request.message ?? '오류가 발생했습니다.'),
                 ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  request.onConfirm?.call();
-                },
-                child: const Text('확인'),
+                actions: [
+                  if (request.onCancel != null)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        request.onCancel?.call();
+                      },
+                      child: const Text('취소'),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      request.onConfirm?.call();
+                    },
+                    child: const Text('확인'),
+                  ),
+                ],
               ),
-            ],
-          ),
         );
         break;
       case DialogType.success:
         await showDialog(
           context: context,
-          builder: (_) => AlertDialog(
-            title: Text(request.title ?? '성공'),
-            content: Text(request.message ?? ''),
-            actions: [
-              if (request.onCancel != null)
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    request.onCancel?.call();
-                  },
-                  child: const Text('취소'),
+          builder:
+              (_) => AlertDialog(
+                title: Text(request.title ?? '성공'),
+                content: Container(
+                  width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
+                  child: Text(request.message ?? ''),
                 ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  request.onConfirm?.call();
-                },
-                child: const Text('확인'),
+                actions: [
+                  if (request.onCancel != null)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        request.onCancel?.call();
+                      },
+                      child: const Text('취소'),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      request.onConfirm?.call();
+                    },
+                    child: const Text('확인'),
+                  ),
+                ],
               ),
-            ],
-          ),
         );
         break;
       case DialogType.confirm:
         await showDialog(
           context: context,
-          builder: (_) => AlertDialog(
-            title: Text(request.title ?? '알림'),
-            content: Text(request.message ?? ''),
-            actions: [
-              if (request.onCancel != null)
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    request.onCancel?.call();
-                  },
-                  child: const Text('취소'),
+          builder:
+              (_) => AlertDialog(
+                title: Text(request.title ?? '알림'),
+                content: Container(
+                  width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
+                  child: Text(request.message ?? ''),
                 ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  request.onConfirm?.call();
-                },
-                child: const Text('확인'),
+                actions: [
+                  if (request.onCancel != null)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        request.onCancel?.call();
+                      },
+                      child: const Text('취소'),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      request.onConfirm?.call();
+                    },
+                    child: const Text('확인'),
+                  ),
+                ],
               ),
-            ],
-          ),
         );
         break;
 
       case DialogType.custom:
         double displayHeight = CommonUtils.getDisplayHeight(context);
+        double displayWidth = CommonUtils.getDisplayWidth(context);
         double maxHeight = displayHeight * 1 / 2;
+        double maxWidth = double.maxFinite;
+        if (CommonUtils.isTablet(context)) {
+          /// 태블릿인 경우만 가로 사이즈 제한
+          maxWidth = displayWidth * 1 / 2;
+        }
 
-        QcLog.d('DialogType.custom displayHeight :$displayHeight, '
-            'maxHeight : $maxHeight ');
+        QcLog.d(
+          'DialogType.custom '
+          'height == displayHeight :$displayHeight, '
+          'maxHeight : $maxHeight | '
+          'width == displayWidth : $displayWidth , '
+          'maxWidth : $maxWidth',
+        );
 
         await showDialog(
           context: context,
-          builder: (_) => AlertDialog(
-            title: Text(request.title ?? '알림'),
-            content: Container(
-                width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
-                height: double.maxFinite,
-                constraints: BoxConstraints(
-                  // maxWidth: CommonUtils.getDial ogMaxWidth(context),
-                  maxHeight: maxHeight,
+          builder:
+              (_) => AlertDialog(
+                title: Text(request.title ?? '알림'),
+                content: Container(
+                  width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
+                  height: double.maxFinite,
+                  constraints: BoxConstraints(
+                    // maxWidth: CommonUtils.getDial ogMaxWidth(context),
+                    maxHeight: maxHeight,
+                    maxWidth: maxWidth,
+                  ),
+                  child: request.customWidget ?? Text(request.message ?? ''),
                 ),
-                child: request.customWidget ?? Text(request.message ?? '')),
-            actions: [
-              if (request.onCancel != null)
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    request.onCancel?.call();
-                  },
-                  child: const Text('취소'),
-                ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  request.onConfirm?.call();
-                },
-                child: const Text('확인'),
+                actions: [
+                  if (request.onCancel != null)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        request.onCancel?.call();
+                      },
+                      child: const Text('취소'),
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      request.onConfirm?.call();
+                    },
+                    child: const Text('확인'),
+                  ),
+                ],
               ),
-            ],
-          ),
         );
         break;
     }
   }
 
-// bool _isShowingDialog = false;
-//
-// @override
-// void initState() {
-//   super.initState();
-//
-//   DialogController.instance.register(
-//     showLoading: _showLoading,
-//     hideLoading: _hideLoading,
-//     enqueueDialog: (request) {
-//       ref.read(dialogQueueProvider.notifier).enqueue(request);
-//     },
-//   );
-// }
-//
-// void _showLoading() {
-//   QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingVisible}');
-//   // if (DialogController.instance.isLoadingVisible) return;
-//   // DialogController.instance.isLoadingVisible = true;
-//   // ref.read(globalLoadingProvider.notifier).state = true;
-//
-//   showDialog(
-//     context: AppRouter.globalNavigatorKey.currentContext!,
-//     barrierDismissible: false,
-//     builder: (_) => const Center(child: CircularProgressIndicator()),
-//   );
-// }
-//
-// void _hideLoading() {
-//   QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingDisable}');
-//   if (DialogController.instance.isLoadingDisable == false) {
-//     return;
-//   }
-//
-//   if (Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).canPop()) {
-//     Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).pop();
-//   }
-//
-//   DialogController.instance.markLoadingHidden(); // ✅ 안전하게 상태 변경
-//   // DialogController.instance.isLoadingVisible = false;
-//   ref.read(globalLoadingProvider.notifier).state = false;
-// }
-//
-// void _tryShowNextDialog() {
-//   final isLoading = ref.read(globalLoadingProvider);
-//   final queue = ref.read(dialogQueueProvider);
-//
-//   if (_isShowingDialog || isLoading || queue.isEmpty) return;
-//
-//   final request = queue.first;
-//   _isShowingDialog = true;
-//   DialogController.instance.markDialogVisible();
-//
-//   showDialog(
-//     context: AppRouter.globalNavigatorKey.currentContext!,
-//     barrierDismissible: false,
-//     builder:
-//         (_) => AlertDialog(
-//           title: Text(request.title ?? ''),
-//           content: Text(request.message?? ''),
-//           actions: [
-//             TextButton(
-//               onPressed: () {
-//                 Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
-//                 request.onConfirm?.call();
-//               },
-//               child: const Text('확인'),
-//             ),
-//             if (request.onCancel != null)
-//               TextButton(
-//                 onPressed: () {
-//                   Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
-//                   request.onCancel?.call();
-//                 },
-//                 child: const Text('취소'),
-//               ),
-//           ],
-//         ),
-//   ).then((_) {
-//     ref.read(dialogQueueProvider.notifier).dequeue();
-//     DialogController.instance.markDialogHidden();
-//     _isShowingDialog = false;
-//     _tryShowNextDialog(); // 다음 다이얼로그가 있으면 또 표시
-//   });
-// }
-//
-// @override
-// void dispose() {
-//   // _loadingSub.close();
-//   // _dialogSub.close();
-//   super.dispose();
-// }
-//
-// @override
-// Widget build(BuildContext context) {
-//   ref.listen(globalLoadingProvider, (prev, next) {
-//     if (!next) _tryShowNextDialog();
-//   });
-//
-//   ref.listen(dialogQueueProvider, (prev, next) {
-//     _tryShowNextDialog();
-//   });
-//
-//   return widget.child;
-// }
+  // bool _isShowingDialog = false;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   DialogController.instance.register(
+  //     showLoading: _showLoading,
+  //     hideLoading: _hideLoading,
+  //     enqueueDialog: (request) {
+  //       ref.read(dialogQueueProvider.notifier).enqueue(request);
+  //     },
+  //   );
+  // }
+  //
+  // void _showLoading() {
+  //   QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingVisible}');
+  //   // if (DialogController.instance.isLoadingVisible) return;
+  //   // DialogController.instance.isLoadingVisible = true;
+  //   // ref.read(globalLoadingProvider.notifier).state = true;
+  //
+  //   showDialog(
+  //     context: AppRouter.globalNavigatorKey.currentContext!,
+  //     barrierDismissible: false,
+  //     builder: (_) => const Center(child: CircularProgressIndicator()),
+  //   );
+  // }
+  //
+  // void _hideLoading() {
+  //   QcLog.d('_showLoading ===== ${DialogController.instance.isLoadingDisable}');
+  //   if (DialogController.instance.isLoadingDisable == false) {
+  //     return;
+  //   }
+  //
+  //   if (Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).canPop()) {
+  //     Navigator.of(AppRouter.globalNavigatorKey.currentContext!, rootNavigator: true).pop();
+  //   }
+  //
+  //   DialogController.instance.markLoadingHidden(); // ✅ 안전하게 상태 변경
+  //   // DialogController.instance.isLoadingVisible = false;
+  //   ref.read(globalLoadingProvider.notifier).state = false;
+  // }
+  //
+  // void _tryShowNextDialog() {
+  //   final isLoading = ref.read(globalLoadingProvider);
+  //   final queue = ref.read(dialogQueueProvider);
+  //
+  //   if (_isShowingDialog || isLoading || queue.isEmpty) return;
+  //
+  //   final request = queue.first;
+  //   _isShowingDialog = true;
+  //   DialogController.instance.markDialogVisible();
+  //
+  //   showDialog(
+  //     context: AppRouter.globalNavigatorKey.currentContext!,
+  //     barrierDismissible: false,
+  //     builder:
+  //         (_) => AlertDialog(
+  //           title: Text(request.title ?? ''),
+  //           content: Text(request.message?? ''),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () {
+  //                 Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
+  //                 request.onConfirm?.call();
+  //               },
+  //               child: const Text('확인'),
+  //             ),
+  //             if (request.onCancel != null)
+  //               TextButton(
+  //                 onPressed: () {
+  //                   Navigator.of(AppRouter.globalNavigatorKey.currentContext!).pop();
+  //                   request.onCancel?.call();
+  //                 },
+  //                 child: const Text('취소'),
+  //               ),
+  //           ],
+  //         ),
+  //   ).then((_) {
+  //     ref.read(dialogQueueProvider.notifier).dequeue();
+  //     DialogController.instance.markDialogHidden();
+  //     _isShowingDialog = false;
+  //     _tryShowNextDialog(); // 다음 다이얼로그가 있으면 또 표시
+  //   });
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   // _loadingSub.close();
+  //   // _dialogSub.close();
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // Widget build(BuildContext context) {
+  //   ref.listen(globalLoadingProvider, (prev, next) {
+  //     if (!next) _tryShowNextDialog();
+  //   });
+  //
+  //   ref.listen(dialogQueueProvider, (prev, next) {
+  //     _tryShowNextDialog();
+  //   });
+  //
+  //   return widget.child;
+  // }
 }
 
 // class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {

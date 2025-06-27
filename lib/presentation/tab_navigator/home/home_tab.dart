@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/routes/app_routes_info.dart';
+import '../../../core/utils/common_utils.dart';
 import '../../../core/utils/print_log.dart';
 import '../../../shared/state/base_con_state.dart';
 import '../../widgets/item_title.dart';
@@ -29,6 +30,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
   @override
   Widget build(BuildContext context) {
     QcLog.d('build ===== $isThisPageVisible');
+    CommonUtils.isTablet(context);
 
     // TestUsual mTestUsual2 = TestUsual(id: '112233', isSelected: false);
     // TestUsual mTestUsual = TestUsual(id: '232323', isSelected: false, content: 'ccccc');

@@ -43,6 +43,7 @@ class MyApp extends ConsumerWidget {
       routerConfig: AppRouter.appRouter,
       title: 'Post App',
       theme: ThemeData(
+        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       builder: (context, child) {

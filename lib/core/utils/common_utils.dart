@@ -4,19 +4,59 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
 import '../constants/app_constants.dart';
 
 class CommonUtils {
+  /// 화면 넓이 가져오기
+  /// 팝업에서는 1/2 최대
+  ///
+  static double getDisplayWidth(BuildContext context) {
+    double totalWidth = MediaQuery.of(context).size.width;
+    final leftInset = MediaQuery.of(context).padding.left;
+    final rightInset = MediaQuery.of(context).padding.right;
+    final displayWidth = totalWidth - leftInset - rightInset;
+    QcLog.d('displayWidth ====== $displayWidth , ($leftInset , $rightInset)');
+    return displayWidth;
+  }
+
+  /// 화면 높이 가져오기
+  /// 팝업에서는 1/2 최대
+  ///
+  static double getDisplayHeight(BuildContext context) {
+    double totalHeight = MediaQuery.of(context).size.height;
+    final statusBarHeight = MediaQuery.of(context).padding.top; // 상단 상태바
+    final bottomInset = MediaQuery.of(context).padding.bottom; // 하단 시스템 영역 (네비게이션 바 등)
+    final displayHeight = totalHeight - statusBarHeight - bottomInset;
+    QcLog.d('displayHeight ====== $displayHeight ($statusBarHeight ,$bottomInset)');
+    return displayHeight;
+  }
+
+  /// 태블릿인지 여부
+  /// 600dp 이상이면 태블릿으로 간주
+  ///
+  static bool isTablet(BuildContext context) {
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    bool isTablet = shortestSide >= 600;
+    QcLog.d('isTablet ====== $isTablet');
+    return isTablet;
+  }
+
+  // final isTabletProvider = Provider<bool>((ref) {
+  //   final context = ref.watch(navigatorKeyProvider).currentContext!;
+  //   final shortestSide = MediaQuery.of(context).size.shortestSide;
+  //   return shortestSide >= 600;
+  // });
+
   ///
   /// 다이얼로그 가로 길이 가져오기
   /// ctDialogMaxWidth 보다 큰 경우 ctDialogMaxWidth로 설정
   /// 작은 경우는 화면 가로 기준
   ///
-  static double getDialogMaxWidth(BuildContext context) {
-    double logicalWidth = MediaQuery.of(context).size.width;
-    final pixelRatio = MediaQuery.of(context).devicePixelRatio;
-    final physicalWidth = logicalWidth * pixelRatio;
-    QcLog.d('getDialogMaxWidth ===== $pixelRatio , $logicalWidth, $physicalWidth');
-
-    return logicalWidth >= AppConstants.DialogMaxWidth ? AppConstants.DialogMaxWidth : logicalWidth;
-  }
+  // static double getDialogMaxWidth(BuildContext context) {
+  //   double logicalWidth = MediaQuery.of(context).size.width;
+  //   final pixelRatio = MediaQuery.of(context).devicePixelRatio;
+  //   final physicalWidth = logicalWidth * pixelRatio;
+  //   QcLog.d('getDialogMaxWidth ===== $pixelRatio , $logicalWidth, $physicalWidth');
+  //
+  //   return logicalWidth >= AppConstants.DialogMaxWidth ? AppConstants.DialogMaxWidth : logicalWidth;
+  // }
 
   /// 팝업 최대 높이
   /// 갤럭시 s23 울트라 (3088 x 1440)  height 834(805), width : 411 ,
@@ -39,17 +79,6 @@ class CommonUtils {
   //   return logicalHeight >= Gc.ctDialogMaxHeight ? Gc.ctDialogMaxHeight : logicalHeight;
   // }
 
-  /// 화면 높이 가져오기
-  ///
-  static double getDisplayHeight(BuildContext context) {
-    double totalHeight = MediaQuery.of(context).size.height;
-    final statusBarHeight = MediaQuery.of(context).padding.top; // 상단 상태바
-    final bottomInset = MediaQuery.of(context).padding.bottom; // 하단 시스템 영역 (네비게이션 바 등)
-    final displayHeight = totalHeight - statusBarHeight - bottomInset;
-    QcLog.d('displayHeight ====== $displayHeight');
-    return displayHeight;
-  }
-
   static const double ctBottomMargin = 20.0;
 
   ///
@@ -70,8 +99,10 @@ class CommonUtils {
     /// bottomInset이 0이 아닌 경우는 설정된 바텀 마진으로
     final extraBottomMargin = bottomInset == 0 ? 20.0 : 0.0;
 
-    QcLog.d('getHomeBottomMargin  ======= ${MediaQuery.of(context).padding} ,'
-        ' bottomInset : $bottomInset, extraBottomMargin: $extraBottomMargin');
+    QcLog.d(
+      'getHomeBottomMargin  ======= ${MediaQuery.of(context).padding} ,'
+      ' bottomInset : $bottomInset, extraBottomMargin: $extraBottomMargin',
+    );
 
     return extraBottomMargin;
   }
