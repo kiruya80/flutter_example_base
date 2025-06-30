@@ -6,14 +6,14 @@ import 'package:go_router/go_router.dart';
 import '../../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
 
-class SettingScreen extends ConsumerStatefulWidget {
-  const SettingScreen({super.key});
+class SettingPage extends ConsumerStatefulWidget {
+  const SettingPage({super.key});
 
   @override
-  ConsumerState<SettingScreen> createState() => _SettingScreenState();
+  ConsumerState<SettingPage> createState() => _SettingPageState();
 }
 
-class _SettingScreenState extends BaseConState<SettingScreen> {
+class _SettingPageState extends BaseConState<SettingPage> {
   @override
   void initState() {
     super.initState();

@@ -41,6 +41,9 @@ class AppRoutesInfo {
 
   static final homeCard = RouteRegistry.register('homeCard', 'homeCard');
 
+  /// edgeToEdge 화면
+  static final edgeToEdge = RouteRegistry.register('edgeToEdge', '/edgeToEdge');
+
   ///
   /// 헬퍼 예시 context.go 를 사용할 때
   /// context.goNamed(

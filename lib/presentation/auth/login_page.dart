@@ -8,18 +8,18 @@ import '../../shared/mixin/navigation_listener_mixin.dart';
 import '../../shared/state/base_con_state.dart';
 import 'auth_state.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginScreenState extends BaseConState<LoginScreen>
+class _LoginPageState extends BaseConState<LoginPage>
     with
-        ErrorListenerMixin<AuthState, LoginScreen>,
-        NavigationListenerMixin<AuthState, LoginScreen>,
-        LoadingListenerMixin<AuthState, LoginScreen> {
+        ErrorListenerMixin<AuthState, LoginPage>,
+        NavigationListenerMixin<AuthState, LoginPage>,
+        LoadingListenerMixin<AuthState, LoginPage> {
   final _controller = TextEditingController();
 
   @override

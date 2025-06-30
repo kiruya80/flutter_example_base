@@ -13,7 +13,13 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     QcLog.d('My App build');
+    final brightness = MediaQuery.of(context).platformBrightness;
 
+    if (brightness == Brightness.dark) {
+      QcLog.d("디바이스 테마 : 🌙 다크 모드입니다");
+    } else {
+      QcLog.d("디바이스 테마 : ☀️ 라이트 모드입니다");
+    }
     /// 기본
     // return MaterialApp(
     //   title: 'Flutter Demo',

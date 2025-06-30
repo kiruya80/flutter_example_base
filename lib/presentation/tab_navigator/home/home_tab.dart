@@ -103,6 +103,13 @@ class _HomeTabState extends BaseConState<HomeTab> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'edgeToEdge',
+        onPressed: () {
+          context.pushNamed(AppRoutesInfo.edgeToEdge.name);
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

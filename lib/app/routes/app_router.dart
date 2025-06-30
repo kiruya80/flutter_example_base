@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../my_app.dart';
+import '../../presentation/auth/login_page.dart';
+import '../../presentation/edge/edge_to_edge_page.dart';
+import '../../presentation/intro/intro_page.dart';
+import '../../presentation/settting/setting_page.dart';
+import '../../presentation/splash/splash_page.dart';
 import '../../shared/state/base_state.dart';
-import '../../presentation/auth/login_screen.dart';
-import '../../presentation/intro/intro_screen.dart';
-import '../../presentation/settting/setting_screen.dart';
 import 'app_routes_info.dart';
 import 'my_route_observer.dart';
-import '../../presentation/splash/splash_screen.dart';
 import 'tab/tab_router.dart';
 
 class AppRouter {
   /// 🔐 navigator keys (탭 스택 유지용)
   // static final rootNavigatorKey = GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> globalNavigatorKey =
-      GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> globalNavigatorKey = GlobalKey<NavigatorState>();
 
   static final appRouter = GoRouter(
     initialLocation: AppRoutesInfo.intro.path,
@@ -39,12 +39,17 @@ class AppRouter {
       GoRoute(
         name: AppRoutesInfo.login.name,
         path: AppRoutesInfo.login.path,
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => const LoginPage(),
       ),
       GoRoute(
         name: AppRoutesInfo.setting.name,
         path: AppRoutesInfo.setting.path,
-        builder: (context, state) => const SettingScreen(),
+        builder: (context, state) => const SettingPage(),
+      ),
+      GoRoute(
+        name: AppRoutesInfo.edgeToEdge.name,
+        path: AppRoutesInfo.edgeToEdge.path,
+        builder: (context, state) => const EdgeToEdgePage(),
       ),
 
       /// tab
