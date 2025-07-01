@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/common_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
 
+///
+/// 안드로이드
+/// https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ko
+///
+/// 앱바 고정된 경우, 앱바를 접는다
+/// 상단 앱 바가 고정되지 않은 경우 일치하는 배경 색상 그라데이션을 추가합니다.
+///
 class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
   final Widget child;
   final Widget? background;
   final AppBar? appBar;
   final Color? backgroundColor;
+  final Color? statusBarColor;
 
   /// Scaffold에서 시스템 status bar까지 확장
   final bool? extendBodyBehindAppBar;
@@ -30,7 +39,8 @@ class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
     required this.child,
     this.background,
     this.appBar,
-    this.backgroundColor,
+    this.backgroundColor = Colors.white,
+    this.statusBarColor = Colors.white,
 
     this.extendBody = true,
     this.extendBodyBehindAppBar = true,
@@ -118,6 +128,18 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
     );
   }
 
+  ///
+  ///
+  /// 항목
+  ///                     statusBarColor              navigationBarColor
+  /// 투명 설정 가능      가능 (Colors.transparent)   가능하지만 blur 발생
+  /// blur 적용 여부      없음 (완전 투명 가능)       있음 (대부분 기기에서 반투명/블러됨)
+  /// 영향을 받는 영역   상단 상태 표시줄             하단 소프트 버튼 영역
+  ///
+  /// systemNavigationBarIconBrightness
+  /// ㄴ Brightness.dark 흰색
+  /// ㄴ Brightness.light 검은색
+  ///
   _onNotification(notification) {
     if (notification is ScrollUpdateNotification) {
       final metrics = notification.metrics;
@@ -132,11 +154,12 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
         /// 리스트 상단
         SystemChrome.setSystemUIOverlayStyle(
           const SystemUiOverlayStyle(
+            // statusBarIconBrightness: Brightness.light,
             statusBarColor: Colors.transparent,
+
+            // systemNavigationBarIconBrightness: Brightness.light,
             systemNavigationBarColor: Colors.transparent,
             systemNavigationBarDividerColor: Colors.transparent,
-            systemNavigationBarIconBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark,
           ),
         );
       } else {
@@ -147,29 +170,139 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
 
           /// 리스트 최하단
           SystemChrome.setSystemUIOverlayStyle(
-            const SystemUiOverlayStyle(
-              statusBarColor: Colors.blueAccent,
-              systemNavigationBarColor: Colors.deepOrangeAccent,
+            SystemUiOverlayStyle(
+              // statusBarIconBrightness: Brightness.light,
+              statusBarColor: widget.statusBarColor?.withOpacitySafe(1),
+
+              // systemNavigationBarIconBrightness: Brightness.light,
+              systemNavigationBarColor: Colors.transparent,
               systemNavigationBarDividerColor: Colors.transparent,
-              systemNavigationBarIconBrightness: Brightness.light,
-              statusBarIconBrightness: Brightness.light,
             ),
           );
         } else if (isScroll == false) {
           QcLog.d("📍 최상단을 지남.");
           isScroll = true;
           SystemChrome.setSystemUIOverlayStyle(
-            const SystemUiOverlayStyle(
-              statusBarColor: Colors.blueAccent,
+            SystemUiOverlayStyle(
+              // statusBarIconBrightness: Brightness.light,
+              statusBarColor: widget.statusBarColor?.withOpacitySafe(0.4),
+
+              // systemNavigationBarIconBrightness: Brightness.light,
               systemNavigationBarColor: Colors.transparent,
               systemNavigationBarDividerColor: Colors.transparent,
-              systemNavigationBarIconBrightness: Brightness.light,
-              statusBarIconBrightness: Brightness.light,
             ),
           );
         }
       }
     }
     return false; // 이벤트 계속 전달
+  }
+}
+
+class GradientTopOverlay extends StatelessWidget {
+  final Color backgroundColor;
+  final double height;
+  const GradientTopOverlay({
+    super.key,
+    required this.backgroundColor,
+    this.height = 80, // 상태바 + 상단 일부
+  });
+
+
+  @override
+  // Widget build(BuildContext context) {
+  //   final topPadding = MediaQuery.of(context).padding.top;
+  //   // final double appBarHeight = 56;
+  //
+  //   return Positioned(
+  //     top: 0,
+  //     left: 0,
+  //     right: 0,
+  //     height: topPadding,
+  //     // 상태바 + AppBar 높이
+  //     child: IgnorePointer(
+  //       child: Container(
+  //         decoration:  BoxDecoration(
+  //           gradient: LinearGradient(
+  //             begin: Alignment.topCenter,
+  //             end: Alignment.bottomCenter,
+  //             colors: [
+  //               // Colors.black54, // 위는 진하게
+  //               // Colors.transparent, // 아래는 투명
+  //               backgroundColor,
+  //               backgroundColor.withOpacitySafe(0.0),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = Theme.of(context).colorScheme.surface;
+
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      height: height,
+      child: IgnorePointer(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                backgroundColor,
+                backgroundColor.withOpacitySafe(0.0),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class GradientBottomOverlay extends StatelessWidget {
+  final Color backgroundColor;
+  final double height;
+
+  const GradientBottomOverlay({
+    super.key,
+    required this.backgroundColor,
+    this.height = 80, // 상태바 + 상단 일부
+  });
+
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+    // final double appBarHeight = 56;
+
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: bottomPadding,
+      // 상태바 + AppBar 높이
+      child: IgnorePointer(
+        child: Container(
+          decoration:  BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                // Colors.black54, // 위는 진하게
+                // Colors.transparent, // 아래는 투명
+                backgroundColor,
+                backgroundColor.withOpacitySafe(0.0),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

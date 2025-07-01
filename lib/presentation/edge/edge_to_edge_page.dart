@@ -30,6 +30,8 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     // return CommonEdgeToEdgePage(child: getEdgeToEdge());
 
     return CommonEdgeToEdgePage(
+      backgroundColor: Colors.white,
+      statusBarColor: Colors.white,
       child: ListView.builder(
         /// 상하단에 공간
         /// 상단은 스테이터스바 겹치지 않고

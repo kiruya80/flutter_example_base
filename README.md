@@ -327,6 +327,9 @@ Android 16(API 36)부터는 화면 방향 강제 고정 제한과 함께,
 전체 영역을 앱이 활용해야 한다는 흐름으로 변화하고 있습니다.
 ㄴ 전체 화면 (edge-to-edge) 사용 권장
 
+# 디자인
+https://rydmike.com/blog_adaptive_theming_guide.html
+
 
 
 

@@ -50,7 +50,9 @@ class MyApp extends ConsumerWidget {
       title: 'Post App',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,
+          // brightness: Brightness.dark,
+        ),
       ),
       builder: (context, child) {
         // return child!;
