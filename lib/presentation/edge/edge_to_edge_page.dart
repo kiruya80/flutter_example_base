@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/utils/common_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,10 +30,13 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     // return getEdgeToEdge2();
     // return material();
     // return CommonEdgeToEdgePage(child: getEdgeToEdge());
+    // final primaryColor = Theme.of(context).primaryColor;
+    final primaryColor = Theme.of(context).colorScheme.primary;
 
     return CommonEdgeToEdgePage(
       backgroundColor: Colors.white,
-      statusBarColor: Colors.white,
+      // statusBarColor: primaryColor,
+      // isStatusBlur: true,
       child: ListView.builder(
         /// 상하단에 공간
         /// 상단은 스테이터스바 겹치지 않고
@@ -47,6 +52,62 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
         },
       ),
     );
+
+
+    // return Scaffold(
+    //   extendBodyBehindAppBar: true,
+    //   body: Stack(
+    //     children: [
+    //       // 전체 배경 (예: 이미지나 컬러)
+    //       Container(
+    //         decoration: BoxDecoration(
+    //           gradient: LinearGradient(
+    //             colors: [Colors.blue.shade300, Colors.purple.shade300],
+    //             begin: Alignment.topCenter,
+    //             end: Alignment.bottomCenter,
+    //           ),
+    //         ),
+    //       ),
+    //       // 배경 이미지 또는 배경색
+    //       Image.network(
+    //         'https://picsum.photos/600/800',
+    //         fit: BoxFit.cover,
+    //         height: double.infinity,
+    //         width: double.infinity,
+    //       ),
+    //
+    //       // ✅ 상태바 영역에만 blur + 반투명 배경
+    //       ClipRect(
+    //         child: BackdropFilter(
+    //           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+    //           child: Container(
+    //             height: statusBarHeight,
+    //             color: Colors.white.withOpacity(0.2), // 반투명 오버레이
+    //           ),
+    //         ),
+    //       ),
+    //
+    //       // 본문
+    //       Positioned.fill(
+    //         child: Column(
+    //           children: [
+    //             SizedBox(height: statusBarHeight + kToolbarHeight), // 상태바 + 앱바 높이만큼 띄우기
+    //             Expanded(
+    //               child: Center(
+    //                 child: Text(
+    //                   '상단 상태바 영역에 블러 적용됨',
+    //                   style: TextStyle(fontSize: 18, color: Colors.white),
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
+
+
   }
 
   getEdgeToEdge() {

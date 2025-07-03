@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -107,6 +109,24 @@ class _HomeTabState extends BaseConState<HomeTab> {
         heroTag: 'edgeToEdge',
         onPressed: () {
           context.pushNamed(AppRoutesInfo.edgeToEdge.name);
+          ///
+          // showModalBottomSheet(
+          //   context: context,
+          //   backgroundColor: Colors.transparent,
+          //   builder: (context) {
+          //     return ClipRRect(
+          //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          //       child: BackdropFilter(
+          //         filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+          //         child: Container(
+          //           height: 300,
+          //           color: Colors.white.withOpacity(0.4),
+          //           child: Center(child: Text('iOS 스타일 시트')),
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // );
         },
         child: const Icon(Icons.add),
       ),

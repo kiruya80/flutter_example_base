@@ -21,6 +21,8 @@ void main() async {
   /// ㄴ Brightness.light 네비게이션 반투명 검은색
   ///
   ///
+  /// iOS에서는 statusBarColor는 완전히 무시
+  ///
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,

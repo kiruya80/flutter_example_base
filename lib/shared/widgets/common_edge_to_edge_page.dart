@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/common_utils.dart';
+import 'package:flutter_example_base/shared/widgets/status_blur_overlay.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/utils/print_log.dart';
@@ -19,6 +23,8 @@ class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
   final Widget? background;
   final AppBar? appBar;
   final Color? backgroundColor;
+
+  final bool? isStatusBlur;
   final Color? statusBarColor;
 
   /// Scaffold에서 시스템 status bar까지 확장
@@ -40,6 +46,12 @@ class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
     this.background,
     this.appBar,
     this.backgroundColor = Colors.white,
+
+    /// isStatusBlur 블러 효과
+    this.isStatusBlur = true,
+
+    /// 블러효과가 false인 경우 색상처리
+    /// 단, ios 색상불가로 블러만 처리
     this.statusBarColor = Colors.white,
 
     this.extendBody = true,
@@ -67,16 +79,6 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _setSystemUiOverlayStyle();
     });
-  }
-
-  void _setSystemUiOverlayStyle() {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarDividerColor: Colors.transparent, // 네비게이션 바 구분선 색상 설정
-      ),
-    );
   }
 
   ///
@@ -122,6 +124,8 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
               bottom: widget.safeAreaBottom ?? false,
               child: widget.child,
             ),
+
+            if (Platform.isIOS || widget.isStatusBlur == true) const StatusBlurOverlay(),
           ],
         ),
       ),
@@ -152,16 +156,7 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
         isScroll = false;
 
         /// 리스트 상단
-        SystemChrome.setSystemUIOverlayStyle(
-          const SystemUiOverlayStyle(
-            // statusBarIconBrightness: Brightness.light,
-            statusBarColor: Colors.transparent,
-
-            // systemNavigationBarIconBrightness: Brightness.light,
-            systemNavigationBarColor: Colors.transparent,
-            systemNavigationBarDividerColor: Colors.transparent,
-          ),
-        );
+        _setSystemUiOverlayStyle();
       } else {
         /// 최상단은 지나감
         if (isBottom) {
@@ -169,28 +164,31 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
           isScroll = false;
 
           /// 리스트 최하단
-          SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(
-              // statusBarIconBrightness: Brightness.light,
-              statusBarColor: widget.statusBarColor?.withOpacitySafe(1),
+          _setSystemUiOverlayStyle(
+            // statusBarIconBrightness: Brightness.light,
+            statusBarColor:
+                widget.isStatusBlur == true
+                    ? Colors.transparent
+                    : widget.statusBarColor?.withOpacitySafe(1),
 
-              // systemNavigationBarIconBrightness: Brightness.light,
-              systemNavigationBarColor: Colors.transparent,
-              systemNavigationBarDividerColor: Colors.transparent,
-            ),
+            // systemNavigationBarIconBrightness: Brightness.light,
+            systemNavigationBarColor: Colors.transparent,
+            systemNavigationBarDividerColor: Colors.transparent,
           );
         } else if (isScroll == false) {
           QcLog.d("📍 최상단을 지남.");
           isScroll = true;
-          SystemChrome.setSystemUIOverlayStyle(
-            SystemUiOverlayStyle(
-              // statusBarIconBrightness: Brightness.light,
-              statusBarColor: widget.statusBarColor?.withOpacitySafe(0.4),
+          _setSystemUiOverlayStyle(
+            /// iOS에서는 statusBarColor는 완전히 무시
+            // statusBarIconBrightness: Brightness.dark,
+            statusBarColor:
+                widget.isStatusBlur == true
+                    ? Colors.transparent
+                    : widget.statusBarColor?.withOpacitySafe(0.4),
 
-              // systemNavigationBarIconBrightness: Brightness.light,
-              systemNavigationBarColor: Colors.transparent,
-              systemNavigationBarDividerColor: Colors.transparent,
-            ),
+            // systemNavigationBarIconBrightness: Brightness.light,
+            systemNavigationBarColor: Colors.transparent,
+            systemNavigationBarDividerColor: Colors.transparent,
           );
         }
       }
@@ -199,110 +197,17 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
   }
 }
 
-class GradientTopOverlay extends StatelessWidget {
-  final Color backgroundColor;
-  final double height;
-  const GradientTopOverlay({
-    super.key,
-    required this.backgroundColor,
-    this.height = 80, // 상태바 + 상단 일부
-  });
-
-
-  @override
-  // Widget build(BuildContext context) {
-  //   final topPadding = MediaQuery.of(context).padding.top;
-  //   // final double appBarHeight = 56;
-  //
-  //   return Positioned(
-  //     top: 0,
-  //     left: 0,
-  //     right: 0,
-  //     height: topPadding,
-  //     // 상태바 + AppBar 높이
-  //     child: IgnorePointer(
-  //       child: Container(
-  //         decoration:  BoxDecoration(
-  //           gradient: LinearGradient(
-  //             begin: Alignment.topCenter,
-  //             end: Alignment.bottomCenter,
-  //             colors: [
-  //               // Colors.black54, // 위는 진하게
-  //               // Colors.transparent, // 아래는 투명
-  //               backgroundColor,
-  //               backgroundColor.withOpacitySafe(0.0),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  @override
-  Widget build(BuildContext context) {
-    final backgroundColor = Theme.of(context).colorScheme.surface;
-
-    return Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
-      height: height,
-      child: IgnorePointer(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                backgroundColor,
-                backgroundColor.withOpacitySafe(0.0),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class GradientBottomOverlay extends StatelessWidget {
-  final Color backgroundColor;
-  final double height;
-
-  const GradientBottomOverlay({
-    super.key,
-    required this.backgroundColor,
-    this.height = 80, // 상태바 + 상단 일부
-  });
-
-
-  @override
-  Widget build(BuildContext context) {
-    final bottomPadding = MediaQuery.of(context).padding.bottom;
-    // final double appBarHeight = 56;
-
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: bottomPadding,
-      // 상태바 + AppBar 높이
-      child: IgnorePointer(
-        child: Container(
-          decoration:  BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [
-                // Colors.black54, // 위는 진하게
-                // Colors.transparent, // 아래는 투명
-                backgroundColor,
-                backgroundColor.withOpacitySafe(0.0),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+void _setSystemUiOverlayStyle({
+  Color? statusBarColor,
+  Color? systemNavigationBarColor,
+  Color? systemNavigationBarDividerColor,
+}) {
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: statusBarColor ?? Colors.transparent,
+      systemNavigationBarColor: systemNavigationBarColor ?? Colors.transparent,
+      systemNavigationBarDividerColor:
+          systemNavigationBarDividerColor ?? Colors.transparent, // 네비게이션 바 구분선 색상 설정
+    ),
+  );
 }
