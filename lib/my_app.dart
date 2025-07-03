@@ -45,15 +45,19 @@ class MyApp extends ConsumerWidget {
     //   theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
     // );
 
+    // CupertinoApp
     return MaterialApp.router(
       routerConfig: AppRouter.appRouter,
       title: 'Post App',
       theme: ThemeData(
         useMaterial3: true,
+        // platform: TargetPlatform.iOS, // 👈 전체를 iOS 스타일로
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,
           // brightness: Brightness.dark,
         ),
       ),
+      // darkTheme: ThemeData.dark(),
+      // themeMode: ThemeMode.system, // system / light / dark
       builder: (context, child) {
         // return child!;
 

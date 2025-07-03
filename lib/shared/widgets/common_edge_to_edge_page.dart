@@ -126,6 +126,13 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
             ),
 
             if (Platform.isIOS || widget.isStatusBlur == true) const StatusBlurOverlay(),
+
+            if (Platform.isAndroid)
+              // Blur Navigation Bar
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: StatusBlurOverlay(height: bottomInset),
+              ),
           ],
         ),
       ),
@@ -165,13 +172,10 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
 
           /// 리스트 최하단
           _setSystemUiOverlayStyle(
-            // statusBarIconBrightness: Brightness.light,
             statusBarColor:
                 widget.isStatusBlur == true
                     ? Colors.transparent
                     : widget.statusBarColor?.withOpacitySafe(1),
-
-            // systemNavigationBarIconBrightness: Brightness.light,
             systemNavigationBarColor: Colors.transparent,
             systemNavigationBarDividerColor: Colors.transparent,
           );
@@ -180,14 +184,12 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
           isScroll = true;
           _setSystemUiOverlayStyle(
             /// iOS에서는 statusBarColor는 완전히 무시
-            // statusBarIconBrightness: Brightness.dark,
             statusBarColor:
                 widget.isStatusBlur == true
                     ? Colors.transparent
                     : widget.statusBarColor?.withOpacitySafe(0.4),
-
-            // systemNavigationBarIconBrightness: Brightness.light,
             systemNavigationBarColor: Colors.transparent,
+            // systemNavigationBarColor:  Colors.white.withOpacity(0.5),
             systemNavigationBarDividerColor: Colors.transparent,
           );
         }
@@ -205,9 +207,15 @@ void _setSystemUiOverlayStyle({
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: statusBarColor ?? Colors.transparent,
+      // statusBarBrightness: Brightness.dark,
+      // 아이폰 상단 글씨(시계, 배터리) 색상
+      // statusBarIconBrightness: Brightness.dark,
+
+      // 안드로이드용 상태바 아이콘 색상
       systemNavigationBarColor: systemNavigationBarColor ?? Colors.transparent,
-      systemNavigationBarDividerColor:
-          systemNavigationBarDividerColor ?? Colors.transparent, // 네비게이션 바 구분선 색상 설정
+      systemNavigationBarDividerColor: systemNavigationBarDividerColor ?? Colors.transparent,
+      // 네비게이션 바 구분선 색상 설정
+      // systemNavigationBarIconBrightness: Brightness.light, // 아이콘 색상 (흰색)
     ),
   );
 }

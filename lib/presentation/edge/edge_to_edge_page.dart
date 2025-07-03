@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/utils/common_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +34,14 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     // final primaryColor = Theme.of(context).primaryColor;
     final primaryColor = Theme.of(context).colorScheme.primary;
 
+    final brightness = MediaQuery.of(context).platformBrightness;
+
+    if (brightness == Brightness.dark) {
+      QcLog.d("디바이스 테마 : 🌙 다크 모드입니다");
+    } else {
+      QcLog.d("디바이스 테마 : ☀️ 라이트 모드입니다");
+    }
+
     return CommonEdgeToEdgePage(
       backgroundColor: Colors.white,
       // statusBarColor: primaryColor,
@@ -52,6 +61,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
         },
       ),
     );
+
 
 
     // return Scaffold(
@@ -106,8 +116,41 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     //     ],
     //   ),
     // );
+  }
 
+  getIosStyle() {
 
+    /// 2. ios 스타일
+    return CupertinoPageScaffold(
+      /// 상단 앱바
+      // navigationBar: const CupertinoNavigationBar(
+      //   middle: Text('Cupertino Navigation'),
+      //   backgroundColor: Color(0xCCFFFFFF), // 반투명 흰색
+      //   border: null, // 테두리 제거하면 더 깔끔
+      // ),
+      /// 상단 앱바에서 백버튼 제거
+      navigationBar: const CupertinoNavigationBar(
+        automaticallyImplyLeading: false, // ⛔ 자동 백버튼 생성 방지
+        middle: null, // 타이틀 없음
+        leading: null, // 백버튼 없음
+        border: null, // 하단 경계선 없음
+        backgroundColor: Color(0xCCFFFFFF), // 반투명 + 블러
+      ),
+      child: ListView.builder(
+        // padding: const EdgeInsets.only(top: 100),
+        itemCount: 30,
+        itemBuilder: (context, index) => Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text('Item $index'),
+        ),
+      ),
+      // child: Center(
+      //   child: CupertinoButton(
+      //     child: const Text('뒤로가기'),
+      //     onPressed: () => Navigator.pop(context),
+      //   ),
+      // ),
+    );
   }
 
   getEdgeToEdge() {

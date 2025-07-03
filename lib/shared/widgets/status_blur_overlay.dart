@@ -30,8 +30,11 @@ class StatusBlurOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = Theme.of(context).colorScheme.surface;
+    // final backgroundColor = Theme.of(context).colorScheme.surface;
     final statusBarHeight = MediaQuery.of(context).padding.top;
+    // statusBarHeight =  MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+    //     .padding
+    //     .top;
     QcLog.d('statusBarHeight === $statusBarHeight');
 
     // return Positioned(
