@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'app/routes/app_router.dart';
+import 'core/theme/app_theme_provider.dart';
 import 'core/utils/print_log.dart';
 
 class MyApp extends ConsumerWidget {
@@ -13,13 +14,19 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     QcLog.d('My App build');
-    final brightness = MediaQuery.of(context).platformBrightness;
 
-    if (brightness == Brightness.dark) {
-      QcLog.d("디바이스 테마 : 🌙 다크 모드입니다");
-    } else {
-      QcLog.d("디바이스 테마 : ☀️ 라이트 모드입니다");
-    }
+    final deviceTheme = MediaQuery.of(context).platformBrightness;
+    QcLog.d("디바이스 테마 : ${deviceTheme == Brightness.dark ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
+
+    // if (deviceTheme == Brightness.dark) {
+    //   QcLog.d("디바이스 테마 : 🌙 다크 모드입니다");
+    // } else {
+    //   QcLog.d("디바이스 테마 : ☀️ 라이트 모드입니다");
+    // }
+
+    final appThemeMode = ref.watch(appThemeModeProvider);
+    QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
+
     /// 기본
     // return MaterialApp(
     //   title: 'Flutter Demo',
@@ -49,6 +56,9 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: AppRouter.appRouter,
       title: 'Post App',
+      themeMode: appThemeMode, // 중요!
+      // darkTheme: ThemeData.dark(),
+      // themeMode: ThemeMode.system, // system / light / dark
       theme: ThemeData(
         useMaterial3: true,
         // platform: TargetPlatform.iOS, // 👈 전체를 iOS 스타일로
@@ -56,8 +66,6 @@ class MyApp extends ConsumerWidget {
           // brightness: Brightness.dark,
         ),
       ),
-      // darkTheme: ThemeData.dark(),
-      // themeMode: ThemeMode.system, // system / light / dark
       builder: (context, child) {
         // return child!;
 

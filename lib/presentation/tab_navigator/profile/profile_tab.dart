@@ -24,47 +24,53 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
 
     return Scaffold(
       appBar: AppBar(title: Text(AppRoutesInfo.tabProfile.name)),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ItemTitle('context goNamed'),
+      body: SingleChildScrollView(child: _getMoveEdgeToEdge()),
+    );
+  }
 
-            RouterMoveItem('goNamed(profileDetail)', () {
-              context.goNamed(AppRoutesInfo.profileDetail.name);
-            }, isError: true),
-            RouterMoveItem(
-              'goNamed(profileDetail, \npathParameters: {id: 123})',
-              () {
-                context.goNamed(
-                  AppRoutesInfo.profileDetail.name,
-                  pathParameters: {'id': '123'},
-                );
-              },
-            ),
-            RouterMoveItem(
-              'goNamed(profileDetail, \nqueryParameters: {title: profile})',
-              () {
-                context.goNamed(
-                  AppRoutesInfo.profileDetail.name,
-                  queryParameters: {'title': 'profile'},
-                );
-              },
-              isError: true,
-            ),
+  _getMoveEdgeToEdge() {
+    return Column(
+      children: [
+        ItemTitle('context EdgeToEdge'),
 
-            ItemTitle('context pushNamed'),
-            RouterMoveItem(
-              'push(/profile/detail, \npathParameters: {id: 123}',
-              () {
-                context.pushNamed(
-                  AppRoutesInfo.profileDetail.name,
-                  pathParameters: {'id': '123'},
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+        // RouterMoveItem('edgeToEdge', () {
+        //   context.pushNamed(AppRoutesInfo.edgeToEdge.name);
+        // }),
+
+        RouterMoveItem('edgeToEdge', () {
+          context.pushNamed(
+            AppRoutesInfo.edgeToEdge.name,
+            pathParameters: {'id': 'id_123'},
+            queryParameters: {'type': 'type_123'},
+          );
+        }),
+      ],
+    );
+  }
+
+  ///
+  /// router 이동 테스트
+  ///
+  _getMoveRouter() {
+    return Column(
+      children: [
+        ItemTitle('context goNamed'),
+
+        RouterMoveItem('goNamed(profileDetail)', () {
+          context.goNamed(AppRoutesInfo.profileDetail.name);
+        }, isError: true),
+        RouterMoveItem('goNamed(profileDetail, \npathParameters: {id: 123})', () {
+          context.goNamed(AppRoutesInfo.profileDetail.name, pathParameters: {'id': '123'});
+        }),
+        RouterMoveItem('goNamed(profileDetail, \nqueryParameters: {title: profile})', () {
+          context.goNamed(AppRoutesInfo.profileDetail.name, queryParameters: {'title': 'profile'});
+        }, isError: true),
+
+        ItemTitle('context pushNamed'),
+        RouterMoveItem('push(/profile/detail, \npathParameters: {id: 123}', () {
+          context.pushNamed(AppRoutesInfo.profileDetail.name, pathParameters: {'id': '123'});
+        }),
+      ],
     );
   }
 }

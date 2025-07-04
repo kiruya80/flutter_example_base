@@ -49,7 +49,11 @@ class AppRouter {
       GoRoute(
         name: AppRoutesInfo.edgeToEdge.name,
         path: AppRoutesInfo.edgeToEdge.path,
-        builder: (context, state) => const EdgeToEdgePage(),
+        builder: (context, state) {
+          final id = state.pathParameters['id'];
+          final type = state.uri.queryParameters['type'];
+          return   EdgeToEdgePage(id:id, type: type,);
+        },
       ),
 
       /// tab
