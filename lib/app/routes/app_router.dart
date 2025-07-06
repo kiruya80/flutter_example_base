@@ -52,7 +52,8 @@ class AppRouter {
         builder: (context, state) {
           final id = state.pathParameters['id'];
           final type = state.uri.queryParameters['type'];
-          return   EdgeToEdgePage(id:id, type: type,);
+          final isAppbar = state.uri.queryParameters['isAppbar'];
+          return   EdgeToEdgePage(id:id, type: type, appbar:isAppbar == "true" ? true:false);
         },
       ),
 

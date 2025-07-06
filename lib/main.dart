@@ -10,6 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   /// 전체 화면 (edge-to-edge) 사용
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
   /// 상태바/내비게이션바 투명하게 만들기
   ///
   /// statusBarIconBrightness
@@ -26,9 +27,10 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
-    // systemNavigationBarIconBrightness: Brightness.dark,
-    // statusBarIconBrightness: Brightness.dark,
+    // systemNavigationBarIconBrightness: Brightness.light,
+    // statusBarIconBrightness: Brightness.light,
   ));
+
   /// 앱 전체에서 사용할 SharedPreferences 인스턴스를 딱 한 번 생성해서,
   /// 모든 곳에서 동일하게 접근할 수 있도록 하기 위해서입니다.
   /// 	•	SharedPreferences.getInstance()는 async 함수이기 때문에, Provider 내부에서 사용할 수 없음

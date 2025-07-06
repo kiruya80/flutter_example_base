@@ -4,10 +4,19 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/utils/print_log.dart';
 import '../../../app/routes/app_routes_info.dart';
+import '../../../core/theme/app_theme_provider.dart';
 import '../../../shared/state/base_con_state.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
+enum EdgeToEdgeType {
+  Default,
+  Common,
+  Refresh,
+  CommonRefresh,
+  CustomScrollView,
+  iosCupertino
+}
 class ProfileTab extends ConsumerStatefulWidget {
   const ProfileTab({super.key});
 
@@ -16,11 +25,18 @@ class ProfileTab extends ConsumerStatefulWidget {
 }
 
 class _ProfileTabState extends BaseConState<ProfileTab> {
+  bool? isDark;
+
   @override
   Widget build(BuildContext context) {
     QcLog.d('build ===== $isThisPageVisible');
     // final shellRouteState = StatefulShellRoute.of(context);
     // print('현재 탭 인덱스: ${shellRouteState.currentIndex}');
+
+    /// theme
+    final appThemeMode = ref.watch(appThemeModeProvider);
+    isDark = appThemeMode == ThemeMode.dark;
+    QcLog.d("앱 테마 : ${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
 
     return Scaffold(
       appBar: AppBar(title: Text(AppRoutesInfo.tabProfile.name)),
@@ -31,17 +47,64 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
   _getMoveEdgeToEdge() {
     return Column(
       children: [
-        ItemTitle('context EdgeToEdge'),
+        ItemTitle('앱 테마 : ${isDark == true ? "🌙 다크 모드" : "☀️ 라이트 모드"}'),
 
-        // RouterMoveItem('edgeToEdge', () {
-        //   context.pushNamed(AppRoutesInfo.edgeToEdge.name);
-        // }),
+        RouterMoveItem('테마 변경', () {
+          ref.read(appThemeModeProvider.notifier).state =
+          (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
+        }),
 
-        RouterMoveItem('edgeToEdge', () {
+
+
+        RouterMoveItem('edgeToEdge Default', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},
-            queryParameters: {'type': 'type_123'},
+            queryParameters: {'type': EdgeToEdgeType.Default.name, 'isAppbar': 'false'},
+          );
+        }),
+
+
+        RouterMoveItem('edgeToEdge Common', () {
+          context.pushNamed(
+            AppRoutesInfo.edgeToEdge.name,
+            pathParameters: {'id': 'id_123'},
+            queryParameters: {'type':  EdgeToEdgeType.Common.name, 'isAppbar': 'true'},
+          );
+        }),
+
+        RouterMoveItem('edgeToEdge Refresh', () {
+          context.pushNamed(
+            AppRoutesInfo.edgeToEdge.name,
+            pathParameters: {'id': 'id_123'},
+            queryParameters: {'type':  EdgeToEdgeType.Refresh.name, 'isAppbar': 'true'},
+          );
+        }),
+
+        RouterMoveItem('edgeToEdge CommonRefresh', () {
+          context.pushNamed(
+            AppRoutesInfo.edgeToEdge.name,
+            pathParameters: {'id': 'id_123'},
+            queryParameters: {'type':  EdgeToEdgeType.CommonRefresh.name, 'isAppbar': 'true'},
+          );
+        }),
+
+
+
+        RouterMoveItem('edgeToEdge CustomScrollView', () {
+          context.pushNamed(
+            AppRoutesInfo.edgeToEdge.name,
+            pathParameters: {'id': 'id_123'},
+            queryParameters: {'type':  EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'true'},
+          );
+        }),
+
+
+        RouterMoveItem('edgeToEdge iosCupertino', () {
+          context.pushNamed(
+            AppRoutesInfo.edgeToEdge.name,
+            pathParameters: {'id': 'id_123'},
+            queryParameters: {'type':  EdgeToEdgeType.iosCupertino.name, 'isAppbar': 'true'},
           );
         }),
       ],

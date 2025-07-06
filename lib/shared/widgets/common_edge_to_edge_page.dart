@@ -11,6 +11,7 @@ import '../../core/theme/app_theme_provider.dart';
 import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
 import 'blur_overlay.dart';
+import 'my_sliver_persistent_header_delegate.dart';
 
 ///
 /// 안드로이드
@@ -146,11 +147,15 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
 
             /// 컨텐츠
             SafeArea(
-              top: widget.safeAreaTop ?? false,
-              bottom: widget.safeAreaBottom ?? false,
-              child: Padding(
-                padding: EdgeInsets.only(top: widget.appBar != null ? kToolbarHeight : 0),
-                child: widget.child,
+              // top: widget.safeAreaTop ?? false,
+              // bottom: widget.safeAreaBottom ?? false,
+              child: Column(
+                children: [
+                  // SizedBox(height: widget.safeAreaTop == false ? statusBarHeight : 0),
+                  // SizedBox(height: widget.appBar != null ? kToolbarHeight : 0),
+                  Expanded(child: widget.child),
+                  // SizedBox(height: widget.safeAreaBottom == false ? bottomInset : 0),
+                ],
               ),
             ),
 
