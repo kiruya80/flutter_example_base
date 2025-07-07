@@ -1,93 +1,25 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants/app_constants.dart';
+import '../../core/utils/common_utils.dart';
+import '../state/base_con_state.dart';
+import 'blur_overlay.dart';
 
-/// 더보기 데이터 상태
+//
+// /// 더보기 데이터 상태
 // enum MoreDataScroll { HAS, NONE, FAIL }
 //
 // enum NetState { Init, Loading, Paging, Empty, Completed, Error, CriticalError }
 
-///
-/// 생성일 : 2024. 10. 19.
-/// 리프레쉬 & 더가져오기 리스트 위젯
-/// https://inblog.ai/vosw1/sliver-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EB%B0%8F-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EB%A0%8C%EB%8D%94%EB%A7%81-19382
-///
-/// 1.  refresh - list타입
-// RefreshMoreScrollview(
-//     isRefresh: // 당겨서 새로고침 여부 기본 true
-//     itemCount: 리스트 아이템,
-//     isMoreDataScroll: 마지막 페이지 여부 ,
-//     netState: DataList.state,
-//     emptyMsg: 로딩등 에러시 메시지 ,
-//     onRefresh: () async { 상단 리프래쉬
-//     },
-//     onBottom: () async { 리스트 바닥
-//     },
-//     upDisappearHeader: // 스크롤시 위로 올라가는 영역
-//             MySliverPersistentHeaderDelegate(
-//             maxHeight: 237,
-//             minHeight: 237,
-//             child: Container(
-//             )),
-//
-//     fixedHeader: // 스크롤시 앱바 아래에 고정되는 영역
-//          MySliverPersistentHeaderDelegate(
-//         maxHeight: 70,
-//         minHeight: 70,
-//         child: Container(
-//           height: 70,
-//           color: Colors.white,
-//           child:  ,
-//         )),
-//
-//     /// 리스트 컨텐츠
-//     sliverChildBuilder: (context, index) {
-//       return listItemView();
-//       }
-//
-/// 2. refresh - content타입
-// RefreshMoreScrollview(
-//     isRefresh: // 당겨서 새로고침 여부 기본 true
-//     onRefresh: () async {
-//     },
-//     upDisappearHeader: // 스크롤시 위로 올라가는 영역
-//             MySliverPersistentHeaderDelegate(
-//             maxHeight: 237,
-//             minHeight: 237,
-//             child: Container(
-//             )),
-//
-//     fixedHeader: // 스크롤시 앱바 아래에 고정되는 영역
-//          MySliverPersistentHeaderDelegate(
-//         maxHeight: 70,
-//         minHeight: 70,
-//         child: Container(
-//           height: 70,
-//           color: Colors.white,
-//           child:  ,
-//         )),
-//
-//     /// 컨텐츠 영역으로 스크롤시 새로고침 가능 onRefresh
-//     noListContent: widget
-///
-//        CustomScrollView(
-//           slivers: [
-//             /// 스크롤시 올라가 사라지는 영역
-//             SliverToBoxAdapter(
-//               child: _upScrollWidget(),
-//             ),
-//
-//             /// 헤더 스크롤시 고정영역 - 플랜선택 위젯
-//             SliverPersistentHeader(pinned: true, delegate: getStickyHeaderDelegate()),
-//
-//             /// 컨텐츠 리스트
-//             SliverList(delegate: getPlanData()),
-//           ],
-//         ),
-//
-class RefreshMoreScrollview extends StatefulWidget {
+class CommonEdgeRefreshScrollview extends ConsumerStatefulWidget {
   /// 리프래시 사용하는 위젯여부
   final bool? isRefresh;
   final int? itemCount;
@@ -119,8 +51,33 @@ class RefreshMoreScrollview extends StatefulWidget {
   /// 리스트뷰
   final IndexedWidgetBuilder? sliverChildBuilder;
   final Widget? noListContent;
+  final Widget? sliverAppBar;
 
-  const RefreshMoreScrollview({
+  ///
+  ///
+  final Color? backgroundColor;
+  final bool? isBlur;
+  final bool? isDark;
+  final Color? statusBarColor;
+
+  /// Scaffold에서 시스템 status bar까지 확장
+  final bool? extendBodyBehindAppBar;
+
+  /// Scaffold에서 bottomNavigationBar 아래로 확장
+  final bool? extendBody;
+
+  /// safeArea의 상단 및 하단 사용여부
+  /// true : 안전구역, 스테이터스바 또는 네비게이션 바 영역을 침범하지 않는다
+  /// false : 전체 사용, 스테이터스 또는 네비게이션바 영역까지 사용한다
+  ///
+  final bool? safeAreaTop;
+  final bool? safeAreaBottom;
+
+  final Widget? floatingActionButton;
+  final Widget? bottomSheet;
+  final Widget? bottomNavigationBar;
+
+  const CommonEdgeRefreshScrollview({
     super.key,
     this.isRefresh = true,
     this.itemCount = 0,
@@ -136,20 +93,97 @@ class RefreshMoreScrollview extends StatefulWidget {
     this.fixedHeader,
     this.sliverChildBuilder,
     this.noListContent,
+    this.sliverAppBar,
+
+    this.backgroundColor = Colors.white,
+
+    /// isBlur 블러 효과
+    this.isBlur = true,
+    this.isDark = true,
+
+    /// 블러효과가 false인 경우 색상처리
+    /// 단, ios 색상불가로 블러만 처리
+    this.statusBarColor = Colors.white,
+
+    this.extendBodyBehindAppBar = true,
+    this.extendBody = true,
+
+    this.safeAreaTop = false,
+    this.safeAreaBottom = false,
+    this.floatingActionButton,
+    this.bottomSheet,
+    this.bottomNavigationBar,
   });
 
   @override
-  State<RefreshMoreScrollview> createState() => _RefreshMoreScrollviewState();
+  ConsumerState<CommonEdgeRefreshScrollview> createState() => _CommonEdgeRefreshScrollviewState();
 }
 
-class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
+class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshScrollview> {
+  bool? isDark = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isDark = widget.isDark;
+    QcLog.d(
+      'initState ====== ${widget.extendBody}, ${widget.extendBodyBehindAppBar} /'
+      '${widget.safeAreaTop} , ${widget.safeAreaBottom} , ${isDark}',
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _setSystemUiOverlayStyle();
+    });
+  }
+
+  void _setSystemUiOverlayStyle({
+    Color? statusBarColor,
+    Color? systemNavigationBarColor,
+    Color? systemNavigationBarDividerColor,
+  }) {
+    ///
+    /// statusBarIconBrightness
+    /// ㄴ ThemeMode.dark - 아이콘 검은색 - 블러 처리시
+    /// ㄴ Brightness.light - 아이콘 흰색
+    ///
+    ///
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: statusBarColor ?? Colors.transparent,
+
+        /// ios
+        // statusBarBrightness:
+        //     widget.isBlur == true
+        //         ? Brightness.dark
+        //         : (isDark == true ? Brightness.dark : Brightness.light),
+          /// 아이폰 상단 글씨(시계, 배터리) 색상
+        // statusBarIconBrightness:
+        //     widget.isBlur == true
+        //         ? Brightness.dark
+        //         : (isDark == true ? Brightness.dark : Brightness.light),
+
+        // statusBarBrightness:Brightness.light,
+        // statusBarIconBrightness:Brightness.light,
+
+        // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
+        systemNavigationBarColor: systemNavigationBarColor ?? Colors.transparent,
+        // 네비게이션 바 구분선 색상 설정
+        systemNavigationBarDividerColor: systemNavigationBarDividerColor ?? Colors.transparent,
+        // 아이콘 색상 (흰색)
+        systemNavigationBarIconBrightness:
+            widget.isBlur == true
+                ? Brightness.light
+                : (isDark == true ? Brightness.dark : Brightness.light),
+      ),
+    );
+  }
+
   /// NotificationListener
   ///
   bool _onNotification(ScrollNotification scrollNotification) {
     if (widget.isMoreDataScroll != MoreDataScroll.HAS) {
       return false;
     }
-    // QcLog.d('_onNotification  RefreshMoreScrollviewState ====== ');
+    // QcLog.d('_onNotification  CommonEdgeRefreshScrollview ====== ');
     var metrics = scrollNotification.metrics;
     //세로 스크롤인 경우에만 추적
     if (metrics.axisDirection != AxisDirection.down) return false;
@@ -183,6 +217,10 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
     //       : null,
     //   slivers: getSliversContents(context),
     // );
+    CommonUtils.isTablet(context);
+    final statusBarHeight = MediaQuery.of(context).padding.top;
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+    QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
 
     /// 2. NotificationListener
     return NotificationListener<ScrollNotification>(
@@ -191,15 +229,36 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
         _onNotification(onNotification);
         return false;
       },
-      child: CustomScrollView(
-        // controller: pagingScrollController,
-        physics:
-            widget.isRefresh == true
-                ? const AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics(), //ios 기본
-                )
-                : null,
-        slivers: getSliversContents(context),
+      child: Scaffold(
+        extendBodyBehindAppBar: widget.extendBodyBehindAppBar ?? true,
+        extendBody: widget.extendBody ?? true,
+        backgroundColor: widget.backgroundColor,
+        floatingActionButton: widget.floatingActionButton,
+        bottomSheet: widget.bottomSheet,
+        bottomNavigationBar: widget.bottomNavigationBar,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          top: widget.safeAreaTop ?? false,
+          bottom: widget.safeAreaBottom ?? false,
+          child: Stack(
+            children: [
+              CustomScrollView(
+                // controller: pagingScrollController,
+                physics:
+                    widget.isRefresh == true
+                        ? const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics(), //ios 기본
+                        )
+                        : null,
+                slivers: getSliversContents(context),
+              ),
+              // if (Platform.isIOS || widget.isBlur == true) BlurOverlay(isStatusDark: false),
+              if (Platform.isAndroid && widget.isBlur == true)
+                // Blur Navigation Bar
+                Align(alignment: Alignment.bottomCenter, child: BlurOverlay(height: bottomInset)),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -213,6 +272,32 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
     //     child: widget.boxAdapter,
     //   ));
     // }
+    // if (widget.sliverAppBar != null) {
+    //   scrollSlivers.add(widget.sliverAppBar!);
+    // }
+
+    /// 높이 고정 앱바
+    scrollSlivers.add(
+      SliverAppBar(
+        expandedHeight: kToolbarHeight,
+        // expandedHeight: 200,
+        floating: true,
+        // 스크롤 방향 반대로 올리면 다시 보여줄지 여부
+        pinned: true,
+        // 스크롤 시 상단에 고정될지 여부
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        flexibleSpace: FlexibleSpaceBar(
+          title: Text('앱바'),
+          background: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(height: kToolbarHeight, color: Colors.white.withOpacitySafe(0.4)),
+            ),
+          ),
+        ),
+      ),
+    );
 
     /// 위로 올라가는 위젯 영역
     if (widget.upDisappearHeader != null) {
@@ -341,15 +426,21 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
         }
 
         /// 하단 리스트 로딩 후 뷰
-        scrollSlivers.add(
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: getSliverFillRemaining(context, widget.isMoreDataScroll),
-          ),
-        );
-
+     if (Platform.isAndroid) {
+       scrollSlivers.add(
+         SliverFillRemaining(
+           hasScrollBody: false,
+           child: getSliverFillRemaining(context, widget.isMoreDataScroll),
+         ),
+       );
+     }
       default:
     }
+
+    /// 제일 아래는 네비게이션 위에 위젯이 다 올라가게
+    scrollSlivers.add(
+      SliverToBoxAdapter(child: SizedBox(height: MediaQuery.of(context).viewPadding.bottom)),
+    );
 
     return scrollSlivers;
   }

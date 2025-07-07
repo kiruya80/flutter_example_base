@@ -69,9 +69,21 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},
+            queryParameters: {'type':  EdgeToEdgeType.Common.name, 'isAppbar': 'false'},
+          );
+        }),
+
+
+        RouterMoveItem('edgeToEdge Common Appbar', () {
+          context.pushNamed(
+            AppRoutesInfo.edgeToEdge.name,
+            pathParameters: {'id': 'id_123'},
             queryParameters: {'type':  EdgeToEdgeType.Common.name, 'isAppbar': 'true'},
           );
         }),
+
+
+
 
         RouterMoveItem('edgeToEdge Refresh', () {
           context.pushNamed(
@@ -91,7 +103,16 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
 
 
 
-        RouterMoveItem('edgeToEdge CustomScrollView', () {
+        RouterMoveItem('CustomScrollView', () {
+          context.pushNamed(
+            AppRoutesInfo.edgeToEdge.name,
+            pathParameters: {'id': 'id_123'},
+            queryParameters: {'type':  EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'false'},
+          );
+        }),
+
+
+        RouterMoveItem('CustomScrollView isAppbar', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},

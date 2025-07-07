@@ -2,12 +2,15 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/common_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_theme_provider.dart';
 import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
+import '../../shared/widgets/common_edge_refresh_scrollview.dart';
 import '../../shared/widgets/common_edge_to_edge_page.dart';
 import '../../shared/widgets/my_sliver_persistent_header_delegate.dart';
 import '../../shared/widgets/refresh_more_scrollview.dart';
@@ -49,7 +52,7 @@ import '../tab_navigator/profile/profile_tab.dart';
 ///      bottom: false,
 ///      top: false,
 ///
-///
+///widget.appbar
 ///
 class EdgeToEdgePage extends ConsumerStatefulWidget {
   final String? id;
@@ -92,13 +95,22 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     if (widget.type == EdgeToEdgeType.Default.name) {
       return getDefault();
     } else if (widget.type == EdgeToEdgeType.Common.name) {
+      // if (widget.appbar == true) {
+      //   return getCommonAppBar();
+      // } else {
+      //   return getCommon();
+      // }
       return getCommon();
     } else if (widget.type == EdgeToEdgeType.Refresh.name) {
       return getRefresh();
-    } else if (widget.type == EdgeToEdgeType.CustomScrollView.name) {
-      return getCustomScrollView();
     } else if (widget.type == EdgeToEdgeType.CommonRefresh.name) {
       return getCommonRefresh();
+    } else if (widget.type == EdgeToEdgeType.CustomScrollView.name) {
+      if (widget.appbar == true) {
+        return getCustomScrollViewAppBar();
+      } else {
+        return getCustomScrollView();
+      }
     } else if (widget.type == EdgeToEdgeType.iosCupertino.name) {
       return getIosCupertino();
     } else {
@@ -121,32 +133,21 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
       body: SafeArea(
         top: false,
         bottom: false,
-          child: Column(
-            children: [
-              // Container(
-              //   height: 90,
-              //   color: Colors.deepPurple,
-              // ),
-              Expanded(
-                child: ListView.builder(
-                  /// 상하단에 공간
-                  /// 상단은 스테이터스바 겹치지 않고
-                  /// 하단은 네비게이션에 가르지 않게
-                  // padding: EdgeInsets.only(top: statusBarHeight, bottom: bottomInset),
-                  itemCount: items.length,
-                  itemBuilder: (_, index) {
-                    return ListTile(
-                      leading: CircleAvatar(child: Text('${index + 1}')),
-                      title: Text(items[index]),
-                      subtitle: Text('This is item number ${index + 1}'),
-                    );
-                  },
-                // ),
-                      ),
-              ),
-            ],
-          ),
+        child: ListView.builder(
+          /// 상하단에 공간
+          /// 상단은 스테이터스바 겹치지 않고
+          /// 하단은 네비게이션에 가르지 않게
+          // padding: EdgeInsets.only(top: statusBarHeight, bottom: bottomInset),
+          itemCount: items.length,
+          itemBuilder: (_, index) {
+            return ListTile(
+              leading: CircleAvatar(child: Text('${index + 1}')),
+              title: Text(items[index]),
+              subtitle: Text('This is item number ${index + 1}'),
+            );
+          },
         ),
+      ),
       // Container(height: 100,color: Colors.blue,)
     );
   }
@@ -154,6 +155,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
   getCommon() {
     return CommonEdgeToEdgePage(
       child: ListView.builder(
+        // padding: EdgeInsets.zero,
         /// 상하단에 공간
         /// 상단은 스테이터스바 겹치지 않고
         /// 하단은 네비게이션에 가르지 않게
@@ -195,11 +197,145 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
   }
 
   getCustomScrollView() {
-    return CommonEdgeToEdgePage(
-      // backgroundColor: Colors.white,
-      // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
-      isBlur: true,
-      child: customScrollView(),
+    // return CommonEdgeToEdgePage(
+    //   // backgroundColor: Colors.white,
+    //   // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
+    //   isBlur: true,
+    //   child: customScrollView(),
+    // );
+    return Scaffold(body: customScrollView());
+  }
+
+  Widget getCustomScrollViewAppBar() {
+    return CommonEdgeRefreshScrollview(
+      itemCount: items.length,
+      // isMoreDataScroll: _isLastPage(),
+      netState: NetState.Completed,
+      // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
+      onRefresh: () async {
+        await Future.delayed(const Duration(milliseconds: 500));
+      },
+      onBottom: () async {
+        // if (claimSelectionViewModel?.isLoad == false &&
+        //     claimSelectionViewModel?.historyList.state == NetState.Completed &&
+        //     claimSelectionViewModel?.historyList.isNextPage == true) {
+        //   await claimSelectionViewModel?.requestHistoryList(isNext: true);
+        // }
+      },
+      // upDisappearHeader: upDisappearHeader,
+      // fixedHeader: fixedHeader,
+      sliverChildBuilder: (context, index) {
+        return Column(
+          children: [
+            // if (index == 0) Container(height: top),
+            ListTile(
+              leading: CircleAvatar(child: Text('${index + 1}')),
+              title: Text("${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}"),
+              subtitle: Text('This is item number ${index + 1}'),
+            ),
+            // if (index + 1 == items.length) Container(height: bottom),
+          ],
+        );
+      },
+    );
+  }
+
+
+
+
+
+  getCustomScrollViewAppBar1() {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: CustomScrollView(
+          slivers: [
+            /// 스크롤시 앱바 영역을 지키거나 올리는 설정 가능
+            // SliverAppBar(
+            //   expandedHeight: 200,
+            //   floating: true,
+            //   // 스크롤 방향 반대로 올리면 다시 보여줄지 여부
+            //   pinned: true,
+            //   // 스크롤 시 상단에 고정될지 여부
+            //   // backgroundColor: Colors.transparent,
+            //   flexibleSpace: FlexibleSpaceBar(
+            //     title: Text('접히는 앱바'),
+            //     background: Stack(
+            //       fit: StackFit.expand,
+            //       children: [
+            //         Image.network(
+            //           'https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=800&q=80',
+            //           fit: BoxFit.cover,
+            //         ),
+            //         Positioned.fill(
+            //           child: BackdropFilter(
+            //             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            //             child: Container(color: Colors.white.withOpacitySafe(0.4)),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
+            /// 높이 고정 앱바
+            SliverAppBar(
+              expandedHeight: kToolbarHeight,
+              // expandedHeight: 200,
+              floating: true,
+              // 스크롤 방향 반대로 올리면 다시 보여줄지 여부
+              pinned: true,
+              // 스크롤 시 상단에 고정될지 여부
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text('앱바'),
+                background: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                    child: Container(
+                      height: kToolbarHeight,
+                      color: Colors.white.withOpacitySafe(0.4),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            /// 스크롤시 올라가 사라진다
+            // SliverToBoxAdapter(
+            //   child: Container(height: 200, color: Colors.deepOrangeAccent),
+            // ),
+
+            /// 스크롤시 상단에서 최소높이까지 줄어듬
+            // SliverPersistentHeader(
+            //   pinned: true,
+            //   delegate: MySliverPersistentHeaderDelegate(
+            //     maxHeight: 200,
+            //     minHeight: 100,
+            //     child: Container(
+            //       // height: 80,
+            //       color: Colors.amber.withOpacitySafe(0.5),
+            //     ),
+            //   ),
+            // ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => ListTile(
+                  leading: CircleAvatar(child: Text('${index + 1}')),
+                  title: Text("${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}"),
+                  subtitle: Text('This is item number ${index + 1}'),
+                ),
+                childCount: items.length,
+              ),
+            ),
+          ],
+          // ),
+        ),
+      ),
     );
   }
 
@@ -342,7 +478,8 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
         //   ),
         // ),
         /// 스크롤시 올라가 사라진다
-        SliverToBoxAdapter(child: Container(height: 200, color: Colors.deepOrangeAccent)),
+        // SliverToBoxAdapter(child: Container(height: 200,
+        //     color: Colors.deepOrangeAccent.withOpacitySafe(0.5))),
 
         /// 스크롤시 상단에서 최소높이까지 줄어듬
         SliverPersistentHeader(
@@ -352,15 +489,19 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
             minHeight: 100,
             child: Container(
               // height: 80,
-              color: Colors.amber,
+              color: Colors.amber.withOpacitySafe(0.5),
             ),
           ),
         ),
 
         SliverList(
           delegate: SliverChildBuilderDelegate(
-            (context, index) => ListTile(title: Text('Item $index')),
-            childCount: 30,
+            (context, index) => ListTile(
+              leading: CircleAvatar(child: Text('${index + 1}')),
+              title: Text("${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}"),
+              subtitle: Text('This is item number ${index + 1}'),
+            ),
+            childCount: items.length,
           ),
         ),
       ],
@@ -368,55 +509,4 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
   }
 }
 
-// return Scaffold(
-//   extendBodyBehindAppBar: true,
-//   body: Stack(
-//     children: [
-//       // 전체 배경 (예: 이미지나 컬러)
-//       Container(
-//         decoration: BoxDecoration(
-//           gradient: LinearGradient(
-//             colors: [Colors.blue.shade300, Colors.purple.shade300],
-//             begin: Alignment.topCenter,
-//             end: Alignment.bottomCenter,
-//           ),
-//         ),
-//       ),
-//       // 배경 이미지 또는 배경색
-//       Image.network(
-//         'https://picsum.photos/600/800',
-//         fit: BoxFit.cover,
-//         height: double.infinity,
-//         width: double.infinity,
-//       ),
-//
-//       // ✅ 상태바 영역에만 blur + 반투명 배경
-//       ClipRect(
-//         child: BackdropFilter(
-//           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-//           child: Container(
-//             height: statusBarHeight,
-//             color: Colors.white.withOpacity(0.2), // 반투명 오버레이
-//           ),
-//         ),
-//       ),
-//
-//       // 본문
-//       Positioned.fill(
-//         child: Column(
-//           children: [
-//             SizedBox(height: statusBarHeight + kToolbarHeight), // 상태바 + 앱바 높이만큼 띄우기
-//             Expanded(
-//               child: Center(
-//                 child: Text(
-//                   '상단 상태바 영역에 블러 적용됨',
-//                   style: TextStyle(fontSize: 18, color: Colors.white),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     ],
-//   ),
-// );
+

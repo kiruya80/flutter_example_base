@@ -29,7 +29,8 @@ import 'my_sliver_persistent_header_delegate.dart';
 class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
   final Widget child;
   final Widget? background;
-  final AppBar? appBar;
+  final Widget? appBar;
+  final bool? isStatusDark;
   final Color? backgroundColor;
 
   final bool? isBlur;
@@ -57,6 +58,7 @@ class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
     required this.child,
     this.background,
     this.appBar,
+    this.isStatusDark = false,
     this.backgroundColor = Colors.white,
 
     /// isBlur 블러 효과
@@ -66,8 +68,8 @@ class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
     /// 단, ios 색상불가로 블러만 처리
     this.statusBarColor = Colors.white,
 
-    this.extendBody = true,
     this.extendBodyBehindAppBar = true,
+    this.extendBody = true,
 
     this.safeAreaTop = false,
     this.safeAreaBottom = false,
@@ -111,7 +113,7 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
     CommonUtils.isTablet(context);
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
-    QcLog.d('statusBarHeight === $statusBarHeight , bottomInset === $bottomInset');
+    QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
 
     // 실제 시스템 바 영역 (상태바, 내비게이션바)
     final viewPadding = MediaQuery.of(context).viewPadding;
@@ -135,7 +137,7 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
         extendBodyBehindAppBar: widget.extendBodyBehindAppBar ?? true,
         extendBody: widget.extendBody ?? true,
         backgroundColor: widget.backgroundColor,
-        appBar: widget.appBar,
+        // appBar: widget.appBar,
         floatingActionButton: widget.floatingActionButton,
         bottomSheet: widget.bottomSheet,
         bottomNavigationBar: widget.bottomNavigationBar,
@@ -147,20 +149,17 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
 
             /// 컨텐츠
             SafeArea(
-              // top: widget.safeAreaTop ?? false,
-              // bottom: widget.safeAreaBottom ?? false,
-              child: Column(
-                children: [
-                  // SizedBox(height: widget.safeAreaTop == false ? statusBarHeight : 0),
-                  // SizedBox(height: widget.appBar != null ? kToolbarHeight : 0),
-                  Expanded(child: widget.child),
-                  // SizedBox(height: widget.safeAreaBottom == false ? bottomInset : 0),
-                ],
-              ),
+              top: widget.safeAreaTop ?? false,
+              bottom: widget.safeAreaBottom ?? false,
+              child: widget.child,
             ),
-
+            Container(
+              margin: EdgeInsets.only(top: widget.appBar != null ? statusBarHeight : 0),
+              height: widget.appBar != null ? kToolbarHeight : 0,
+              child: widget.appBar,
+            ),
             /// appBar 유무에 따라 높이 달라짐
-            if (Platform.isIOS || widget.isBlur == true) const BlurOverlay(),
+            if (Platform.isIOS || widget.isBlur == true)   BlurOverlay(isStatusDark: widget.isStatusDark,),
 
             if (Platform.isAndroid && widget.isBlur == true)
               // Blur Navigation Bar

@@ -22,11 +22,13 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
 class BlurOverlay extends StatelessWidget {
   final Color? backgroundColor;
   final double? height;
+  final bool? isStatusDark;
 
   const BlurOverlay({
     super.key,
     this.backgroundColor,
     this.height, // 상태바 + 상단 일부
+    this.isStatusDark = false,
   });
 
   @override
@@ -50,8 +52,8 @@ class BlurOverlay extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: Container(
           height: height ?? statusBarHeight,
-          // color: Colors.white.withOpacity(0.2), // 반투명 오버레이
-          color: Colors.white.withOpacitySafe(0.4),
+          // 반투명 오버레이
+          color: isStatusDark == true ? Colors.black.withOpacitySafe(0.2) : Colors.white.withOpacitySafe(0.2),
         ),
       ),
     );
