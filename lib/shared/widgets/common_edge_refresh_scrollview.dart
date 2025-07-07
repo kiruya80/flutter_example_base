@@ -11,14 +11,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/utils/common_utils.dart';
 import '../state/base_con_state.dart';
-import 'blur_overlay.dart';
 
-//
-// /// 더보기 데이터 상태
-// enum MoreDataScroll { HAS, NONE, FAIL }
-//
-// enum NetState { Init, Loading, Paging, Empty, Completed, Error, CriticalError }
-
+///
+/// Edge to edge + RefreshScrollview
+///
 class CommonEdgeRefreshScrollview extends ConsumerStatefulWidget {
   /// 리프래시 사용하는 위젯여부
   final bool? isRefresh;
@@ -40,8 +36,6 @@ class CommonEdgeRefreshScrollview extends ConsumerStatefulWidget {
   /// 새로고침 인디케이터 색상
   final Color refreshIndicatorColor;
 
-  // final Widget? boxAdapter;
-
   /// 올라가는 헤더
   final SliverPersistentHeaderDelegate? upDisappearHeader;
 
@@ -51,14 +45,11 @@ class CommonEdgeRefreshScrollview extends ConsumerStatefulWidget {
   /// 리스트뷰
   final IndexedWidgetBuilder? sliverChildBuilder;
   final Widget? noListContent;
-  final Widget? sliverAppBar;
 
   ///
   ///
+  final String? appTitle;
   final Color? backgroundColor;
-  final bool? isBlur;
-  final bool? isDark;
-  final Color? statusBarColor;
 
   /// Scaffold에서 시스템 status bar까지 확장
   final bool? extendBodyBehindAppBar;
@@ -88,26 +79,18 @@ class CommonEdgeRefreshScrollview extends ConsumerStatefulWidget {
     this.onRefresh,
     this.onBottom,
     this.refreshIndicatorColor = Colors.blue,
-    // this.boxAdapter,
     this.upDisappearHeader,
     this.fixedHeader,
     this.sliverChildBuilder,
     this.noListContent,
-    this.sliverAppBar,
 
+    ///
+    /// EdgeRe
+    ///
+    this.appTitle,
     this.backgroundColor = Colors.white,
-
-    /// isBlur 블러 효과
-    this.isBlur = true,
-    this.isDark = true,
-
-    /// 블러효과가 false인 경우 색상처리
-    /// 단, ios 색상불가로 블러만 처리
-    this.statusBarColor = Colors.white,
-
     this.extendBodyBehindAppBar = true,
     this.extendBody = true,
-
     this.safeAreaTop = false,
     this.safeAreaBottom = false,
     this.floatingActionButton,
@@ -120,26 +103,19 @@ class CommonEdgeRefreshScrollview extends ConsumerStatefulWidget {
 }
 
 class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshScrollview> {
-  bool? isDark = false;
-
   @override
   void initState() {
     super.initState();
-    isDark = widget.isDark;
     QcLog.d(
       'initState ====== ${widget.extendBody}, ${widget.extendBodyBehindAppBar} /'
-      '${widget.safeAreaTop} , ${widget.safeAreaBottom} , ${isDark}',
+      '${widget.safeAreaTop} , ${widget.safeAreaBottom} ',
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _setSystemUiOverlayStyle();
     });
   }
 
-  void _setSystemUiOverlayStyle({
-    Color? statusBarColor,
-    Color? systemNavigationBarColor,
-    Color? systemNavigationBarDividerColor,
-  }) {
+  void _setSystemUiOverlayStyle( ) {
     ///
     /// statusBarIconBrightness
     /// ㄴ ThemeMode.dark - 아이콘 검은색 - 블러 처리시
@@ -148,31 +124,16 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
     ///
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: statusBarColor ?? Colors.transparent,
-
-        /// ios
-        // statusBarBrightness:
-        //     widget.isBlur == true
-        //         ? Brightness.dark
-        //         : (isDark == true ? Brightness.dark : Brightness.light),
-          /// 아이폰 상단 글씨(시계, 배터리) 색상
-        // statusBarIconBrightness:
-        //     widget.isBlur == true
-        //         ? Brightness.dark
-        //         : (isDark == true ? Brightness.dark : Brightness.light),
-
-        // statusBarBrightness:Brightness.light,
-        // statusBarIconBrightness:Brightness.light,
-
+        statusBarColor: Colors.transparent,
+        // ✅ iOS 상태바 아이콘 밝기 light(black ison), dark(white icon)
+        statusBarBrightness: Brightness.light,
+        // ✅ Android 상태바 아이콘 밝기 → light(white ison), dark(black icon)
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.transparent,
         // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
-        systemNavigationBarColor: systemNavigationBarColor ?? Colors.transparent,
-        // 네비게이션 바 구분선 색상 설정
-        systemNavigationBarDividerColor: systemNavigationBarDividerColor ?? Colors.transparent,
-        // 아이콘 색상 (흰색)
-        systemNavigationBarIconBrightness:
-            widget.isBlur == true
-                ? Brightness.light
-                : (isDark == true ? Brightness.dark : Brightness.light),
+        systemNavigationBarDividerColor: Colors.transparent,
+        // ✅ Android 네비게이션 아이콘 밝기 → light(white ison, 검은색 반투명 배경), dark(black icon, 흰색 반투명 배경)
+        systemNavigationBarIconBrightness: Brightness.dark,
       ),
     );
   }
@@ -183,7 +144,6 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
     if (widget.isMoreDataScroll != MoreDataScroll.HAS) {
       return false;
     }
-    // QcLog.d('_onNotification  CommonEdgeRefreshScrollview ====== ');
     var metrics = scrollNotification.metrics;
     //세로 스크롤인 경우에만 추적
     if (metrics.axisDirection != AxisDirection.down) return false;
@@ -229,6 +189,7 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
         _onNotification(onNotification);
         return false;
       },
+
       child: Scaffold(
         extendBodyBehindAppBar: widget.extendBodyBehindAppBar ?? true,
         extendBody: widget.extendBody ?? true,
@@ -253,9 +214,8 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
                 slivers: getSliversContents(context),
               ),
               // if (Platform.isIOS || widget.isBlur == true) BlurOverlay(isStatusDark: false),
-              if (Platform.isAndroid && widget.isBlur == true)
-                // Blur Navigation Bar
-                Align(alignment: Alignment.bottomCenter, child: BlurOverlay(height: bottomInset)),
+              // if (Platform.isAndroid && widget.isBlur == true)
+              //   Align(alignment: Alignment.bottomCenter, child: BlurOverlay(height: bottomInset, isStatusDark: false,)),
             ],
           ),
         ),
@@ -276,19 +236,31 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
     //   scrollSlivers.add(widget.sliverAppBar!);
     // }
 
-    /// 높이 고정 앱바
+    /// 높이 고정 앱바 - transparent
     scrollSlivers.add(
       SliverAppBar(
         expandedHeight: kToolbarHeight,
-        // expandedHeight: 200,
-        floating: true,
         // 스크롤 방향 반대로 올리면 다시 보여줄지 여부
-        pinned: true,
+        floating: true,
         // 스크롤 시 상단에 고정될지 여부
+        pinned: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          // ✅ iOS 상태바 아이콘 밝기 light(black ison), dark(white icon)
+          statusBarBrightness: Brightness.light,
+          // ✅ Android 상태바 아이콘 밝기 → light(white ison), dark(black icon)
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: Colors.transparent,
+          // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
+          systemNavigationBarDividerColor: Colors.transparent,
+          // ✅ Android 네비게이션 아이콘 밝기 → light(white ison, 검은색 반투명 배경), dark(black icon, 흰색 반투명 배경)
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
+        // 검정 아이콘
         flexibleSpace: FlexibleSpaceBar(
-          title: Text('앱바'),
+          title: Text(widget.appTitle ?? ''),
           background: ClipRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -367,9 +339,11 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
             );
           },
           onRefresh: () async {
+            QcLog.d('onRefresh ================');
             if (widget.onRefresh != null) {
-              await Future.delayed(const Duration(milliseconds: 500));
-              widget.onRefresh!();
+              /// 새로고침 로딩 딜레이주기
+              // await Future.delayed(const Duration(seconds: 2));
+              await widget.onRefresh!();
             }
           },
         ),
@@ -385,6 +359,18 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
     ///
     switch (widget.netState) {
       // case NetState.Loading:
+      //   scrollSlivers.add(
+      //     SliverFillRemaining(
+      //       hasScrollBody: false,
+      //       child: Center(child: CircularProgressIndicator(
+      //         strokeWidth: 2.0,
+      //         valueColor: const AlwaysStoppedAnimation<Color>(
+      //           Color(0xFFFE6F0F),
+      //         ),
+      //         strokeCap: StrokeCap.round,
+      //       )),
+      //     ),
+      //   );
       case NetState.Error:
         scrollSlivers.add(
           SliverFillRemaining(
@@ -426,14 +412,14 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
         }
 
         /// 하단 리스트 로딩 후 뷰
-     if (Platform.isAndroid) {
-       scrollSlivers.add(
-         SliverFillRemaining(
-           hasScrollBody: false,
-           child: getSliverFillRemaining(context, widget.isMoreDataScroll),
-         ),
-       );
-     }
+        if (Platform.isAndroid) {
+          scrollSlivers.add(
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: getSliverFillRemaining(context, widget.isMoreDataScroll),
+            ),
+          );
+        }
       default:
     }
 

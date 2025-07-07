@@ -107,6 +107,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
       return getCommonRefresh();
     } else if (widget.type == EdgeToEdgeType.CustomScrollView.name) {
       if (widget.appbar == true) {
+        netState = NetState.Paging;
         return getCustomScrollViewAppBar();
       } else {
         return getCustomScrollView();
@@ -206,16 +207,33 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     return Scaffold(body: customScrollView());
   }
 
+  NetState? netState = NetState.Paging;
+
   Widget getCustomScrollViewAppBar() {
     return CommonEdgeRefreshScrollview(
+      appTitle: 'Edge refresh',
       itemCount: items.length,
       // isMoreDataScroll: _isLastPage(),
+      isMoreDataScroll : MoreDataScroll.HAS,
       netState: NetState.Completed,
       // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
       onRefresh: () async {
-        await Future.delayed(const Duration(milliseconds: 500));
+        // setState(() {
+        //   netState = NetState.Loading;
+        // });
+        // await Future.delayed(const Duration(seconds: 2));
+        // setState(() {
+        //   netState = NetState.Completed;
+        // });
+        QcLog.d('items 11 ====== ${items.length}');
+        await Future.delayed(const Duration(seconds: 2));
+        setState(() {
+          items.insert(0, 'Refreshed at ${DateTime.now().toIso8601String()}');
+        });
+        QcLog.d('items 22 ====== ${items.length}');
       },
       onBottom: () async {
+        QcLog.d('onBottom ====== ');
         // if (claimSelectionViewModel?.isLoad == false &&
         //     claimSelectionViewModel?.historyList.state == NetState.Completed &&
         //     claimSelectionViewModel?.historyList.isNextPage == true) {

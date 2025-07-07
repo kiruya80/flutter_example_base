@@ -50,10 +50,12 @@ class BlurOverlay extends StatelessWidget {
       child: BackdropFilter(
         // filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        // filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: Container(
           height: height ?? statusBarHeight,
           // 반투명 오버레이
           color: isStatusDark == true ? Colors.black.withOpacitySafe(0.2) : Colors.white.withOpacitySafe(0.2),
+          // color:  Colors.white.withOpacitySafe(0.1),
         ),
       ),
     );

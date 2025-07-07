@@ -283,8 +283,8 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
           },
           onRefresh: () async {
             if (widget.onRefresh != null) {
-              await Future.delayed(const Duration(milliseconds: 500));
-              widget.onRefresh!();
+              // await Future.delayed(const Duration(milliseconds: 500));
+              await widget.onRefresh!();
             }
           },
         ),
