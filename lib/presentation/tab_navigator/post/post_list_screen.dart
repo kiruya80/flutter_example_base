@@ -52,9 +52,7 @@ class _PostListScreenState extends BaseConState<PostListScreen>
     final state = ref.watch(postListViewModelProvider);
     QcLog.d('state ===== ${state.toString()}');
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Posts')),
-      body: Column(
+    return  Column(
         children: [
           Column(
             children: [
@@ -149,21 +147,20 @@ class _PostListScreenState extends BaseConState<PostListScreen>
                     ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'fab_tab1',
-        onPressed: () {
-          final state = ref.read(authViewModelProvider);
-          if (state.isLoggedIn == true) {
-            // context.push('/postAdd');
-            context.pushNamed(AppRoutesInfo.postAdd.name);
-          } else {
-            // context.push('/login');
-            context.pushNamed(AppRoutesInfo.login.name);
-          }
-        },
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   heroTag: 'fab_tab1',
+      //   onPressed: () {
+      //     final state = ref.read(authViewModelProvider);
+      //     if (state.isLoggedIn == true) {
+      //       // context.push('/postAdd');
+      //       context.pushNamed(AppRoutesInfo.postAdd.name);
+      //     } else {
+      //       // context.push('/login');
+      //       context.pushNamed(AppRoutesInfo.login.name);
+      //     }
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }

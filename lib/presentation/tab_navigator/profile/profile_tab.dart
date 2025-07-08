@@ -34,11 +34,9 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
     isDark = appThemeMode == ThemeMode.dark;
     QcLog.d("앱 테마 : ${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
 
-    return Scaffold(
-      appBar: AppBar(title: Text(AppRoutesInfo.tabProfile.name)),
-      body: SingleChildScrollView(
+    return  SingleChildScrollView(
           controller: widget.mainNavScrollController,
-          child: _getMoveEdgeToEdge()),
+          child: _getMoveEdgeToEdge()
     );
   }
 

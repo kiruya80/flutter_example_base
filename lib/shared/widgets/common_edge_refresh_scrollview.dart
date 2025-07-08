@@ -258,7 +258,7 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
                         curve: Curves.easeOut,
                       );
                     },
-                    child: Container(height: statusBarHeight + 15, color: Colors.deepPurple),
+                    child: Container(height: statusBarHeight + 15, color: Colors.transparent),
                   ),
                 ),
             ],

@@ -37,9 +37,7 @@ class _SearchTabState extends BaseConState<SearchTab> {
     /// searchDetailFullPath ==== /search/detail/123?tab=settings
     QcLog.d('searchDetailFullPath ==== $url2');
 
-    return Scaffold(
-      appBar: AppBar(title: Text(AppRoutesInfo.tabSearch.name)),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         controller: widget.mainNavScrollController,
         child: Column(
           children: [
@@ -96,7 +94,7 @@ class _SearchTabState extends BaseConState<SearchTab> {
             }),
           ],
         ),
-      ),
+
     );
   }
 }

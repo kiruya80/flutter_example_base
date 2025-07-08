@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/presentation/dialog/dialog_queue_listener.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/home/home_tab.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/post/post_list_screen.dart';
@@ -24,13 +27,28 @@ class MainScaffoldWithNav extends StatefulWidget {
   State<MainScaffoldWithNav> createState() => MainScaffoldWithNavState();
 }
 
-class MainScaffoldWithNavState extends State<MainScaffoldWithNav>  with SingleTickerProviderStateMixin {
+class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
+    with SingleTickerProviderStateMixin {
   final Map<int, ScrollController> controllers = {
     AppRoutesInfo.tabHome.tabIndex ?? 0: ScrollController(),
     AppRoutesInfo.tabPosts.tabIndex ?? 1: ScrollController(),
     AppRoutesInfo.tabProfile.tabIndex ?? 2: ScrollController(),
     AppRoutesInfo.tabSearch.tabIndex ?? 3: ScrollController(),
   };
+  // var navItems = [
+  //   BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+  //   BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
+  //   BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+  //   BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+  // ];
+
+  final List<NavItem> navItems = [
+    NavItem(icon: Icons.home, label: 'Home'),
+    NavItem(icon: Icons.search, label: 'Post'),
+    NavItem(icon: Icons.person, label: 'Profile'),
+    NavItem(icon: Icons.search, label: 'Search'),
+  ];
+
 
   int _lastTappedIndex = 0;
 
@@ -86,6 +104,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>  with SingleTi
     }
     super.dispose();
   }
+
   late final AnimationController _bottomBarAnimationController;
 
   @override
@@ -115,27 +134,63 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>  with SingleTi
   Widget build(BuildContext context) {
     return Scaffold(
       // body: widget.shell,
-      body: IndexedStack(
-        index: widget.navigationShell.currentIndex,
+      extendBody: true,
+
+      // body: IndexedStack(
+      //   index: widget.navigationShell.currentIndex,
+      //   children: [
+      //     HomeTab(mainNavScrollController: controllers[0]!),
+      //     PostListScreen(mainNavScrollController: controllers[1]!),
+      //     ProfileTab(mainNavScrollController: controllers[2]!),
+      //     SearchTab(mainNavScrollController: controllers[3]!),
+      //   ],
+      // ),
+      body: Stack(
         children: [
-          HomeTab(mainNavScrollController: controllers[0]!),
-          PostListScreen(mainNavScrollController: controllers[1]!),
-          ProfileTab(mainNavScrollController: controllers[2]!),
-          SearchTab(mainNavScrollController: controllers[3]!),
+          Positioned.fill(
+            child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover),
+          ),
+
+          // Center(
+          //   child: Text(
+          //     'Content',
+          //     style: TextStyle(fontSize: 24, color: Colors.white),
+          //   ),
+          // ),
+          IndexedStack(
+            index: widget.navigationShell.currentIndex,
+            children: [
+              HomeTab(mainNavScrollController: controllers[0]!),
+              PostListScreen(mainNavScrollController: controllers[1]!),
+              ProfileTab(mainNavScrollController: controllers[2]!),
+              SearchTab(mainNavScrollController: controllers[3]!),
+            ],
+          ),
+
+          // ✅ blur 처리된 BottomNavigationBar
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: MediaQuery.of(context).padding.bottom,
+            child: _buildBlurBottomBar(),
+          ),
         ],
       ),
+
       /// 이동없는 네비게이션
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: widget.navigationShell.currentIndex,
-        type: BottomNavigationBarType.fixed, // 4개 이상일 경우 필요
-        onTap: _onTap,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.transparent, // 투명처리
+      //   currentIndex: widget.navigationShell.currentIndex,
+      //   type: BottomNavigationBarType.fixed, // 4개 이상일 경우 필요
+      //   onTap: _onTap,
+      //
+      //   items: const [
+      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+      //   ],
+      // ),
       /// 스크롤에 따라 이동
       // bottomNavigationBar: SizeTransition(
       //   sizeFactor: CurvedAnimation(
@@ -154,7 +209,87 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>  with SingleTi
       //     ],
       //   ),
       // ),
-
     );
   }
+
+  Widget _buildBlurBottomBar() {
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Container(
+          height: kBottomNavigationBarHeight+10,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            border: Border(top: BorderSide(color: Colors.white24, width: 0.5)),
+            // color: Colors.white.withOpacity(0.1),
+            // border: const Border(top: BorderSide(color: Colors.white30, width: 0.5)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(navItems.length, (index) {
+              final selected = index == widget.navigationShell.currentIndex;
+              final item = navItems[index];
+
+              // return GestureDetector(
+              //   onTap: () => _onTap(index),
+              //   behavior: HitTestBehavior.opaque,
+              //   child: Column(
+              //     mainAxisSize: MainAxisSize.min,
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Text(
+              //         item.label ?? '',
+              //         style: TextStyle(
+              //           color: selected ? Colors.white : Colors.white54,
+              //           fontSize: 12,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // );
+
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () => _onTap(index),
+                  behavior: HitTestBehavior.opaque,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    decoration: BoxDecoration(
+                      color: selected ? Colors.white.withOpacity(0.1) : Colors.transparent,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          item.icon,
+                          color: selected ? Colors.white : Colors.white60,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          item.label,
+                          style: TextStyle(
+                            color: selected ? Colors.white : Colors.white60,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NavItem {
+  final IconData icon;
+  final String label;
+
+  NavItem({required this.icon, required this.label});
 }
