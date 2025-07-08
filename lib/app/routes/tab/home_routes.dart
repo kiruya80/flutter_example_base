@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 
+import '../../../main_scaffold_with_nav.dart';
 import '../../../presentation/other/detail_screen.dart';
 import '../../../presentation/other/home_card_screen.dart';
 import '../../../presentation/tab_navigator/home/home_tab.dart';
@@ -20,7 +21,15 @@ final List<GoRoute> homeTabRoutes = [
     path: AppRoutesInfo.tabHome.path,
 
     /// '/xxx'는 절대경로
-    pageBuilder: (context, state) => NoTransitionPage(child: HomeTab()),
+    // pageBuilder: (context, state) => NoTransitionPage(child: HomeTab()),
+    pageBuilder: (context, state) {
+      final mainScaffoldState = context.findAncestorStateOfType<MainScaffoldWithNavState>();
+      final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabHome.tabIndex]; // 게시글 탭 인덱스
+
+      return NoTransitionPage(
+        child: HomeTab(mainNavScrollController: controller!),
+      );
+    },
     routes: [
       // GoRoute(
       //   name: AppRoutesInfo.detail.name,

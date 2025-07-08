@@ -12,7 +12,9 @@ import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
 class HomeTab extends ConsumerStatefulWidget {
-  const HomeTab({super.key});
+  final ScrollController mainNavScrollController;
+
+  const HomeTab({super.key, required this.mainNavScrollController});
 
   @override
   ConsumerState<HomeTab> createState() => _HomeTabState();
@@ -48,6 +50,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
     return Scaffold(
       appBar: AppBar(title: Text(AppRoutesInfo.tabHome.name)),
       body: SingleChildScrollView(
+        controller: widget.mainNavScrollController,
         child: Column(
           children: [
             ///
@@ -102,6 +105,34 @@ class _HomeTabState extends BaseConState<HomeTab> {
             RouterMoveItem('pushNamed(/setting) 스택 추가', () {
               context.pushNamed(AppRoutesInfo.setting.name);
             }),
+
+
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
+            RouterMoveItem('=====', () {
+            }),
           ],
         ),
       ),
@@ -109,6 +140,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
         heroTag: 'edgeToEdge',
         onPressed: () {
           context.pushNamed(AppRoutesInfo.edgeToEdge.name);
+
           ///
           // showModalBottomSheet(
           //   context: context,

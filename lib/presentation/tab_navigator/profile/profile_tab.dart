@@ -9,16 +9,12 @@ import '../../../shared/state/base_con_state.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
-enum EdgeToEdgeType {
-  Default,
-  Common,
-  Refresh,
-  CommonRefresh,
-  CustomScrollView,
-  iosCupertino
-}
+enum EdgeToEdgeType { Default, Common, Refresh, CommonRefresh, CustomScrollView, iosCupertino }
+
 class ProfileTab extends ConsumerStatefulWidget {
-  const ProfileTab({super.key});
+  final ScrollController mainNavScrollController;
+
+  const ProfileTab({super.key, required this.mainNavScrollController});
 
   @override
   ConsumerState<ProfileTab> createState() => _ProfileTabState();
@@ -40,7 +36,9 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
 
     return Scaffold(
       appBar: AppBar(title: Text(AppRoutesInfo.tabProfile.name)),
-      body: SingleChildScrollView(child: _getMoveEdgeToEdge()),
+      body: SingleChildScrollView(
+          controller: widget.mainNavScrollController,
+          child: _getMoveEdgeToEdge()),
     );
   }
 
@@ -51,10 +49,8 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
 
         RouterMoveItem('테마 변경', () {
           ref.read(appThemeModeProvider.notifier).state =
-          (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
+              (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
         }),
-
-
 
         RouterMoveItem('edgeToEdge Default', () {
           context.pushNamed(
@@ -64,32 +60,27 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
           );
         }),
 
-
         RouterMoveItem('edgeToEdge Common', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},
-            queryParameters: {'type':  EdgeToEdgeType.Common.name, 'isAppbar': 'false'},
+            queryParameters: {'type': EdgeToEdgeType.Common.name, 'isAppbar': 'false'},
           );
         }),
-
 
         RouterMoveItem('edgeToEdge Common Appbar', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},
-            queryParameters: {'type':  EdgeToEdgeType.Common.name, 'isAppbar': 'true'},
+            queryParameters: {'type': EdgeToEdgeType.Common.name, 'isAppbar': 'true'},
           );
         }),
-
-
-
 
         RouterMoveItem('edgeToEdge Refresh', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},
-            queryParameters: {'type':  EdgeToEdgeType.Refresh.name, 'isAppbar': 'true'},
+            queryParameters: {'type': EdgeToEdgeType.Refresh.name, 'isAppbar': 'true'},
           );
         }),
 
@@ -97,35 +88,31 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},
-            queryParameters: {'type':  EdgeToEdgeType.CommonRefresh.name, 'isAppbar': 'true'},
+            queryParameters: {'type': EdgeToEdgeType.CommonRefresh.name, 'isAppbar': 'true'},
           );
         }),
-
-
 
         RouterMoveItem('CustomScrollView', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},
-            queryParameters: {'type':  EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'false'},
+            queryParameters: {'type': EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'false'},
           );
         }),
-
 
         RouterMoveItem('CustomScrollView isAppbar', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},
-            queryParameters: {'type':  EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'true'},
+            queryParameters: {'type': EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'true'},
           );
         }),
-
 
         RouterMoveItem('edgeToEdge iosCupertino', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
             pathParameters: {'id': 'id_123'},
-            queryParameters: {'type':  EdgeToEdgeType.iosCupertino.name, 'isAppbar': 'true'},
+            queryParameters: {'type': EdgeToEdgeType.iosCupertino.name, 'isAppbar': 'true'},
           );
         }),
       ],

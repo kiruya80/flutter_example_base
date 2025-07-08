@@ -11,7 +11,9 @@ import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
 class SearchTab extends ConsumerStatefulWidget {
-  const SearchTab({super.key});
+  final ScrollController mainNavScrollController;
+
+  const SearchTab({super.key, required this.mainNavScrollController});
 
   @override
   ConsumerState<SearchTab> createState() => _SearchTabState();
@@ -30,10 +32,7 @@ class _SearchTabState extends BaseConState<SearchTab> {
     /// fullPath ==== detail/123?tab=settings
     QcLog.d('fullPath ==== $url');
 
-    final url2 = AppRoutesInfo.searchDetailFullPath(
-      id: '123',
-      query: {'tab': 'settings'},
-    );
+    final url2 = AppRoutesInfo.searchDetailFullPath(id: '123', query: {'tab': 'settings'});
 
     /// searchDetailFullPath ==== /search/detail/123?tab=settings
     QcLog.d('searchDetailFullPath ==== $url2');
@@ -41,6 +40,7 @@ class _SearchTabState extends BaseConState<SearchTab> {
     return Scaffold(
       appBar: AppBar(title: Text(AppRoutesInfo.tabSearch.name)),
       body: SingleChildScrollView(
+        controller: widget.mainNavScrollController,
         child: Column(
           children: [
             ItemTitle('context Go path'),
@@ -55,10 +55,7 @@ class _SearchTabState extends BaseConState<SearchTab> {
 
             RouterMoveItem('go(/search/detail/123?query=ddddddd)', () {
               context.go(
-                AppRoutesInfo.searchDetailFullPath(
-                  id: '123',
-                  query: {'query': 'ddddddd'},
-                ),
+                AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}),
               );
             }),
 
@@ -70,10 +67,7 @@ class _SearchTabState extends BaseConState<SearchTab> {
 
             RouterMoveItem('push(/search/detail/123?query=ddddddd)', () {
               context.push(
-                AppRoutesInfo.searchDetailFullPath(
-                  id: '123',
-                  query: {'query': 'ddddddd'},
-                ),
+                AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}),
               );
             }),
 

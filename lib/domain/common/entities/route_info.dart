@@ -15,6 +15,7 @@ abstract class RouteInfo with _$RouteInfo {
   const factory RouteInfo({
     required String name,
     required String path,
+    int? tabIndex,
     String? prefixPath,
     Map<String, dynamic>? pathParams,
     Map<String, dynamic>? queryParams,

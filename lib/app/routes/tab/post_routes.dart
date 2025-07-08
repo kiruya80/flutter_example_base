@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 
+import '../../../main_scaffold_with_nav.dart';
 import '../../../presentation/tab_navigator/post/post_list_screen.dart';
 import '../../../presentation/tab_navigator/post/post_write_screen.dart';
 import '../app_routes_info.dart';
@@ -11,7 +12,15 @@ final List<GoRoute> postTabRoutes = [
   GoRoute(
     name: AppRoutesInfo.tabPosts.name,
     path: AppRoutesInfo.tabPosts.path,
-    pageBuilder: (context, state) => NoTransitionPage(child: PostListScreen()),
+    // pageBuilder: (context, state) => NoTransitionPage(child: PostListScreen()),
+    pageBuilder: (context, state) {
+      final mainScaffoldState = context.findAncestorStateOfType<MainScaffoldWithNavState>();
+      final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabPosts.tabIndex]; // 게시글 탭 인덱스
+
+      return NoTransitionPage(
+        child: PostListScreen(mainNavScrollController: controller!),
+      );
+    },
     routes: [
       GoRoute(
         name: AppRoutesInfo.postAdd.name,

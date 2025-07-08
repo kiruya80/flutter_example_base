@@ -17,7 +17,9 @@ import '../../../domain/common/entities/dialog_request.dart';
 import '../../widgets/item_title.dart';
 
 class PostListScreen extends ConsumerStatefulWidget {
-  const PostListScreen({super.key});
+  final ScrollController mainNavScrollController;
+
+  const PostListScreen({super.key, required this.mainNavScrollController});
 
   @override
   ConsumerState<PostListScreen> createState() => _PostListScreenState();
@@ -58,6 +60,7 @@ class _PostListScreenState extends BaseConState<PostListScreen>
             children: [
               ItemTitle('api & dialog'),
               SingleChildScrollView(
+                controller: widget.mainNavScrollController,
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
@@ -129,20 +132,21 @@ class _PostListScreenState extends BaseConState<PostListScreen>
             ],
           ),
           Expanded(
-            child: state.isLoading == true
-                ? Container()
-                : state.error != null
+            child:
+                state.isLoading == true
+                    ? Container()
+                    : state.error != null
                     ? Center(child: Text('Error: ${state.error?.message}'))
                     : ListView.builder(
-                        itemCount: state.posts.length,
-                        itemBuilder: (context, index) {
-                          final post = state.posts[index];
-                          return ListTile(
-                            title: Text(post.title ?? ''),
-                            subtitle: Text(post.body ?? ''),
-                          );
-                        },
-                      ),
+                      itemCount: state.posts.length,
+                      itemBuilder: (context, index) {
+                        final post = state.posts[index];
+                        return ListTile(
+                          title: Text(post.title ?? ''),
+                          subtitle: Text(post.body ?? ''),
+                        );
+                      },
+                    ),
           ),
         ],
       ),

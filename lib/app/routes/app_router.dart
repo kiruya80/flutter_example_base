@@ -60,7 +60,7 @@ class AppRouter {
       /// tab
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
-          return MainScaffoldWithNav(shell: navigationShell);
+          return MainScaffoldWithNav(navigationShell: navigationShell);
         },
         branches: TabRouter.tabBranches,
       ),

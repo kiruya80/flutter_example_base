@@ -16,10 +16,10 @@ class AppRoutesInfo {
 
   /// 탭 라우터
   ///
-  static final tabHome = RouteRegistry.register('home', '/home');
-  static final tabPosts = RouteRegistry.register('posts', '/posts');
-  static final tabSearch = RouteRegistry.register('search', '/search');
-  static final tabProfile = RouteRegistry.register('profile', '/profile');
+  static final tabHome = RouteRegistry.register('home', '/home', tabIndex: 0);
+  static final tabPosts = RouteRegistry.register('posts', '/posts', tabIndex: 1);
+  static final tabSearch = RouteRegistry.register('search', '/search', tabIndex: 2);
+  static final tabProfile = RouteRegistry.register('profile', '/profile', tabIndex: 3);
 
   /// 상세 라우터
   ///

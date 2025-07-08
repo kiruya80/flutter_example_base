@@ -103,6 +103,8 @@ class CommonEdgeRefreshScrollview extends ConsumerStatefulWidget {
 }
 
 class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshScrollview> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -115,7 +117,7 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
     });
   }
 
-  void _setSystemUiOverlayStyle( ) {
+  void _setSystemUiOverlayStyle() {
     ///
     /// statusBarIconBrightness
     /// ㄴ ThemeMode.dark - 아이콘 검은색 - 블러 처리시
@@ -157,6 +159,12 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
     return false;
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   /**
       AlwaysScrollableScrollPhysics(
       //physics 물리 - 원하는 UI에 맞춰 작업하면 됨
@@ -180,7 +188,9 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
     CommonUtils.isTablet(context);
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
-    QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
+    QcLog.d(
+      'statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset ',
+    );
 
     /// 2. NotificationListener
     return NotificationListener<ScrollNotification>(
@@ -204,7 +214,7 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
           child: Stack(
             children: [
               CustomScrollView(
-                // controller: pagingScrollController,
+                controller: _scrollController,
                 physics:
                     widget.isRefresh == true
                         ? const AlwaysScrollableScrollPhysics(
@@ -213,9 +223,44 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
                         : null,
                 slivers: getSliversContents(context),
               ),
+
               // if (Platform.isIOS || widget.isBlur == true) BlurOverlay(isStatusDark: false),
               // if (Platform.isAndroid && widget.isBlur == true)
               //   Align(alignment: Alignment.bottomCenter, child: BlurOverlay(height: bottomInset, isStatusDark: false,)),
+
+              // GestureDetector(
+              //     behavior: HitTestBehavior.translucent,
+              //     onTap: () {
+              //       QcLog.d('onTap === ');
+              //       _scrollController.animateTo(
+              //         0.0,
+              //         duration: const Duration(milliseconds: 300),
+              //         curve: Curves.easeOut,
+              //       );
+              //     },
+              //     child: Container(height: statusBarHeight + 15,
+              //
+              //       color: Colors.deepPurple,
+              //     )),
+              if (Platform.isAndroid && widget.sliverChildBuilder != null)
+                Positioned(
+                  top: 0,
+                  left: 60,
+                  right: 60,
+                  height: statusBarHeight + 15,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      QcLog.d('onTap === ');
+                      _scrollController.animateTo(
+                        0.0,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
+                      );
+                    },
+                    child: Container(height: statusBarHeight + 15, color: Colors.deepPurple),
+                  ),
+                ),
             ],
           ),
         ),

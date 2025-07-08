@@ -4,7 +4,7 @@ class RouteRegistry {
   static final Set<String> _names = {};
   static final Set<String> _paths = {};
 
-  static RouteInfo register(String name, String path, {String? prefixPath}) {
+  static RouteInfo register(String name, String path, {String? prefixPath, int? tabIndex}) {
     /// 라우터 이름은 유니크
     if (_names.contains(name)) {
       throw ArgumentError('Route name "$name" is already registered. 라우터');
@@ -17,6 +17,6 @@ class RouteRegistry {
 
     _names.add(name);
     _paths.add(path);
-    return RouteInfo(name:name, path:path, prefixPath: prefixPath);
+    return RouteInfo(name:name, path:path, prefixPath: prefixPath, tabIndex:tabIndex);
   }
 }
