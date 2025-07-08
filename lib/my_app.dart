@@ -56,13 +56,15 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: AppRouter.appRouter,
       title: 'Post App',
-      themeMode: appThemeMode, // 중요!
+      themeMode: appThemeMode,
+      // 중요!
       // darkTheme: ThemeData.dark(),
       // themeMode: ThemeMode.system, // system / light / dark
       theme: ThemeData(
         useMaterial3: true,
         // platform: TargetPlatform.iOS, // 👈 전체를 iOS 스타일로
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
           // brightness: Brightness.dark,
         ),
       ),
@@ -79,79 +81,22 @@ class MyApp extends ConsumerWidget {
   }
 }
 
-class _GlobalLoadingBlocker extends StatelessWidget {
-  const _GlobalLoadingBlocker();
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // Back key 막음
-      child: AbsorbPointer(
-        // 하위 터치 이벤트 차단
-        absorbing: true,
-        child: Container(
-          color: Colors.black38,
-          alignment: Alignment.center,
-          child: const CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
-}
-
-/// 바텀네비게이터
-class ScaffoldWithNavBar extends StatelessWidget {
-  final StatefulNavigationShell shell;
-
-  const ScaffoldWithNavBar({super.key, required this.shell});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: shell,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: shell.currentIndex,
-        type: BottomNavigationBarType.fixed, // 4개 이상일 경우 필요
-        onTap: (index) {
-          QcLog.d(
-            'state before ===== ${GoRouterState.of(context).topRoute.toString()} , ${GoRouterState.of(context).uri} , ${shell.currentIndex} ',
-          );
-
-          // if (index == shell.currentIndex) {
-          if (TabChangeObserver.onTabChanged(index)) {
-            /// todo 만약 홈탭으로 돌아오고 리빌드 하고 싶을때는 프로바이더나 이벤트 버스등 명시적 호출 필요
-            /// if (index == 0) {
-            ///   eventBus.fire(HomeTabSelectedEvent());
-            ///   homeTabNotifier.refresh();
-            /// }
-            ///
-            /// 동일한 탭 다시 클릭하는 경우 홈으로 이동하게
-            shell.goBranch(index, initialLocation: true);
-          } else {
-            shell.goBranch(index);
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-        ],
-      ),
-    );
-  }
-}
-
-class TabChangeObserver {
-  static int _lastIndex = 0;
-
-  static bool onTabChanged(int newIndex) {
-    if (_lastIndex != newIndex) {
-      debugPrint('🟢 탭 변경: $_lastIndex -> $newIndex');
-      _lastIndex = newIndex;
-      return false;
-    } else {
-      return true;
-    }
-  }
-}
+// class _GlobalLoadingBlocker extends StatelessWidget {
+//   const _GlobalLoadingBlocker();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return WillPopScope(
+//       onWillPop: () async => false, // Back key 막음
+//       child: AbsorbPointer(
+//         // 하위 터치 이벤트 차단
+//         absorbing: true,
+//         child: Container(
+//           color: Colors.black38,
+//           alignment: Alignment.center,
+//           child: const CircularProgressIndicator(),
+//         ),
+//       ),
+//     );
+//   }
+// }
