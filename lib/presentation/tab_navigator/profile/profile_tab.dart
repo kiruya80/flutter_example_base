@@ -7,6 +7,7 @@ import '../../../../../core/utils/print_log.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../core/theme/app_theme_provider.dart';
 import '../../../shared/state/base_con_state.dart';
+import '../../../shared/widgets/edge_custom_scrollview.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
@@ -35,8 +36,20 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
     isDark = appThemeMode == ThemeMode.dark;
     QcLog.d("앱 테마 : ${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
 
+    return EdgeCustomScrollview(
+      content: SingleChildScrollView(
+        controller: widget.mainNavScrollController,
+        child: _getMoveEdgeToEdge(),
+      ),
+      backgroundColor: Colors.deepPurple.withOpacitySafe(0.2),
+      isRefresh: false,
+      //   isMoreDataScroll: MoreDataScroll.HAS,
+    );
+  }
+
+  _content() {
     return Container(
-      color: Colors.teal.withOpacitySafe(0.6),
+      color: Colors.deepPurple.withOpacitySafe(0.6),
       child: SingleChildScrollView(
         controller: widget.mainNavScrollController,
         child: _getMoveEdgeToEdge(),

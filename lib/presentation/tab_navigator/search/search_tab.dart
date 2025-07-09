@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/app/routes/route_helper.dart';
+import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/domain/common/entities/route_info.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,13 +8,14 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/utils/print_log.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../shared/state/base_con_state.dart';
+import '../../../shared/widgets/edge_custom_scrollview.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
 class SearchTab extends ConsumerStatefulWidget {
   final ScrollController? mainNavScrollController;
 
-  const SearchTab({super.key,  this.mainNavScrollController});
+  const SearchTab({super.key, this.mainNavScrollController});
 
   @override
   ConsumerState<SearchTab> createState() => _SearchTabState();
@@ -37,6 +39,15 @@ class _SearchTabState extends BaseConState<SearchTab> {
     /// searchDetailFullPath ==== /search/detail/123?tab=settings
     QcLog.d('searchDetailFullPath ==== $url2');
 
+    return EdgeCustomScrollview(
+      content: _content(),
+      backgroundColor: Colors.teal.withOpacitySafe(0.2),
+      isRefresh: false,
+      //   isMoreDataScroll: MoreDataScroll.HAS,
+    );
+  }
+
+  _content() {
     return Stack(
       children: [
         // 배경 이미지
@@ -57,7 +68,9 @@ class _SearchTabState extends BaseConState<SearchTab> {
               }),
 
               RouterMoveItem('go(/search/detail/123?query=ddddddd)', () {
-                context.go(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
+                context.go(
+                  AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}),
+                );
               }),
 
               ItemTitle('context push'),

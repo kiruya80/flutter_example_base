@@ -15,6 +15,7 @@ import '../../../shared/mixin/navigation_listener_mixin.dart';
 import '../../../shared/state/base_con_state.dart';
 import '../../../core/controller/dialog_controller.dart';
 import '../../../domain/common/entities/dialog_request.dart';
+import '../../../shared/widgets/edge_custom_scrollview.dart';
 import '../../widgets/item_title.dart';
 
 class PostListScreen extends ConsumerStatefulWidget {
@@ -50,121 +51,128 @@ class _PostListScreenState extends BaseConState<PostListScreen>
 
   @override
   Widget build(BuildContext context) {
+    return EdgeCustomScrollview(
+      content: _content(),
+      backgroundColor: Colors.green.withOpacitySafe(0.2),
+      isRefresh: false,
+      //   isMoreDataScroll: MoreDataScroll.HAS,
+    );
+  }
+
+  _content() {
     final state = ref.watch(postListViewModelProvider);
     QcLog.d('state ===== ${state.toString()}');
 
-    return Container(
-      color: Colors.amber.withOpacitySafe(0.6),
-      child: Column(
-        children: [
-          Column(
-            children: [
-              ItemTitle('api & dialog'),
-              SingleChildScrollView(
-                controller: widget.mainNavScrollController,
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                      child: Text('loadPosts'),
-                      onPressed: () {
-                        ref.read(postListViewModelProvider.notifier).loadPosts();
-                      },
-                    ),
-                    ElevatedButton(
-                      child: Text('일반 dialog'),
-                      onPressed: () {
-                        DialogController(ref).enqueue(
-                          DialogRequest.confirm(
-                            '다이얼로그 띄우기',
-                            onCancel: () {
-                              QcLog.d('onCancelled');
-                            },
-                            onConfirm: () {
-                              QcLog.d('onConfirm');
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                    ElevatedButton(
-                      child: Text('error dialog'),
-                      onPressed: () {
-                        ref.read(postListViewModelProvider.notifier).dialogLoadError();
-                      },
-                    ),
-                    ElevatedButton(
-                      child: Text('Delayed dialog'),
-                      onPressed: () {
-                        ref.read(postListViewModelProvider.notifier).dialogDelayed();
-                      },
-                    ),
-                    ElevatedButton(
-                      child: Text('custom dialog'),
-                      onPressed: () {
-                        CommonUtils.isTablet(context);
+    return Column(
+      children: [
+        ItemTitle('api & dialog'),
 
-                        DialogController(ref).enqueue(
-                          DialogRequest.custom(
-                            ListView.builder(
-                              itemCount: items.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  leading: CircleAvatar(child: Text('${index + 1}')),
-                                  title: Text(items[index]),
-                                  subtitle: Text('This is item number ${index + 1}'),
-                                );
-                              },
-                            ),
-                            onCancel: () {
-                              QcLog.d('onCancelled');
-                            },
-                            onConfirm: () {
-                              QcLog.d('onConfirm');
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+        /// 상단 선택 메뉴들
+        Container(
+          height: 100,
+          child: SingleChildScrollView(
+            controller: widget.mainNavScrollController,
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ElevatedButton(
+                  child: Text('loadPosts'),
+                  onPressed: () {
+                    ref.read(postListViewModelProvider.notifier).loadPosts();
+                  },
                 ),
-              ),
-              SizedBox(height: 10),
-            ],
+                ElevatedButton(
+                  child: Text('일반 dialog'),
+                  onPressed: () {
+                    DialogController(ref).enqueue(
+                      DialogRequest.confirm(
+                        '다이얼로그 띄우기',
+                        onCancel: () {
+                          QcLog.d('onCancelled');
+                        },
+                        onConfirm: () {
+                          QcLog.d('onConfirm');
+                        },
+                      ),
+                    );
+                  },
+                ),
+                ElevatedButton(
+                  child: Text('error dialog'),
+                  onPressed: () {
+                    ref.read(postListViewModelProvider.notifier).dialogLoadError();
+                  },
+                ),
+                ElevatedButton(
+                  child: Text('Delayed dialog'),
+                  onPressed: () {
+                    ref.read(postListViewModelProvider.notifier).dialogDelayed();
+                  },
+                ),
+                ElevatedButton(
+                  child: Text('custom dialog'),
+                  onPressed: () {
+                    CommonUtils.isTablet(context);
+
+                    DialogController(ref).enqueue(
+                      DialogRequest.custom(
+                        ListView.builder(
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: CircleAvatar(child: Text('${index + 1}')),
+                              title: Text(items[index]),
+                              subtitle: Text('This is item number ${index + 1}'),
+                            );
+                          },
+                        ),
+                        onCancel: () {
+                          QcLog.d('onCancelled');
+                        },
+                        onConfirm: () {
+                          QcLog.d('onConfirm');
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
-          Expanded(
-            child:
-                state.isLoading == true
-                    ? Container()
-                    : state.error != null
-                    ? Center(child: Text('Error: ${state.error?.message}'))
-                    : ListView.builder(
-                      itemCount: state.posts.length,
-                      itemBuilder: (context, index) {
-                        final post = state.posts[index];
-                        return ListTile(
-                          title: Text(post.title ?? ''),
-                          subtitle: Text(post.body ?? ''),
-                        );
-                      },
-                    ),
-          ),
-        ],
-        // floatingActionButton: FloatingActionButton(
-        //   heroTag: 'fab_tab1',
-        //   onPressed: () {
-        //     final state = ref.read(authViewModelProvider);
-        //     if (state.isLoggedIn == true) {
-        //       // context.push('/postAdd');
-        //       context.pushNamed(AppRoutesInfo.postAdd.name);
-        //     } else {
-        //       // context.push('/login');
-        //       context.pushNamed(AppRoutesInfo.login.name);
-        //     }
-        //   },
-        //   child: const Icon(Icons.add),
+        ),
+        SizedBox(height: 10),
+
+        // Expanded(
+        //   child:
+        state.isLoading == true
+            ? Container()
+            : state.error != null
+            ? Center(child: Text('Error: ${state.error?.message}'))
+            : ListView.builder(
+              shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+              itemCount: state.posts.length,
+              itemBuilder: (context, index) {
+                final post = state.posts[index];
+                return ListTile(title: Text(post.title ?? ''), subtitle: Text(post.body ?? ''));
+              },
+            ),
         // ),
-      ),
+      ],
+      // floatingActionButton: FloatingActionButton(
+      //   heroTag: 'fab_tab1',
+      //   onPressed: () {
+      //     final state = ref.read(authViewModelProvider);
+      //     if (state.isLoggedIn == true) {
+      //       // context.push('/postAdd');
+      //       context.pushNamed(AppRoutesInfo.postAdd.name);
+      //     } else {
+      //       // context.push('/login');
+      //       context.pushNamed(AppRoutesInfo.login.name);
+      //     }
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }
