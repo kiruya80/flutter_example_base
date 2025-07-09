@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../main_scaffold_with_nav.dart';
+import '../../my_app.dart';
 import '../../presentation/auth/login_page.dart';
 import '../../presentation/edge/edge_to_edge_page.dart';
 import '../../presentation/intro/intro_page.dart';
@@ -61,6 +62,7 @@ class AppRouter {
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return MainScaffoldWithNav(navigationShell: navigationShell);
+          // return ScaffoldWithNavBar(shell: navigationShell);
         },
         branches: TabRouter.tabBranches,
       ),

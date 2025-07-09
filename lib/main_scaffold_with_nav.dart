@@ -1,13 +1,19 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/presentation/dialog/dialog_queue_listener.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/home/home_tab.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/post/post_list_screen.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/profile/profile_tab.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/search/search_tab.dart';
+import 'package:flutter_example_base/shared/entities/nav_item.dart';
+import 'package:flutter_example_base/shared/widgets/blur_bottom_bar_item.dart';
+import 'package:flutter_example_base/shared/widgets/common_edge_to_edge_page.dart';
+import 'package:flutter_example_base/shared/widgets/common_pop_scope_widget.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +41,8 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     AppRoutesInfo.tabProfile.tabIndex ?? 2: ScrollController(),
     AppRoutesInfo.tabSearch.tabIndex ?? 3: ScrollController(),
   };
-  // var navItems = [
+
+  // var bottomNavItems = [
   //   BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
   //   BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
   //   BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
@@ -43,12 +50,11 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   // ];
 
   final List<NavItem> navItems = [
-    NavItem(icon: Icons.home, label: 'Home'),
-    NavItem(icon: Icons.search, label: 'Post'),
-    NavItem(icon: Icons.person, label: 'Profile'),
-    NavItem(icon: Icons.search, label: 'Search'),
+    NavItem(iconData: Icons.home, label: 'Home'),
+    NavItem(iconData: Icons.post_add, label: 'Post'),
+    NavItem(iconData: Icons.person, label: 'Profile'),
+    NavItem(iconData: Icons.search, label: 'Search'),
   ];
-
 
   int _lastTappedIndex = 0;
 
@@ -132,8 +138,109 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
 
   @override
   Widget build(BuildContext context) {
+    // return getDefault();
+    return getBottomNavBlur();
+    // return getCustomNavStack();
+  }
+
+  /// 1. 기본 네비게이션바
+  /// ㄴ 백키 종료 가능
+  getDefault() {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      body: widget.navigationShell,
+
+      /// 이동없는 네비게이션
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.transparent, // 투명처리
+      //   currentIndex: widget.navigationShell.currentIndex,
+      //   type: BottomNavigationBarType.fixed, // 4개 이상일 경우 필요
+      //   onTap: _onTap,
+      //   items: bottomNavItems,
+      // ),
+      /// 스크롤에 따라 이동
+      // bottomNavigationBar: SizeTransition(
+      //   sizeFactor: CurvedAnimation(
+      //     parent: _bottomBarAnimationController,
+      //     curve: Curves.easeInOut,
+      //   ).drive(Tween(begin: 1.0, end: 0.0)),
+      //   axisAlignment: -1.0,
+      //   child: BottomNavigationBar(
+      //     currentIndex: widget.navigationShell.currentIndex,
+      //     onTap: _onTap,
+      //     items: bottomNavItems,
+      //   ),
+      // ),
+      /// 블러처리
+      bottomNavigationBar: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.transparent,
+            // 투명처리
+            currentIndex: widget.navigationShell.currentIndex,
+            type: BottomNavigationBarType.fixed,
+            // 4개 이상일 경우 필요
+            onTap: _onTap,
+            // items: bottomNavItems,
+            items: List.generate(navItems.length, (index) {
+              final item = navItems[index];
+              return item.toBottomNavigationBarItem(
+                selected: index == widget.navigationShell.currentIndex,
+                selectedColor: Colors.white,
+                unselectedColor: Colors.grey,
+              );
+            }),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 2 .블러 처리된 네비게이션
+  /// ㄴ 백키 종료 가능
+  getBottomNavBlur() {
+    var bottom = MediaQuery.of(context).padding.bottom;
+    return CommonEdgeToEdgePage(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      // bottomNavigationBar: ClipRect(
+      //   child: BackdropFilter(
+      //     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+      //     child: BottomNavigationBar(
+      //       backgroundColor: Colors.transparent,
+      //       // 투명처리
+      //       currentIndex: widget.navigationShell.currentIndex,
+      //       type: BottomNavigationBarType.fixed,
+      //       // 4개 이상일 경우 필요
+      //       onTap: _onTap,
+      //       // items: bottomNavItems,
+      //       items: List.generate(navItems.length, (index) {
+      //         final item = navItems[index];
+      //         return item.toBottomNavigationBarItem(
+      //           selected: index == widget.navigationShell.currentIndex,
+      //           selectedColor: Colors.white,
+      //           unselectedColor: Colors.grey,
+      //         );
+      //       }),
+      //     ),
+      //   ),
+      // ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: bottom),
+        child: _buildBlurBottomBar(),
+      ),
+      child: widget.navigationShell,
+    );
+  }
+
+  /// stack으로 구성
+  /// ㄴ 단, 뒤로가기시 종료가 안되는 이슈
+  getCustomNavStack() {
+    return CommonEdgeToEdgePage(
       // body: widget.shell,
+      extendBodyBehindAppBar: true,
       extendBody: true,
 
       // body: IndexedStack(
@@ -145,7 +252,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       //     SearchTab(mainNavScrollController: controllers[3]!),
       //   ],
       // ),
-      body: Stack(
+      child: Stack(
         children: [
           Positioned.fill(
             child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover),
@@ -176,50 +283,19 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
           ),
         ],
       ),
-
-      /// 이동없는 네비게이션
-      // bottomNavigationBar: BottomNavigationBar(
-      //   backgroundColor: Colors.transparent, // 투명처리
-      //   currentIndex: widget.navigationShell.currentIndex,
-      //   type: BottomNavigationBarType.fixed, // 4개 이상일 경우 필요
-      //   onTap: _onTap,
-      //
-      //   items: const [
-      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-      //     BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
-      //     BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-      //     BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-      //   ],
-      // ),
-      /// 스크롤에 따라 이동
-      // bottomNavigationBar: SizeTransition(
-      //   sizeFactor: CurvedAnimation(
-      //     parent: _bottomBarAnimationController,
-      //     curve: Curves.easeInOut,
-      //   ).drive(Tween(begin: 1.0, end: 0.0)),
-      //   axisAlignment: -1.0,
-      //   child: BottomNavigationBar(
-      //     currentIndex: widget.navigationShell.currentIndex,
-      //     onTap: _onTap,
-      //     items: const [
-      //       BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-      //       BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
-      //       BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-      //       BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-      //     ],
-      //   ),
-      // ),
     );
   }
 
-  Widget _buildBlurBottomBar() {
+  /// blur 처리된 바텀네이게이션
+  ///
+  Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Ripple}) {
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: Container(
-          height: kBottomNavigationBarHeight+10,
+          height: kBottomNavigationBarHeight + 10,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.white.withOpacitySafe(0.15),
             border: Border(top: BorderSide(color: Colors.white24, width: 0.5)),
             // color: Colors.white.withOpacity(0.1),
             // border: const Border(top: BorderSide(color: Colors.white30, width: 0.5)),
@@ -229,54 +305,13 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
             children: List.generate(navItems.length, (index) {
               final selected = index == widget.navigationShell.currentIndex;
               final item = navItems[index];
-
-              // return GestureDetector(
-              //   onTap: () => _onTap(index),
-              //   behavior: HitTestBehavior.opaque,
-              //   child: Column(
-              //     mainAxisSize: MainAxisSize.min,
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Text(
-              //         item.label ?? '',
-              //         style: TextStyle(
-              //           color: selected ? Colors.white : Colors.white54,
-              //           fontSize: 12,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // );
-
               return Expanded(
-                child: GestureDetector(
+                child: BlurBottomBarItem(
+                  blurType: blurType,
+                  selected: selected,
+                  iconData: item.iconData,
+                  label: item.label ?? '',
                   onTap: () => _onTap(index),
-                  behavior: HitTestBehavior.opaque,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    decoration: BoxDecoration(
-                      color: selected ? Colors.white.withOpacity(0.1) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          item.icon,
-                          color: selected ? Colors.white : Colors.white60,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          item.label,
-                          style: TextStyle(
-                            color: selected ? Colors.white : Colors.white60,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               );
             }),
@@ -285,11 +320,4 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       ),
     );
   }
-}
-
-class NavItem {
-  final IconData icon;
-  final String label;
-
-  NavItem({required this.icon, required this.label});
 }

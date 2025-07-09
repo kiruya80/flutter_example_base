@@ -11,9 +11,9 @@ import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
 class SearchTab extends ConsumerStatefulWidget {
-  final ScrollController mainNavScrollController;
+  final ScrollController? mainNavScrollController;
 
-  const SearchTab({super.key, required this.mainNavScrollController});
+  const SearchTab({super.key,  this.mainNavScrollController});
 
   @override
   ConsumerState<SearchTab> createState() => _SearchTabState();
@@ -37,64 +37,68 @@ class _SearchTabState extends BaseConState<SearchTab> {
     /// searchDetailFullPath ==== /search/detail/123?tab=settings
     QcLog.d('searchDetailFullPath ==== $url2');
 
-    return SingleChildScrollView(
-        controller: widget.mainNavScrollController,
-        child: Column(
-          children: [
-            ItemTitle('context Go path'),
+    return Stack(
+      children: [
+        // 배경 이미지
+        Positioned.fill(child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover)),
 
-            RouterMoveItem('go(/search/detail)', () {
-              context.go('/search/detail');
-            }, isError: true),
+        SingleChildScrollView(
+          controller: widget.mainNavScrollController,
+          child: Column(
+            children: [
+              ItemTitle('context Go path'),
 
-            RouterMoveItem('go(/search/detail/123)', () {
-              context.go('/search/detail/123');
-            }),
+              RouterMoveItem('go(/search/detail)', () {
+                context.go('/search/detail');
+              }, isError: true),
 
-            RouterMoveItem('go(/search/detail/123?query=ddddddd)', () {
-              context.go(
-                AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}),
-              );
-            }),
+              RouterMoveItem('go(/search/detail/123)', () {
+                context.go('/search/detail/123');
+              }),
 
-            ItemTitle('context push'),
+              RouterMoveItem('go(/search/detail/123?query=ddddddd)', () {
+                context.go(AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}));
+              }),
 
-            RouterMoveItem('push(/search/detail/123)', () {
-              context.push('/search/detail/123');
-            }),
+              ItemTitle('context push'),
 
-            RouterMoveItem('push(/search/detail/123?query=ddddddd)', () {
-              context.push(
-                AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}),
-              );
-            }),
+              RouterMoveItem('push(/search/detail/123)', () {
+                context.push('/search/detail/123');
+              }),
 
-            ItemTitle('홈의 상세 페이지 이동 [go & push]'),
+              RouterMoveItem('push(/search/detail/123?query=ddddddd)', () {
+                context.push(
+                  AppRoutesInfo.searchDetailFullPath(id: '123', query: {'query': 'ddddddd'}),
+                );
+              }),
 
-            /// 브랜치로 전환(현재탭 스택 제거) home 이동후 detail 이동
-            /// 뒤로가기시 홈으로 가능
-            RouterMoveItem('go(/home/detail)', () {
-              context.go('/home/detail');
-            }),
+              ItemTitle('홈의 상세 페이지 이동 [go & push]'),
 
-            /// 현재탭 위에 /home/detai 쌓임
-            /// 뒤로가기시 현재탭으로
-            RouterMoveItem('push(/home/detail)', () {
-              context.push('/home/detail');
-            }),
+              /// 브랜치로 전환(현재탭 스택 제거) home 이동후 detail 이동
+              /// 뒤로가기시 홈으로 가능
+              RouterMoveItem('go(/home/detail)', () {
+                context.go('/home/detail');
+              }),
 
-            /// home 이동후 detail
-            RouterMoveItem('go(/home/homeCard)', () {
-              // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
-              //     context.pushNamed('details', pathParameters: {'id': '123'});
-              context.go('/home/homeCard');
-            }),
-            RouterMoveItem('push(/home/homeCard)', () {
-              context.push('/home/homeCard');
-            }),
-          ],
+              /// 현재탭 위에 /home/detai 쌓임
+              /// 뒤로가기시 현재탭으로
+              RouterMoveItem('push(/home/detail)', () {
+                context.push('/home/detail');
+              }),
+
+              /// home 이동후 detail
+              RouterMoveItem('go(/home/homeCard)', () {
+                // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
+                //     context.pushNamed('details', pathParameters: {'id': '123'});
+                context.go('/home/homeCard');
+              }),
+              RouterMoveItem('push(/home/homeCard)', () {
+                context.push('/home/homeCard');
+              }),
+            ],
+          ),
         ),
-
+      ],
     );
   }
 }

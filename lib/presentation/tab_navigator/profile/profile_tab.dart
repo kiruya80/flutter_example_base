@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,9 +13,9 @@ import '../../widgets/router_move_item.dart';
 enum EdgeToEdgeType { Default, Common, Refresh, CommonRefresh, CustomScrollView, iosCupertino }
 
 class ProfileTab extends ConsumerStatefulWidget {
-  final ScrollController mainNavScrollController;
+  final ScrollController? mainNavScrollController;
 
-  const ProfileTab({super.key, required this.mainNavScrollController});
+  const ProfileTab({super.key, this.mainNavScrollController});
 
   @override
   ConsumerState<ProfileTab> createState() => _ProfileTabState();
@@ -34,9 +35,12 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
     isDark = appThemeMode == ThemeMode.dark;
     QcLog.d("앱 테마 : ${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
 
-    return  SingleChildScrollView(
-          controller: widget.mainNavScrollController,
-          child: _getMoveEdgeToEdge()
+    return Container(
+      color: Colors.teal.withOpacitySafe(0.6),
+      child: SingleChildScrollView(
+        controller: widget.mainNavScrollController,
+        child: _getMoveEdgeToEdge(),
+      ),
     );
   }
 

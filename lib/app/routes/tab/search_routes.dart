@@ -18,7 +18,7 @@ final List<GoRoute> searchTabRoutes = [
       final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabSearch.tabIndex]; // 게시글 탭 인덱스
 
       return NoTransitionPage(
-        child: SearchTab(mainNavScrollController: controller!),
+        child: SearchTab(mainNavScrollController: controller),
       );
     },
     routes: [

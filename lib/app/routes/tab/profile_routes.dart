@@ -18,7 +18,7 @@ final List<GoRoute> profileTabRoutes = [
       final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabProfile.tabIndex]; // 게시글 탭 인덱스
 
       return NoTransitionPage(
-        child: ProfileTab(mainNavScrollController: controller!),
+        child: ProfileTab(mainNavScrollController: controller),
       );
     },
     routes: [

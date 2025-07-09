@@ -18,7 +18,7 @@ final List<GoRoute> postTabRoutes = [
       final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabPosts.tabIndex]; // 게시글 탭 인덱스
 
       return NoTransitionPage(
-        child: PostListScreen(mainNavScrollController: controller!),
+        child: PostListScreen(mainNavScrollController: controller),
       );
     },
     routes: [

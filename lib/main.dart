@@ -27,8 +27,8 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
-    // systemNavigationBarIconBrightness: Brightness.light,
-    // statusBarIconBrightness: Brightness.light,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    statusBarIconBrightness: Brightness.dark,
   ));
 
   /// 앱 전체에서 사용할 SharedPreferences 인스턴스를 딱 한 번 생성해서,

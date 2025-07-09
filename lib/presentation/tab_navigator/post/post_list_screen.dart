@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/post/post_list_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,9 +18,9 @@ import '../../../domain/common/entities/dialog_request.dart';
 import '../../widgets/item_title.dart';
 
 class PostListScreen extends ConsumerStatefulWidget {
-  final ScrollController mainNavScrollController;
+  final ScrollController? mainNavScrollController;
 
-  const PostListScreen({super.key, required this.mainNavScrollController});
+  const PostListScreen({super.key, this.mainNavScrollController});
 
   @override
   ConsumerState<PostListScreen> createState() => _PostListScreenState();
@@ -52,7 +53,9 @@ class _PostListScreenState extends BaseConState<PostListScreen>
     final state = ref.watch(postListViewModelProvider);
     QcLog.d('state ===== ${state.toString()}');
 
-    return  Column(
+    return Container(
+      color: Colors.amber.withOpacitySafe(0.6),
+      child: Column(
         children: [
           Column(
             children: [
@@ -147,20 +150,21 @@ class _PostListScreenState extends BaseConState<PostListScreen>
                     ),
           ),
         ],
-      // floatingActionButton: FloatingActionButton(
-      //   heroTag: 'fab_tab1',
-      //   onPressed: () {
-      //     final state = ref.read(authViewModelProvider);
-      //     if (state.isLoggedIn == true) {
-      //       // context.push('/postAdd');
-      //       context.pushNamed(AppRoutesInfo.postAdd.name);
-      //     } else {
-      //       // context.push('/login');
-      //       context.pushNamed(AppRoutesInfo.login.name);
-      //     }
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
+        // floatingActionButton: FloatingActionButton(
+        //   heroTag: 'fab_tab1',
+        //   onPressed: () {
+        //     final state = ref.read(authViewModelProvider);
+        //     if (state.isLoggedIn == true) {
+        //       // context.push('/postAdd');
+        //       context.pushNamed(AppRoutesInfo.postAdd.name);
+        //     } else {
+        //       // context.push('/login');
+        //       context.pushNamed(AppRoutesInfo.login.name);
+        //     }
+        //   },
+        //   child: const Icon(Icons.add),
+        // ),
+      ),
     );
   }
 }

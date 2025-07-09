@@ -12,9 +12,9 @@ import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
 class HomeTab extends ConsumerStatefulWidget {
-  final ScrollController mainNavScrollController;
+  final ScrollController? mainNavScrollController;
 
-  const HomeTab({super.key, required this.mainNavScrollController});
+  const HomeTab({super.key, this.mainNavScrollController});
 
   @override
   ConsumerState<HomeTab> createState() => _HomeTabState();
@@ -47,104 +47,85 @@ class _HomeTabState extends BaseConState<HomeTab> {
     // final postFromJson = TestUsual.fromJson(json);
     // QcLog.d('postFromJson ===== ${postFromJson.toJson()}');
 
-    return   Stack(
-        children: [
-          // 배경 이미지
-          Positioned.fill(
-            child: Image.network(
-              'https://picsum.photos/1080/1920',
-              fit: BoxFit.cover,
-            ),
+    return Stack(
+      children: [
+        // 배경 이미지
+        Positioned.fill(child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover)),
+
+        SingleChildScrollView(
+          controller: widget.mainNavScrollController,
+          child: Column(
+            children: [
+              ///
+              ///
+              ///
+              ItemTitle('context Go & Push'),
+              RouterMoveItem('go(/home/detail)', () {
+                // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
+                //     context.pushNamed('details', pathParameters: {'id': '123'});
+                context.go('/home/detail');
+              }),
+
+              RouterMoveItem('go(/detail)', () {
+                context.go('/detail');
+              }, isError: true),
+
+              RouterMoveItem('push(/home/detail)', () {
+                context.push('/home/detail');
+              }),
+
+              RouterMoveItem('push(/detail)', () {
+                context.push('/detail');
+              }, isError: true),
+
+              RouterMoveItem('go(/home/homeCard)', () {
+                // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
+                //     context.pushNamed('details', pathParameters: {'id': '123'});
+                context.go('/home/homeCard');
+              }),
+              RouterMoveItem('push(/home/homeCard)', () {
+                context.push('/home/homeCard');
+              }),
+
+              ItemTitle('Setting go & push'),
+
+              /// 스택 리셋 back 불가
+              RouterMoveItem('go(/setting) 스택 리셋', () {
+                context.go(AppRoutesInfo.setting.path);
+              }),
+
+              /// 스택 리셋 back 불가
+              RouterMoveItem('goNamed(/setting) 스택 리셋', () {
+                context.goNamed(AppRoutesInfo.setting.name);
+              }),
+
+              /// 스택 추가 back 가능
+              RouterMoveItem('push(/setting) 스택 추가', () {
+                context.push(AppRoutesInfo.setting.path);
+              }),
+
+              /// 스택 추가 back 가능
+              RouterMoveItem('pushNamed(/setting) 스택 추가', () {
+                context.pushNamed(AppRoutesInfo.setting.name);
+              }),
+
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+              RouterMoveItem('=====', () {}),
+            ],
           ),
-
-          SingleChildScrollView(
-            controller: widget.mainNavScrollController,
-            child: Column(
-              children: [
-                ///
-                ///
-                ///
-                ItemTitle('context Go & Push'),
-                RouterMoveItem('go(/home/detail)', () {
-                  // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
-                  //     context.pushNamed('details', pathParameters: {'id': '123'});
-                  context.go('/home/detail');
-                }),
-
-                RouterMoveItem('go(/detail)', () {
-                  context.go('/detail');
-                }, isError: true),
-
-                RouterMoveItem('push(/home/detail)', () {
-                  context.push('/home/detail');
-                }),
-
-                RouterMoveItem('push(/detail)', () {
-                  context.push('/detail');
-                }, isError: true),
-
-                RouterMoveItem('go(/home/homeCard)', () {
-                  // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
-                  //     context.pushNamed('details', pathParameters: {'id': '123'});
-                  context.go('/home/homeCard');
-                }),
-                RouterMoveItem('push(/home/homeCard)', () {
-                  context.push('/home/homeCard');
-                }),
-
-                ItemTitle('Setting go & push'),
-
-                /// 스택 리셋 back 불가
-                RouterMoveItem('go(/setting) 스택 리셋', () {
-                  context.go(AppRoutesInfo.setting.path);
-                }),
-
-                /// 스택 리셋 back 불가
-                RouterMoveItem('goNamed(/setting) 스택 리셋', () {
-                  context.goNamed(AppRoutesInfo.setting.name);
-                }),
-
-                /// 스택 추가 back 가능
-                RouterMoveItem('push(/setting) 스택 추가', () {
-                  context.push(AppRoutesInfo.setting.path);
-                }),
-
-                /// 스택 추가 back 가능
-                RouterMoveItem('pushNamed(/setting) 스택 추가', () {
-                  context.pushNamed(AppRoutesInfo.setting.name);
-                }),
-
-
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-                RouterMoveItem('=====', () {
-                }),
-              ],
-            ),
-          ),
-        ],
+        ),
+      ],
 
       // floatingActionButton: FloatingActionButton(
       //   heroTag: 'edgeToEdge',
@@ -173,9 +154,5 @@ class _HomeTabState extends BaseConState<HomeTab> {
       //   child: const Icon(Icons.add),
       // ),
     );
-
-
-
-
   }
 }

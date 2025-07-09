@@ -116,15 +116,15 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
     QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
 
     // 실제 시스템 바 영역 (상태바, 내비게이션바)
-    final viewPadding = MediaQuery.of(context).viewPadding;
-    // 키보드 등으로 인해 “가려지는 영역”
-    final viewInsets = MediaQuery.of(context).viewInsets;
-    // viewPadding === EdgeInsets(0.0, 28.6, 0.0, 48.0) , viewInsets === EdgeInsets.zero
-    QcLog.d(' viewPadding === $viewPadding , viewInsets == $viewInsets');
-
-    var appThemeMode = ref.watch(appThemeModeProvider);
-    QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "☀🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
-    isDark = appThemeMode == ThemeMode.dark;
+    // final viewPadding = MediaQuery.of(context).viewPadding;
+    // // 키보드 등으로 인해 “가려지는 영역”
+    // final viewInsets = MediaQuery.of(context).viewInsets;
+    // // viewPadding === EdgeInsets(0.0, 28.6, 0.0, 48.0) , viewInsets === EdgeInsets.zero
+    // QcLog.d(' viewPadding === $viewPadding , viewInsets == $viewInsets');
+    //
+    // var appThemeMode = ref.watch(appThemeModeProvider);
+    // QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "☀🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
+    // isDark = appThemeMode == ThemeMode.dark;
 
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification onNotification) {

@@ -27,7 +27,7 @@ final List<GoRoute> homeTabRoutes = [
       final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabHome.tabIndex]; // 게시글 탭 인덱스
 
       return NoTransitionPage(
-        child: HomeTab(mainNavScrollController: controller!),
+        child: HomeTab(mainNavScrollController: controller),
       );
     },
     routes: [
