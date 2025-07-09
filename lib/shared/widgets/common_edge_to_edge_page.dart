@@ -153,13 +153,16 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
               bottom: widget.safeAreaBottom ?? false,
               child: widget.child,
             ),
+
             Container(
               margin: EdgeInsets.only(top: widget.appBar != null ? statusBarHeight : 0),
               height: widget.appBar != null ? kToolbarHeight : 0,
               child: widget.appBar,
             ),
+
             /// appBar 유무에 따라 높이 달라짐
-            if (Platform.isIOS || widget.isBlur == true)   BlurOverlay(isStatusDark: widget.isStatusDark,),
+            if (Platform.isIOS || widget.isBlur == true)
+              BlurOverlay(isStatusDark: widget.isStatusDark),
 
             if (Platform.isAndroid && widget.isBlur == true)
               // Blur Navigation Bar

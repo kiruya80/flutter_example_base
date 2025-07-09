@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,6 +7,7 @@ import '../../../app/routes/app_routes_info.dart';
 import '../../../core/utils/common_utils.dart';
 import '../../../core/utils/print_log.dart';
 import '../../../shared/state/base_con_state.dart';
+import '../../../shared/widgets/edge_custom_scrollview.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
@@ -47,11 +47,17 @@ class _HomeTabState extends BaseConState<HomeTab> {
     // final postFromJson = TestUsual.fromJson(json);
     // QcLog.d('postFromJson ===== ${postFromJson.toJson()}');
 
+    return EdgeCustomScrollview(
+      content: _content(),
+      backgroundColor: Colors.deepOrange.withOpacitySafe(0.2),
+      isRefresh: false,
+      //   isMoreDataScroll: MoreDataScroll.HAS,
+    );
+  }
+
+  _content() {
     return Stack(
       children: [
-        // 배경 이미지
-        Positioned.fill(child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover)),
-
         SingleChildScrollView(
           controller: widget.mainNavScrollController,
           child: Column(
