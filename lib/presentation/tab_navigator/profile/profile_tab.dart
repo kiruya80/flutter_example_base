@@ -63,6 +63,9 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
         ItemTitle('앱 테마 : ${isDark == true ? "🌙 다크 모드" : "☀️ 라이트 모드"}'),
 
         RouterMoveItem('테마 변경', () {
+          QcLog.d('테마변경 === ');
+          // final appThemeMode = ref.read(appThemeModeProvider);
+          // isDark = appThemeMode == ThemeMode.dark;
           ref.read(appThemeModeProvider.notifier).state =
               (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
         }),
@@ -130,6 +133,19 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
             queryParameters: {'type': EdgeToEdgeType.iosCupertino.name, 'isAppbar': 'true'},
           );
         }),
+
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
+        RouterMoveItem('=====', () {}),
       ],
     );
   }

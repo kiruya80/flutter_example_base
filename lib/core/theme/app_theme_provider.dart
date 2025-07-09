@@ -8,4 +8,4 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// ref.read(appThemeModeProvider.notifier).state
 ///   = (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
 ///
-final appThemeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.light);
+final appThemeModeProvider = StateProvider<ThemeMode?>((ref) => null);

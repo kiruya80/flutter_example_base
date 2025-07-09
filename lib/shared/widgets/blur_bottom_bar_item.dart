@@ -138,7 +138,7 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
           duration: const Duration(milliseconds: 250),
           padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
-            color: widget.selected ? Colors.white.withOpacity(0.1) : Colors.transparent,
+            color: widget.selected ? Colors.white.withOpacitySafe(0.1) : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(

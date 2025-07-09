@@ -22,13 +22,15 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
 class BlurOverlay extends StatelessWidget {
   final Color? backgroundColor;
   final double? height;
-  final bool? isStatusDark;
+  final bool? isDark;
+  final bool? isBottom;
 
   const BlurOverlay({
     super.key,
     this.backgroundColor,
     this.height, // 상태바 + 상단 일부
-    this.isStatusDark = false,
+    this.isDark = false,
+    this.isBottom = false,
   });
 
   @override
@@ -39,7 +41,7 @@ class BlurOverlay extends StatelessWidget {
     // CommonEdgeToEdgePage 그릴때, 앱바가 있고 없고에 따라 달라짐
     // 28.571428571428573
     // 84.57142857142857
-    QcLog.d('statusBarHeight === $statusBarHeight');
+    QcLog.d('isDark, statusBarHeight === $isDark , $statusBarHeight');
 
     ///
     ///  •	sigmaX: 5, sigmaY: 5 → 살짝 흐려진 유리창 느낌
@@ -48,14 +50,18 @@ class BlurOverlay extends StatelessWidget {
     ///
     return ClipRect(
       child: BackdropFilter(
-        // filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        // filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         // filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: Container(
           height: height ?? statusBarHeight,
           // 반투명 오버레이
-          color: isStatusDark == true ? Colors.black.withOpacitySafe(0.2) : Colors.white.withOpacitySafe(0.2),
-          // color:  Colors.white.withOpacitySafe(0.1),
+          color:
+              isDark == true
+                  ? Colors.black.withOpacitySafe(0.2)
+                  : isBottom == true
+                  ? Colors.white.withOpacitySafe(0.5)
+                  : Colors.white.withOpacitySafe(0.2),
         ),
       ),
     );

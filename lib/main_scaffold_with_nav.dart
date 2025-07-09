@@ -1,11 +1,8 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
-import 'package:flutter_example_base/presentation/dialog/dialog_queue_listener.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/home/home_tab.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/post/post_list_screen.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/profile/profile_tab.dart';
@@ -13,14 +10,10 @@ import 'package:flutter_example_base/presentation/tab_navigator/search/search_ta
 import 'package:flutter_example_base/shared/entities/nav_item.dart';
 import 'package:flutter_example_base/shared/widgets/blur_bottom_bar_item.dart';
 import 'package:flutter_example_base/shared/widgets/common_edge_to_edge_page.dart';
-import 'package:flutter_example_base/shared/widgets/common_pop_scope_widget.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'app/routes/app_router.dart';
 import 'app/routes/app_routes_info.dart';
-import 'core/theme/app_theme_provider.dart';
 import 'core/utils/print_log.dart';
 
 /// 바텀네비게이터
@@ -35,6 +28,8 @@ class MainScaffoldWithNav extends StatefulWidget {
 
 class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     with SingleTickerProviderStateMixin {
+  late final AnimationController _bottomBarAnimationController;
+
   final Map<int, ScrollController> controllers = {
     AppRoutesInfo.tabHome.tabIndex ?? 0: ScrollController(),
     AppRoutesInfo.tabPosts.tabIndex ?? 1: ScrollController(),
@@ -110,8 +105,6 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     }
     super.dispose();
   }
-
-  late final AnimationController _bottomBarAnimationController;
 
   @override
   void initState() {
@@ -288,7 +281,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
 
   /// blur 처리된 바텀네이게이션
   ///
-  Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Ripple}) {
+  Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Scale}) {
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),

@@ -8,6 +8,7 @@ import 'my_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   /// 전체 화면 (edge-to-edge) 사용
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
@@ -24,12 +25,14 @@ void main() async {
   ///
   /// iOS에서는 statusBarColor는 완전히 무시
   ///
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    systemNavigationBarColor: Colors.transparent,
-    systemNavigationBarIconBrightness: Brightness.dark,
-    statusBarIconBrightness: Brightness.dark,
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   SystemUiOverlayStyle(
+  //     statusBarColor: Colors.transparent,
+  //     systemNavigationBarColor: Colors.transparent,
+  //     systemNavigationBarIconBrightness: Brightness.dark,
+  //     statusBarIconBrightness: Brightness.dark,
+  //   ),
+  // );
 
   /// 앱 전체에서 사용할 SharedPreferences 인스턴스를 딱 한 번 생성해서,
   /// 모든 곳에서 동일하게 접근할 수 있도록 하기 위해서입니다.
@@ -37,7 +40,6 @@ void main() async {
   // 	•	Provider는 동기적으로 생성되어야 하기 때문에 비동기 호출을 넣으면 안 됩니다.
   // 	•	따라서 비동기 초기화가 가능한 main()에서만 처리할 수 있습니다.
   final prefs = await SharedPreferences.getInstance();
-
 
   runApp(
     ProviderScope(

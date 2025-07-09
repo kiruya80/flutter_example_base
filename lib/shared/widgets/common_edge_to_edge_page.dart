@@ -122,14 +122,14 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
     // // viewPadding === EdgeInsets(0.0, 28.6, 0.0, 48.0) , viewInsets === EdgeInsets.zero
     // QcLog.d(' viewPadding === $viewPadding , viewInsets == $viewInsets');
     //
-    // var appThemeMode = ref.watch(appThemeModeProvider);
-    // QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "☀🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
-    // isDark = appThemeMode == ThemeMode.dark;
+    var appThemeMode = ref.watch(appThemeModeProvider);
+    QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "☀🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
+    isDark = appThemeMode == ThemeMode.dark;
 
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification onNotification) {
         //스크롤 시 이 부분에서 이벤트가 발생한다.
-        _onNotification(onNotification);
+        // _onNotification(onNotification);
         return false; // 이벤트 계속 전달
       },
 
@@ -161,12 +161,14 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
             ),
 
             /// appBar 유무에 따라 높이 달라짐
-            if (Platform.isIOS || widget.isBlur == true)
-              BlurOverlay(isStatusDark: widget.isStatusDark),
+            if (Platform.isIOS || widget.isBlur == true) BlurOverlay(isDark: isDark),
 
+            // Blur Navigation Bar
             if (Platform.isAndroid && widget.isBlur == true)
-              // Blur Navigation Bar
-              Align(alignment: Alignment.bottomCenter, child: BlurOverlay(height: bottomInset)),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: BlurOverlay(height: bottomInset, isDark: isDark, isBottom: true,),
+              ),
           ],
         ),
       ),

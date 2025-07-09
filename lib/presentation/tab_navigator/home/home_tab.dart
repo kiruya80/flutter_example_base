@@ -21,7 +21,7 @@ class HomeTab extends ConsumerStatefulWidget {
 }
 
 class _HomeTabState extends BaseConState<HomeTab> {
-  late void Function() _cancelLoadingListener;
+  // late void Function() _cancelLoadingListener;
 
   @override
   void initState() {
