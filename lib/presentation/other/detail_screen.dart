@@ -33,10 +33,7 @@ class _DetailScreenState extends BaseConState<DetailScreen> {
     if (isThisPageVisible == false) {
       return;
     }
-    showDialog(
-      context: context,
-      builder: (_) => const AlertDialog(content: Text('데이터 도착')),
-    );
+    showDialog(context: context, builder: (_) => const AlertDialog(content: Text('데이터 도착')));
   }
 
   @override
@@ -53,9 +50,7 @@ class _DetailScreenState extends BaseConState<DetailScreen> {
       body: Center(
         child: Column(
           children: [
-            Text(
-              'id: ${widget.id} , queryStr query : ${widget.query} ,  title : ${widget.title}',
-            ),
+            Text('id: ${widget.id} , queryStr query : ${widget.query} ,  title : ${widget.title}'),
             ElevatedButton(
               onPressed: () {
                 if (context.canPop()) {

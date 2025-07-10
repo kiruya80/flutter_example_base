@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_example_base/core/extensions/color_extensions.dart';
-import 'package:flutter_example_base/core/utils/print_log.dart';
 
 /**
     ImageFilter.blur(sigmaX: 0, sigmaY: 0)
@@ -22,26 +20,21 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
 class BlurOverlay extends StatelessWidget {
   final Color? backgroundColor;
   final double? height;
-  final bool? isDark;
-  final bool? isBottom;
 
   const BlurOverlay({
     super.key,
     this.backgroundColor,
     this.height, // 상태바 + 상단 일부
-    this.isDark = false,
-    this.isBottom = false,
   });
 
   @override
   Widget build(BuildContext context) {
     // final backgroundColor = Theme.of(context).colorScheme.surface;
-    final statusBarHeight = MediaQuery.of(context).padding.top;
 
+    // final statusBarHeight = MediaQuery.of(context).padding.top;
     // CommonEdgeToEdgePage 그릴때, 앱바가 있고 없고에 따라 달라짐
     // 28.571428571428573
     // 84.57142857142857
-    QcLog.d('isDark, statusBarHeight === $isDark , $statusBarHeight');
 
     ///
     ///  •	sigmaX: 5, sigmaY: 5 → 살짝 흐려진 유리창 느낌
@@ -54,14 +47,14 @@ class BlurOverlay extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         // filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: Container(
-          height: height ?? statusBarHeight,
+          height: height,
           // 반투명 오버레이
-          color:
-              isDark == true
-                  ? Colors.black.withOpacitySafe(0.2)
-                  : isBottom == true
-                  ? Colors.white.withOpacitySafe(0.5)
-                  : Colors.white.withOpacitySafe(0.2),
+          color: backgroundColor ?? Colors.transparent,
+          // isDark == true
+          //     ? Colors.black.withOpacitySafe(0.2)
+          //     : isBottom == true
+          //     ? Colors.white.withOpacitySafe(0.5)
+          //     : Colors.white.withOpacitySafe(0.2),
         ),
       ),
     );

@@ -12,9 +12,8 @@ _TestPerson _$TestPersonFromJson(Map<String, dynamic> json) => _TestPerson(
   age: (json['age'] as num).toInt(),
 );
 
-Map<String, dynamic> _$TestPersonToJson(_TestPerson instance) =>
-    <String, dynamic>{
-      'firstName': instance.firstName,
-      'lastName': instance.lastName,
-      'age': instance.age,
-    };
+Map<String, dynamic> _$TestPersonToJson(_TestPerson instance) => <String, dynamic>{
+  'firstName': instance.firstName,
+  'lastName': instance.lastName,
+  'age': instance.age,
+};

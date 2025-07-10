@@ -49,9 +49,7 @@ class _LoginPageState extends BaseConState<LoginPage>
       return;
     }
 
-    final success = await ref
-        .read(authViewModelProvider.notifier)
-        .loginUser(userId);
+    final success = await ref.read(authViewModelProvider.notifier).loginUser(userId);
     if (!mounted) return;
 
     if (success) {
@@ -67,9 +65,9 @@ class _LoginPageState extends BaseConState<LoginPage>
   }
 
   void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.red),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
   }
 
   @override
@@ -92,10 +90,7 @@ class _LoginPageState extends BaseConState<LoginPage>
             const SizedBox(height: 16),
             state.isLoading == true
                 ? Container()
-                : ElevatedButton(
-                  onPressed: _onLoginPressed,
-                  child: const Text('로그인'),
-                ),
+                : ElevatedButton(onPressed: _onLoginPressed, child: const Text('로그인')),
           ],
         ),
       ),

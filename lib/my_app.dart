@@ -109,22 +109,22 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
         // scaffoldBackgroundColor: Colors.white,
         // platform: TargetPlatform.iOS, // 👈 전체를 iOS 스타일로
-        // colorScheme: ColorScheme.fromSeed(
-        //   seedColor: Color(0xff4c662b),
-        //   brightness: Brightness.light,
-        // ),
-        colorScheme: MaterialTheme.lightScheme()
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xff4c662b),
+          brightness: Brightness.light,
+        ),
+        // colorScheme: MaterialTheme.lightScheme()
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         // brightness: Brightness.dark,
         // scaffoldBackgroundColor: Colors.black,
         // platform: TargetPlatform.iOS, // 👈 전체를 iOS 스타일로
-        // colorScheme: ColorScheme.fromSeed(
-        //   seedColor: Color(0xffb1d18a),
-        //   brightness: Brightness.dark,
-        // ),
-          colorScheme: MaterialTheme.darkScheme()
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xffb1d18a),
+          brightness: Brightness.dark,
+        ),
+        // colorScheme: MaterialTheme.darkScheme()
       ),
 
       builder: (context, child) {

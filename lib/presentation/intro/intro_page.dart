@@ -39,11 +39,7 @@ class _IntroPageState extends BaseConState<IntroPage> {
       body: Center(
         child: Text(
           'MyApp',
-          style: TextStyle(
-            fontSize: 36,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
     );

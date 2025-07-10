@@ -17,6 +17,10 @@ import 'my_sliver_persistent_header_delegate.dart';
 /// 안드로이드
 /// https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ko
 ///
+/// 기본 엣지페이지
+/// ㄴ상태바 및 백키쪽 블러처리됨
+///
+///
 /// 앱바 고정된 경우, 앱바를 접는다
 /// 상단 앱 바가 고정되지 않은 경우 일치하는 배경 색상 그라데이션을 추가합니다.
 ///
@@ -26,7 +30,7 @@ import 'my_sliver_persistent_header_delegate.dart';
 /// 2. 블러 on 인 경우 & 앱바 있는 경우
 /// ㄴ
 ///
-class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
+class CommonDefaultEdgePage extends ConsumerStatefulWidget {
   final Widget child;
   final Widget? background;
   final Widget? appBar;
@@ -53,7 +57,7 @@ class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
   final Widget? bottomSheet;
   final Widget? bottomNavigationBar;
 
-  const CommonEdgeToEdgePage({
+  const CommonDefaultEdgePage({
     super.key,
     required this.child,
     this.background,
@@ -79,10 +83,10 @@ class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<CommonEdgeToEdgePage> createState() => _CommonEdgeToEdgePageState();
+  ConsumerState<CommonDefaultEdgePage> createState() => _CommonDefaultEdgePageState();
 }
 
-class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
+class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   bool? isScroll = false;
   bool? isDark = false;
 
@@ -95,7 +99,7 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
     );
     isScroll = false;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _setSystemUiOverlayStyle();
+      // _setSystemUiOverlayStyle();
     });
   }
 
@@ -156,19 +160,18 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
 
             Container(
               margin: EdgeInsets.only(top: widget.appBar != null ? statusBarHeight : 0),
-              height: widget.appBar != null ? kToolbarHeight : 0,
+              // height: widget.appBar != null ? kToolbarHeight : 0,
+              color: Colors.deepPurple,
+              height: kToolbarHeight,
               child: widget.appBar,
             ),
 
-            /// appBar 유무에 따라 높이 달라짐
-            if (Platform.isIOS || widget.isBlur == true) BlurOverlay(isDark: isDark),
+            /// 블러 appBar 유무에 따라 높이 달라짐
+            if (Platform.isIOS || widget.isBlur == true) BlurOverlay(height: statusBarHeight),
 
-            // Blur Navigation Bar
+            /// 블러  Navigation Bar
             if (Platform.isAndroid && widget.isBlur == true)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: BlurOverlay(height: bottomInset, isDark: isDark, isBottom: true,),
-              ),
+              Align(alignment: Alignment.bottomCenter, child: BlurOverlay(height: bottomInset)),
           ],
         ),
       ),
@@ -236,7 +239,11 @@ class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
     }
   }
 
+  ///
+  /// 상태바 및 백키영역
+  ///
   void _setSystemUiOverlayStyle({
+    ThemeMode? themeMode,
     Color? statusBarColor,
     Color? systemNavigationBarColor,
     Color? systemNavigationBarDividerColor,

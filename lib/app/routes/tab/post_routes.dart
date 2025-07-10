@@ -15,11 +15,10 @@ final List<GoRoute> postTabRoutes = [
     // pageBuilder: (context, state) => NoTransitionPage(child: PostListScreen()),
     pageBuilder: (context, state) {
       final mainScaffoldState = context.findAncestorStateOfType<MainScaffoldWithNavState>();
-      final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabPosts.tabIndex]; // 게시글 탭 인덱스
+      final controller =
+          mainScaffoldState?.controllers[AppRoutesInfo.tabPosts.tabIndex]; // 게시글 탭 인덱스
 
-      return NoTransitionPage(
-        child: PostListScreen(mainNavScrollController: controller),
-      );
+      return NoTransitionPage(child: PostListScreen(mainNavScrollController: controller));
     },
     routes: [
       GoRoute(

@@ -28,12 +28,7 @@ class _AuthApi implements AuthApi {
     _data.addAll(body);
     final _options = _setStreamType<AuthModel>(
       Options(method: 'POST', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/posts',
-            queryParameters: queryParameters,
-            data: _data,
-          )
+          .compose(_dio.options, '/posts', queryParameters: queryParameters, data: _data)
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
@@ -55,12 +50,7 @@ class _AuthApi implements AuthApi {
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<void>(
       Options(method: 'POST', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/logout',
-            queryParameters: queryParameters,
-            data: _data,
-          )
+          .compose(_dio.options, '/logout', queryParameters: queryParameters, data: _data)
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     await _dio.fetch<void>(_options);

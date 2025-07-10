@@ -5,12 +5,7 @@ part 'post.g.dart';
 
 @freezed
 abstract class Post with _$Post {
-  const factory Post({
-    required int? id,
-    String? title,
-    String? body,
-    int? userId,
-  }) = _Post;
+  const factory Post({required int? id, String? title, String? body, int? userId}) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 }

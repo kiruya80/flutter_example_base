@@ -32,10 +32,7 @@ class _HomeCardScreenState extends BaseConState<HomeCardScreen> {
     // ✅ 안전하게 상태 업데이트
     if (!isThisPageVisible) return;
 
-    showDialog(
-      context: context,
-      builder: (_) => const AlertDialog(content: Text('데이터 도착')),
-    );
+    showDialog(context: context, builder: (_) => const AlertDialog(content: Text('데이터 도착')));
   }
 
   @override
@@ -52,9 +49,7 @@ class _HomeCardScreenState extends BaseConState<HomeCardScreen> {
       body: Center(
         child: Column(
           children: [
-            Text(
-              'id: ${widget.id} , queryStr query : ${widget.query} ,  title : ${widget.title}',
-            ),
+            Text('id: ${widget.id} , queryStr query : ${widget.query} ,  title : ${widget.title}'),
             ElevatedButton(
               onPressed: () {
                 if (context.canPop()) {

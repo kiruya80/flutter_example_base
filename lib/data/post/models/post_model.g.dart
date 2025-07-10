@@ -13,10 +13,9 @@ _PostModel _$PostModelFromJson(Map<String, dynamic> json) => _PostModel(
   userId: (json['userId'] as num?)?.toInt(),
 );
 
-Map<String, dynamic> _$PostModelToJson(_PostModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'body': instance.body,
-      'userId': instance.userId,
-    };
+Map<String, dynamic> _$PostModelToJson(_PostModel instance) => <String, dynamic>{
+  'id': instance.id,
+  'title': instance.title,
+  'body': instance.body,
+  'userId': instance.userId,
+};

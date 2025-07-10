@@ -28,10 +28,7 @@ import '../base/base_ui_status.dart';
 /// → DialogController.enqueue(dialogRequest) → DialogQueueListener 감지 → showDialog(...)
 ///
 // mixin LoadingListenerMixin<T>  {
-mixin LoadingListenerMixin<
-  T extends BaseUiStatus,
-  W extends ConsumerStatefulWidget
->
+mixin LoadingListenerMixin<T extends BaseUiStatus, W extends ConsumerStatefulWidget>
     on ConsumerState<W> {
   late ProviderSubscription<T> _subscription;
 

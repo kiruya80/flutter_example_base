@@ -8,10 +8,7 @@ import '../base/base_ui_status.dart';
 ///
 /// 1. mixin
 ///
-mixin ErrorListenerMixin<
-  T extends BaseUiStatus,
-  W extends ConsumerStatefulWidget
->
+mixin ErrorListenerMixin<T extends BaseUiStatus, W extends ConsumerStatefulWidget>
     on ConsumerState<W> {
   late ProviderSubscription<T> _subscription;
 
@@ -21,13 +18,9 @@ mixin ErrorListenerMixin<
         'ErrorListenerMixin listenManual ==== ${prev?.error} , ${next.error} / ${next.isLoading} ',
       );
       if (next.error != null) {
-        DialogController(ref).enqueue(
-          DialogRequest(
-            type: DialogType.error,
-            title: "에러",
-            message: next.error!.message,
-          ),
-        );
+        DialogController(
+          ref,
+        ).enqueue(DialogRequest(type: DialogType.error, title: "에러", message: next.error!.message));
       }
     });
   }

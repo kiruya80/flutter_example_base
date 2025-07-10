@@ -42,18 +42,7 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
         child: _getMoveEdgeToEdge(),
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      isRefresh: false,
       //   isMoreDataScroll: MoreDataScroll.HAS,
-    );
-  }
-
-  _content() {
-    return Container(
-      color: Colors.deepPurple.withOpacitySafe(0.6),
-      child: SingleChildScrollView(
-        controller: widget.mainNavScrollController,
-        child: _getMoveEdgeToEdge(),
-      ),
     );
   }
 
@@ -78,6 +67,7 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
           );
         }),
 
+        RouterMoveItem('=====', () {}),
         RouterMoveItem('edgeToEdge Common', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
@@ -94,6 +84,7 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
           );
         }),
 
+        RouterMoveItem('=====', () {}),
         RouterMoveItem('edgeToEdge Refresh', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
@@ -102,6 +93,7 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
           );
         }),
 
+        RouterMoveItem('=====', () {}),
         RouterMoveItem('edgeToEdge CommonRefresh', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
@@ -110,6 +102,7 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
           );
         }),
 
+        RouterMoveItem('=====', () {}),
         RouterMoveItem('CustomScrollView', () {
           context.pushNamed(
             AppRoutesInfo.edgeToEdge.name,
@@ -126,13 +119,13 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
           );
         }),
 
-        RouterMoveItem('edgeToEdge iosCupertino', () {
-          context.pushNamed(
-            AppRoutesInfo.edgeToEdge.name,
-            pathParameters: {'id': 'id_123'},
-            queryParameters: {'type': EdgeToEdgeType.iosCupertino.name, 'isAppbar': 'true'},
-          );
-        }),
+        // RouterMoveItem('edgeToEdge iosCupertino', () {
+        //   context.pushNamed(
+        //     AppRoutesInfo.edgeToEdge.name,
+        //     pathParameters: {'id': 'id_123'},
+        //     queryParameters: {'type': EdgeToEdgeType.iosCupertino.name, 'isAppbar': 'true'},
+        //   );
+        // }),
 
         RouterMoveItem('=====', () {}),
         RouterMoveItem('=====', () {}),

@@ -23,6 +23,7 @@ class HomeTab extends ConsumerStatefulWidget {
 
 class _HomeTabState extends BaseConState<HomeTab> {
   bool? isDark;
+
   // late void Function() _cancelLoadingListener;
 
   @override
@@ -54,98 +55,92 @@ class _HomeTabState extends BaseConState<HomeTab> {
     return EdgeCustomScrollview(
       content: _content(),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      isRefresh: false,
       //   isMoreDataScroll: MoreDataScroll.HAS,
     );
   }
 
   _content() {
-    return Stack(
-      children: [
-        SingleChildScrollView(
-          controller: widget.mainNavScrollController,
-          child: Column(
-            children: [
-              ///
-              ///
-              ///
-              ItemTitle('context Go & Push'),
+    return SingleChildScrollView(
+      controller: widget.mainNavScrollController,
+      child: Column(
+        children: [
+          ///
+          ///
+          ///
+          ItemTitle('context Go & Push'),
 
-              RouterMoveItem('테마 변경', () {
-                QcLog.d('테마변경 === ');
-                // final appThemeMode = ref.read(appThemeModeProvider);
-                // isDark = appThemeMode == ThemeMode.dark;
-                ref.read(appThemeModeProvider.notifier).state =
+          RouterMoveItem('테마 변경', () {
+            QcLog.d('테마변경 === ');
+            // final appThemeMode = ref.read(appThemeModeProvider);
+            // isDark = appThemeMode == ThemeMode.dark;
+            ref.read(appThemeModeProvider.notifier).state =
                 (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
-              }),
+          }),
 
+          RouterMoveItem('go(/home/detail)', () {
+            // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
+            //     context.pushNamed('details', pathParameters: {'id': '123'});
+            context.go('/home/detail');
+          }),
 
-              RouterMoveItem('go(/home/detail)', () {
-                // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
-                //     context.pushNamed('details', pathParameters: {'id': '123'});
-                context.go('/home/detail');
-              }),
+          RouterMoveItem('go(/detail)', () {
+            context.go('/detail');
+          }, isError: true),
 
-              RouterMoveItem('go(/detail)', () {
-                context.go('/detail');
-              }, isError: true),
+          RouterMoveItem('push(/home/detail)', () {
+            context.push('/home/detail');
+          }),
 
-              RouterMoveItem('push(/home/detail)', () {
-                context.push('/home/detail');
-              }),
+          RouterMoveItem('push(/detail)', () {
+            context.push('/detail');
+          }, isError: true),
 
-              RouterMoveItem('push(/detail)', () {
-                context.push('/detail');
-              }, isError: true),
+          RouterMoveItem('go(/home/homeCard)', () {
+            // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
+            //     context.pushNamed('details', pathParameters: {'id': '123'});
+            context.go('/home/homeCard');
+          }),
+          RouterMoveItem('push(/home/homeCard)', () {
+            context.push('/home/homeCard');
+          }),
 
-              RouterMoveItem('go(/home/homeCard)', () {
-                // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
-                //     context.pushNamed('details', pathParameters: {'id': '123'});
-                context.go('/home/homeCard');
-              }),
-              RouterMoveItem('push(/home/homeCard)', () {
-                context.push('/home/homeCard');
-              }),
+          ItemTitle('Setting go & push'),
 
-              ItemTitle('Setting go & push'),
+          /// 스택 리셋 back 불가
+          RouterMoveItem('go(/setting) 스택 리셋', () {
+            context.go(AppRoutesInfo.setting.path);
+          }),
 
-              /// 스택 리셋 back 불가
-              RouterMoveItem('go(/setting) 스택 리셋', () {
-                context.go(AppRoutesInfo.setting.path);
-              }),
+          /// 스택 리셋 back 불가
+          RouterMoveItem('goNamed(/setting) 스택 리셋', () {
+            context.goNamed(AppRoutesInfo.setting.name);
+          }),
 
-              /// 스택 리셋 back 불가
-              RouterMoveItem('goNamed(/setting) 스택 리셋', () {
-                context.goNamed(AppRoutesInfo.setting.name);
-              }),
+          /// 스택 추가 back 가능
+          RouterMoveItem('push(/setting) 스택 추가', () {
+            context.push(AppRoutesInfo.setting.path);
+          }),
 
-              /// 스택 추가 back 가능
-              RouterMoveItem('push(/setting) 스택 추가', () {
-                context.push(AppRoutesInfo.setting.path);
-              }),
+          /// 스택 추가 back 가능
+          RouterMoveItem('pushNamed(/setting) 스택 추가', () {
+            context.pushNamed(AppRoutesInfo.setting.name);
+          }),
 
-              /// 스택 추가 back 가능
-              RouterMoveItem('pushNamed(/setting) 스택 추가', () {
-                context.pushNamed(AppRoutesInfo.setting.name);
-              }),
-
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-              RouterMoveItem('=====', () {}),
-            ],
-          ),
-        ),
-      ],
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+        ],
+      ),
 
       // floatingActionButton: FloatingActionButton(
       //   heroTag: 'edgeToEdge',

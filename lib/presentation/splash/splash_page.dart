@@ -37,11 +37,13 @@ class _SplashPageState extends BaseConState<SplashPage> {
   }
 
   void _setSystemUiOverlayStyle() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent, // 네비게이션 바 색상 설정
-      // systemNavigationBarDividerColor: Colors.red, // 네비게이션 바 구분선 색상 설정
-      // statusBarColor: Colors.green, // 상태 바 색상 설정
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent, // 네비게이션 바 색상 설정
+        // systemNavigationBarDividerColor: Colors.red, // 네비게이션 바 구분선 색상 설정
+        // statusBarColor: Colors.green, // 상태 바 색상 설정
+      ),
+    );
   }
 
   @override
@@ -52,16 +54,9 @@ class _SplashPageState extends BaseConState<SplashPage> {
       appBar: AppBar(title: Text('SplashPage')),
       backgroundColor: Colors.white,
       body: Container(
-          color: Colors.blue,
-        child: Center(
-          child: Column(
-            children: [
-              CircularProgressIndicator(),
-            ],
-          ),
-        ),
+        color: Colors.blue,
+        child: Center(child: Column(children: [CircularProgressIndicator()])),
       ),
     );
   }
-
 }

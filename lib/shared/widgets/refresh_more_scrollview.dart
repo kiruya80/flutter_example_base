@@ -88,6 +88,7 @@ import '../../core/constants/app_constants.dart';
 //         ),
 //
 class RefreshMoreScrollview extends StatefulWidget {
+  final bool? isPhysics;
   /// 리프래시 사용하는 위젯여부
   final bool? isRefresh;
   final int? itemCount;
@@ -122,6 +123,7 @@ class RefreshMoreScrollview extends StatefulWidget {
 
   const RefreshMoreScrollview({
     super.key,
+    this.isPhysics = true,
     this.isRefresh = true,
     this.itemCount = 0,
     this.isMoreDataScroll = MoreDataScroll.NONE,
@@ -194,7 +196,7 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
       child: CustomScrollView(
         // controller: pagingScrollController,
         physics:
-            widget.isRefresh == true
+            widget.isPhysics == true
                 ? const AlwaysScrollableScrollPhysics(
                   parent: BouncingScrollPhysics(), //ios 기본
                 )

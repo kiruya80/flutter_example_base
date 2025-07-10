@@ -8,10 +8,9 @@ import '../../domain/common/entities/dialog_request.dart';
 //   (ref) => DialogQueueManager(),
 // );
 
-final dialogQueueProvider =
-    StateNotifierProvider<DialogQueueNotifier, Queue<DialogRequest>>(
-      (ref) => DialogQueueNotifier(),
-    );
+final dialogQueueProvider = StateNotifierProvider<DialogQueueNotifier, Queue<DialogRequest>>(
+  (ref) => DialogQueueNotifier(),
+);
 
 ///
 /// 일반 다이얼로그 큐 (FIFO)

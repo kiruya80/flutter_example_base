@@ -12,9 +12,8 @@ _TestUsual _$TestUsualFromJson(Map<String, dynamic> json) => _TestUsual(
   content: json['content'] as String?,
 );
 
-Map<String, dynamic> _$TestUsualToJson(_TestUsual instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'isSelected': instance.isSelected,
-      'content': instance.content,
-    };
+Map<String, dynamic> _$TestUsualToJson(_TestUsual instance) => <String, dynamic>{
+  'id': instance.id,
+  'isSelected': instance.isSelected,
+  'content': instance.content,
+};

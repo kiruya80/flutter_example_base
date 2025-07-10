@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:go_router/go_router.dart';
 
-final RouteObserver<ModalRoute<void>> widgetRouteObserver =
-    RouteObserver<ModalRoute<void>>();
+final RouteObserver<ModalRoute<void>> widgetRouteObserver = RouteObserver<ModalRoute<void>>();
 
-abstract class BaseState<T extends StatefulWidget> extends State<T>
-    with RouteAware {
+abstract class BaseState<T extends StatefulWidget> extends State<T> with RouteAware {
   String _location = '';
   bool _didPop = false;
 
@@ -16,8 +14,7 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>
   String get currentLocation => _location;
 
   /// 현재 이 페이지가 화면에 보이는 상태인지
-  bool get isThisPageVisible =>
-      mounted && _didPop && ModalRoute.of(context)!.isCurrent;
+  bool get isThisPageVisible => mounted && _didPop && ModalRoute.of(context)!.isCurrent;
 
   /// 페이지 트리에 있는지만 확인 (화면에 보이는지 여부와는 무관)
   bool get isActivePage => mounted;

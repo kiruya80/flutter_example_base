@@ -23,6 +23,7 @@ abstract class RouteInfo with _$RouteInfo {
 
   factory RouteInfo.fromJson(Map<String, dynamic> json) => _$RouteInfoFromJson(json);
 }
+
 // class RouteInfo {
 //   final String name;
 //   final String path;

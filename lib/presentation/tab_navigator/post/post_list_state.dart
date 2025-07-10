@@ -17,12 +17,8 @@ abstract class PostListState with _$PostListState implements BaseUiStatus {
     RouteInfo? navigateTo,
   }) = _PostListState;
 
-  factory PostListState.initial() => const PostListState(
-    posts: [],
-    isLoading: false,
-    error: null,
-    navigateTo: null,
-  );
+  factory PostListState.initial() =>
+      const PostListState(posts: [], isLoading: false, error: null, navigateTo: null);
 
   factory PostListState.fromJson(Map<String, dynamic> json) => _$PostListStateFromJson(json);
 }

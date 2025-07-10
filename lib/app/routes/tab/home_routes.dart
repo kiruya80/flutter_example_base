@@ -24,11 +24,10 @@ final List<GoRoute> homeTabRoutes = [
     // pageBuilder: (context, state) => NoTransitionPage(child: HomeTab()),
     pageBuilder: (context, state) {
       final mainScaffoldState = context.findAncestorStateOfType<MainScaffoldWithNavState>();
-      final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabHome.tabIndex]; // 게시글 탭 인덱스
+      final controller =
+          mainScaffoldState?.controllers[AppRoutesInfo.tabHome.tabIndex]; // 게시글 탭 인덱스
 
-      return NoTransitionPage(
-        child: HomeTab(mainNavScrollController: controller),
-      );
+      return NoTransitionPage(child: HomeTab(mainNavScrollController: controller));
     },
     routes: [
       // GoRoute(
