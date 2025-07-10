@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import 'app/routes/app_router.dart';
 import 'core/theme/app_theme_provider.dart';
+import 'core/theme/theme.dart';
 import 'core/utils/print_log.dart';
 
 class MyApp extends ConsumerWidget {
@@ -46,7 +47,7 @@ class MyApp extends ConsumerWidget {
         // ✅ Android 네비게이션 아이콘 밝기 → light(white ison, 검은색 반투명 배경), dark(black icon, 흰색 반투명 배경)
         systemNavigationBarIconBrightness:
             themeMode == ThemeMode.light ? Brightness.dark : Brightness.light,
-          // systemNavigationBarIconBrightness:Brightness.dark,
+        // systemNavigationBarIconBrightness:Brightness.dark,
         // 자동 대비 조정 끄기 (Android 10+) false : 검은색,흰색 반투명 삭제
         systemNavigationBarContrastEnforced: false,
       ),
@@ -56,6 +57,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     QcLog.d('My App build');
+    FocusScope.of(context).unfocus();
 
     final deviceTheme = MediaQuery.of(context).platformBrightness;
     final themeMode = deviceTheme == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
@@ -101,16 +103,30 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: AppRouter.appRouter,
       title: 'Post App',
-      themeMode: appThemeMode,
-      // darkTheme: ThemeData.dark(),
+      themeMode: appThemeMode, // ThemeMode.system
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
+        // scaffoldBackgroundColor: Colors.white,
         // platform: TargetPlatform.iOS, // 👈 전체를 iOS 스타일로
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          // brightness: Brightness.dark,
-        ),
+        // colorScheme: ColorScheme.fromSeed(
+        //   seedColor: Color(0xff4c662b),
+        //   brightness: Brightness.light,
+        // ),
+        colorScheme: MaterialTheme.lightScheme()
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        // brightness: Brightness.dark,
+        // scaffoldBackgroundColor: Colors.black,
+        // platform: TargetPlatform.iOS, // 👈 전체를 iOS 스타일로
+        // colorScheme: ColorScheme.fromSeed(
+        //   seedColor: Color(0xffb1d18a),
+        //   brightness: Brightness.dark,
+        // ),
+          colorScheme: MaterialTheme.darkScheme()
+      ),
+
       builder: (context, child) {
         // 여기의 context는 아직 Navigator가 아닐 수 있으므로
         // 반드시 child 안쪽에서 사용해야 함

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/routes/app_routes_info.dart';
+import '../../../core/theme/app_theme_provider.dart';
 import '../../../core/utils/common_utils.dart';
 import '../../../core/utils/print_log.dart';
 import '../../../shared/state/base_con_state.dart';
@@ -21,6 +22,7 @@ class HomeTab extends ConsumerStatefulWidget {
 }
 
 class _HomeTabState extends BaseConState<HomeTab> {
+  bool? isDark;
   // late void Function() _cancelLoadingListener;
 
   @override
@@ -36,6 +38,8 @@ class _HomeTabState extends BaseConState<HomeTab> {
     QcLog.d('build ===== $isThisPageVisible');
     CommonUtils.isTablet(context);
 
+    final appThemeMode = ref.watch(appThemeModeProvider);
+    isDark = appThemeMode == ThemeMode.dark;
     // TestUsual mTestUsual2 = TestUsual(id: '112233', isSelected: false);
     // TestUsual mTestUsual = TestUsual(id: '232323', isSelected: false, content: 'ccccc');
     // QcLog.d('mTestUsual ===== ${mTestUsual.toString()}');
@@ -49,7 +53,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
 
     return EdgeCustomScrollview(
       content: _content(),
-      backgroundColor: Colors.deepOrange.withOpacitySafe(0.2),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       isRefresh: false,
       //   isMoreDataScroll: MoreDataScroll.HAS,
     );
@@ -66,6 +70,16 @@ class _HomeTabState extends BaseConState<HomeTab> {
               ///
               ///
               ItemTitle('context Go & Push'),
+
+              RouterMoveItem('테마 변경', () {
+                QcLog.d('테마변경 === ');
+                // final appThemeMode = ref.read(appThemeModeProvider);
+                // isDark = appThemeMode == ThemeMode.dark;
+                ref.read(appThemeModeProvider.notifier).state =
+                (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
+              }),
+
+
               RouterMoveItem('go(/home/detail)', () {
                 // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
                 //     context.pushNamed('details', pathParameters: {'id': '123'});

@@ -41,7 +41,7 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
         controller: widget.mainNavScrollController,
         child: _getMoveEdgeToEdge(),
       ),
-      backgroundColor: Colors.deepPurple.withOpacitySafe(0.2),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       isRefresh: false,
       //   isMoreDataScroll: MoreDataScroll.HAS,
     );

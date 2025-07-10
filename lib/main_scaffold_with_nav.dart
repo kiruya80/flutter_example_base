@@ -28,7 +28,8 @@ class MainScaffoldWithNav extends StatefulWidget {
 
 class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _bottomBarAnimationController;
+  /// 바텀 네비게이션 가리기 애니메이션
+  // late final AnimationController _bottomBarAnimationController;
 
   final Map<int, ScrollController> controllers = {
     AppRoutesInfo.tabHome.tabIndex ?? 0: ScrollController(),
@@ -110,23 +111,24 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   void initState() {
     super.initState();
 
+    /// 바텀 네비게이션 가리기 애니메이션
     // 하단 바 애니메이션 컨트롤러
-    _bottomBarAnimationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
-    );
-
-    // 각 탭의 스크롤 방향 감지
-    for (final entry in controllers.entries) {
-      entry.value.addListener(() {
-        final direction = entry.value.position.userScrollDirection;
-        if (direction == ScrollDirection.reverse) {
-          _bottomBarAnimationController.forward(); // 아래로 → 숨김
-        } else if (direction == ScrollDirection.forward) {
-          _bottomBarAnimationController.reverse(); // 위로 → 다시 나타남
-        }
-      });
-    }
+    // _bottomBarAnimationController = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(milliseconds: 200),
+    // );
+    //
+    // // 각 탭의 스크롤 방향 감지
+    // for (final entry in controllers.entries) {
+    //   entry.value.addListener(() {
+    //     final direction = entry.value.position.userScrollDirection;
+    //     if (direction == ScrollDirection.reverse) {
+    //       _bottomBarAnimationController.forward(); // 아래로 → 숨김
+    //     } else if (direction == ScrollDirection.forward) {
+    //       _bottomBarAnimationController.reverse(); // 위로 → 다시 나타남
+    //     }
+    //   });
+    // }
   }
 
   @override
@@ -286,12 +288,13 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: Container(
+          padding: EdgeInsets.only(left: 5,right: 5 ),
           height: kBottomNavigationBarHeight + 10,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacitySafe(0.15),
-            border: Border(top: BorderSide(color: Colors.white24, width: 0.5)),
-            // color: Colors.white.withOpacity(0.1),
-            // border: const Border(top: BorderSide(color: Colors.white30, width: 0.5)),
+            // color: Colors.white.withOpacitySafe(0.15),
+            // border: Border(top: BorderSide(color: Colors.white24, width: 0.5)),
+            color: Theme.of(context).colorScheme.secondary.withOpacitySafe(0.2),
+            // border: Border(top: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 0.5)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

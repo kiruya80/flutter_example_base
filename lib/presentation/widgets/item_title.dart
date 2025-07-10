@@ -12,10 +12,11 @@ class ItemTitle extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: Colors.deepPurple,
+        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+          // color: Colors.deepPurple,
           fontWeight: FontWeight.w600,
         ),
+        // style: Theme.of(context).textTheme.headlineMedium,
         textAlign: TextAlign.start,
       ),
     );

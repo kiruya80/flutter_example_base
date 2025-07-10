@@ -53,7 +53,7 @@ class _PostListScreenState extends BaseConState<PostListScreen>
   Widget build(BuildContext context) {
     return EdgeCustomScrollview(
       content: _content(),
-      backgroundColor: Colors.green.withOpacitySafe(0.2),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       isRefresh: false,
       //   isMoreDataScroll: MoreDataScroll.HAS,
     );

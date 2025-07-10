@@ -6,13 +6,7 @@ class RouterMoveItem extends StatelessWidget {
   bool? isError;
   Function()? onPress;
 
-  RouterMoveItem(
-    this.title,
-    this.onPress, {
-    super.key,
-    this.btnTitle = 'Go',
-    this.isError = false,
-  });
+  RouterMoveItem(this.title, this.onPress, {super.key, this.btnTitle = 'Go', this.isError = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,26 +21,20 @@ class RouterMoveItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(
-                    color: isError == true ? Colors.red : Colors.black,
-                  ),
+                  style:Theme.of(context).textTheme.titleMedium ,
+                  // style: TextStyle(
+                  //   color: isError == true ? Colors.red : Colors.black,
+                  // ),
                 ),
               ),
-              ElevatedButton(
-                onPressed: onPress,
-                child: Text(
-                  btnTitle ?? 'Go',
-                  style: TextStyle(
-                    color: isError == true ? Colors.red : Colors.black,
-                  ),
-                ),
-              ),
+              // ElevatedButton
+              OutlinedButton(onPressed: onPress, child: Text(btnTitle ?? 'Go')),
             ],
           ),
           SizedBox(
             width: double.maxFinite,
             child: Divider(
-              color: Colors.blueGrey.withValues(alpha: 0.5),
+              // color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
               thickness: 1.0,
             ),
           ),

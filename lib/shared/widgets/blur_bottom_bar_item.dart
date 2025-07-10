@@ -40,7 +40,7 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
     if (widget.blurType == BlurBottomType.Scale) {
       return getTabScale();
     } else if (widget.blurType == BlurBottomType.NoScale) {
-      return getTabNoScale();
+    return getTabNoScale();
     } else {
       return getRipple();
     }
@@ -48,42 +48,67 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
 
   /// 탭을 누르면 살짝 작아졌다가 돌아오는 효과
   getTabScale() {
-    return GestureDetector(
-      onTapDown: _onTapDown,
-      onTapUp: _onTapUp,
-      onTapCancel: _onTapCancel,
-      onTap: widget.onTap,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedScale(
-        scale: _scale,
-        duration: const Duration(milliseconds: 100),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          decoration: BoxDecoration(
-            color: widget.selected ? Colors.white.withOpacitySafe(0.1) : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: Icon(
-                  widget.iconData,
-                  key: ValueKey<bool>(widget.selected),
-                  color: widget.selected ? Colors.black : Colors.white60,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTapDown: _onTapDown,
+        onTapUp: _onTapUp,
+        onTapCancel: _onTapCancel,
+        onTap: widget.onTap,
+        // behavior: HitTestBehavior.opaque,
+        borderRadius: BorderRadius.circular(12),
+        child: AnimatedScale(
+          scale: _scale,
+          duration: const Duration(milliseconds: 100),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            decoration: BoxDecoration(
+              // color: widget.selected ? Colors.white.withOpacitySafe(0.1) : Colors.transparent,
+              color:
+                  widget.selected
+                      ? Theme.of(context).colorScheme.primary.withOpacitySafe(0.5)
+                      : Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: Icon(
+                    widget.iconData,
+                    key: ValueKey<bool>(widget.selected),
+                    // color: widget.selected ? Colors.black : Colors.white60,
+                    color:
+                        widget.selected
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : Theme.of(context).colorScheme.outline.withOpacitySafe(0.5),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                widget.label,
-                style: TextStyle(
-                  color: widget.selected ? Colors.black : Colors.white60,
-                  fontSize: 12,
+                const SizedBox(height: 2),
+                Text(
+                  widget.label,
+                  // style: TextStyle(
+                  //   // color: widget.selected ? Colors.black : Colors.white60,
+                  //   color:
+                  //       widget.selected
+                  //           ? Theme.of(context).colorScheme.onPrimary
+                  //           : Theme.of(context).colorScheme.outline.withOpacitySafe(0.6),
+                  //   fontSize: 12,
+                  // ),
+
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    // fontWeight: FontWeight.w600,
+                      color:
+                          widget.selected
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : Theme.of(context).colorScheme.outline.withOpacitySafe(0.6),
+
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -97,8 +122,10 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.symmetric(vertical: 6),
-        decoration: BoxDecoration(
-          color: widget.selected ? Colors.white.withOpacitySafe(0.1) : Colors.transparent,
+        decoration: BoxDecoration(         color:
+        widget.selected
+            ? Theme.of(context).colorScheme.primary.withOpacitySafe(0.5)
+            : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -110,7 +137,10 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
               child: Icon(
                 widget.iconData,
                 key: ValueKey<bool>(widget.selected),
-                color: widget.selected ? Colors.black : Colors.white60,
+                color:
+                widget.selected
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
               ),
             ),
             // item.icon,
@@ -118,7 +148,10 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
             Text(
               widget.label ?? '',
               style: TextStyle(
-                color: widget.selected ? Colors.black : Colors.white60,
+                color:
+                widget.selected
+                    ? Theme.of(context).colorScheme.onPrimary
+                    : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
                 fontSize: 12,
               ),
             ),
@@ -137,8 +170,10 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           padding: const EdgeInsets.symmetric(vertical: 6),
-          decoration: BoxDecoration(
-            color: widget.selected ? Colors.white.withOpacitySafe(0.1) : Colors.transparent,
+          decoration: BoxDecoration(         color:
+          widget.selected
+              ? Theme.of(context).colorScheme.primary.withOpacitySafe(0.5)
+              : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -149,14 +184,20 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
                 child: Icon(
                   widget.iconData,
                   key: ValueKey<bool>(widget.selected),
-                  color: widget.selected ? Colors.black : Colors.white60,
+                  color:
+                    widget.selected
+                    ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 widget.label,
                 style: TextStyle(
-                  color: widget.selected ? Colors.black : Colors.white60,
+                  color:
+                  widget.selected
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
                   fontSize: 12,
                 ),
               ),
