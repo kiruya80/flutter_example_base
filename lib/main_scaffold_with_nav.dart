@@ -9,7 +9,7 @@ import 'package:flutter_example_base/presentation/tab_navigator/profile/profile_
 import 'package:flutter_example_base/presentation/tab_navigator/search/search_tab.dart';
 import 'package:flutter_example_base/shared/entities/nav_item.dart';
 import 'package:flutter_example_base/shared/widgets/blur_bottom_bar_item.dart';
-import 'package:flutter_example_base/shared/widgets/common_edge_to_edge_page.dart';
+import 'package:flutter_example_base/shared/widgets/common_default_edge_page.dart';
 
 import 'package:go_router/go_router.dart';
 
