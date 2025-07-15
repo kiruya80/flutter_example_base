@@ -126,19 +126,20 @@ class _HomeTabState extends BaseConState<HomeTab> {
             context.pushNamed(AppRoutesInfo.setting.name);
           }),
 
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
+          // RouterMoveItem('=====', () {}),
+          ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: const ClampingScrollPhysics(),
+            itemCount: 50,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: CircleAvatar(child: Text('${index + 1}')),
+                title: Text('${index}'),
+                subtitle: Text('This is item number ${index + 1}'),
+              );
+            },
+          ),
         ],
       ),
 

@@ -7,7 +7,7 @@ extension ColorExtension on Color {
   Color withOpacitySafe(double opacity) {
     assert(opacity >= 0.0 && opacity <= 1.0, 'Opacity must be between 0.0 and 1.0');
     final alpha = opacity.clamp(0.0, 1.0);
-    QcLog.d('withOpacitySafe === $alpha');
+    // QcLog.d('withOpacitySafe === $alpha');
     return withValues(alpha: alpha);
   }
 

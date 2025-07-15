@@ -30,6 +30,8 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     with SingleTickerProviderStateMixin {
   /// 바텀 네비게이션 가리기 애니메이션
   // late final AnimationController _bottomBarAnimationController;
+  late final AnimationController _controller;
+  late final Animation<Offset> _offsetAnimation;
 
   ///
   /// tab 내부  스크롤 컨트럴러
@@ -60,6 +62,8 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   ];
 
   int _lastTappedIndex = 0;
+  bool isBottomBarVisible = true;
+  double lastOffset = 0;
 
   bool onTabChanged(int newIndex) {
     if (_lastTappedIndex != newIndex) {
@@ -116,6 +120,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     for (final controller in controllers.values) {
       controller.dispose();
     }
+    _controller.dispose();
     super.dispose();
   }
 
@@ -141,12 +146,35 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     //     }
     //   });
     // }
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    _offsetAnimation = Tween<Offset>(
+      begin: const Offset(0, 1), // 아래에 감춰짐
+      end: Offset.zero, // 제자리로 올라옴
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    // 시작 시 보이게 하려면
+    _controller.forward();
+  }
+
+  void showBottomBar(bool show) {
+    if (show) {
+      _controller.forward().then((v) {
+        isBottomBarVisible = true;
+      });
+    } else {
+      _controller.reverse().then((v) {
+        isBottomBarVisible = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // return getDefault();
-    return getBottomNavBlur();
+
+    // return getBottomNavBlur();
+    return getBottomNavBlurAni();
+    // return getBottomNavBlurAni2();
     // return getCustomNavStack();
   }
 
@@ -209,35 +237,59 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// ㄴ 백키 종료 가능
   getBottomNavBlur() {
     var bottom = MediaQuery.of(context).padding.bottom;
+    QcLog.d('bottom  $bottom , kBottomNavigationBarHeight ==== $kBottomNavigationBarHeight');
+
     return CommonDefaultEdgePage(
       extendBodyBehindAppBar: true,
       extendBody: true,
-      // bottomNavigationBar: ClipRect(
-      //   child: BackdropFilter(
-      //     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-      //     child: BottomNavigationBar(
-      //       backgroundColor: Colors.transparent,
-      //       // 투명처리
-      //       currentIndex: widget.navigationShell.currentIndex,
-      //       type: BottomNavigationBarType.fixed,
-      //       // 4개 이상일 경우 필요
-      //       onTap: _onTap,
-      //       // items: bottomNavItems,
-      //       items: List.generate(navItems.length, (index) {
-      //         final item = navItems[index];
-      //         return item.toBottomNavigationBarItem(
-      //           selected: index == widget.navigationShell.currentIndex,
-      //           selectedColor: Colors.white,
-      //           unselectedColor: Colors.grey,
-      //         );
-      //       }),
-      //     ),
-      //   ),
-      // ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: bottom),
-        child: _buildBlurBottomBar(),
+        padding: EdgeInsets.only(bottom: 0),
+        child: _buildBlurBottomBarBlur(),
       ),
+      child: widget.navigationShell,
+    );
+  }
+
+  /// 2-1 .블러 처리된 네비게이션 애니메이션
+  /// ㄴ 백키 종료 가능
+  getBottomNavBlurAni() {
+    return CommonDefaultEdgePage(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      onScrollTop: () {
+        // 스크롤 시작 → 일단 숨기자 (UX 선택 사항)
+        // setState(() => isBottomBarVisible = true);
+        showBottomBar(true);
+      },
+      onScrollUpdate: (offset) {
+        // setState(() => isBottomBarVisible = false);
+        // showBottomBar(false);
+        // offset 값 변화에 따라 위/아래 감지해서 show/hide
+        if (offset > lastOffset && isBottomBarVisible) {
+          // setState(() => isBottomBarVisible = false);
+          showBottomBar(false);
+        } else if (offset < lastOffset && !isBottomBarVisible) {
+          // setState(() => isBottomBarVisible = true);
+          showBottomBar(true);
+        }
+        lastOffset = offset;
+      },
+      onScrollEnd: () {
+        // 스크롤 멈췄을 때 상태 유지 또는 복구 로직 추가 가능
+      },
+      bottomNavigationBar: _buildBlurBottomBar(),
+      child: widget.navigationShell,
+    );
+  }
+
+  getBottomNavBlurAni2() {
+    return CommonDefaultEdgePage(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      onShowBottomBar: (isVisible) {
+        showBottomBar(isVisible);
+      },
+      bottomNavigationBar: _buildBlurBottomBar(),
       child: widget.navigationShell,
     );
   }
@@ -245,35 +297,71 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   ///
   /// blur 처리된 바텀네이게이션
   ///
-  Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Scale}) {
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: Container(
-          padding: EdgeInsets.only(left: 5, right: 5),
-          height: kBottomNavigationBarHeight + 10,
-          decoration: BoxDecoration(
-            // color: Colors.white.withOpacitySafe(0.15),
-            color: Theme.of(context).colorScheme.surfaceBright.withOpacitySafe(0.3),
-            // color: Theme.of(context).colorScheme.secondary.withOpacitySafe(0.2),
-            /// 바텀 네비 위 줄
-            // border: Border(top: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 0.5)),
+  Widget _buildBlurBottomBarBlur({BlurBottomType? blurType = BlurBottomType.Scale}) {
+    return SafeArea(
+      top: false,
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.only(left: 5, right: 5),
+            height: kBottomNavigationBarHeight + 10,
+            decoration: BoxDecoration(
+              // color: Colors.white.withOpacitySafe(0.15),
+              color: Theme.of(context).colorScheme.surfaceBright.withOpacitySafe(0.3),
+              // color: Theme.of(context).colorScheme.secondary.withOpacitySafe(0.2),
+              /// 바텀 네비 위 줄
+              // border: Border(top: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 0.5)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(navItems.length, (index) {
+                final selected = index == widget.navigationShell.currentIndex;
+                final item = navItems[index];
+                return Expanded(
+                  child: BlurBottomBarItem(
+                    blurType: blurType,
+                    selected: selected,
+                    iconData: item.iconData,
+                    label: item.label ?? '',
+                    onTap: () => _onTap(index),
+                  ),
+                );
+              }),
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(navItems.length, (index) {
-              final selected = index == widget.navigationShell.currentIndex;
-              final item = navItems[index];
-              return Expanded(
-                child: BlurBottomBarItem(
-                  blurType: blurType,
-                  selected: selected,
-                  iconData: item.iconData,
-                  label: item.label ?? '',
-                  onTap: () => _onTap(index),
-                ),
-              );
-            }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Scale}) {
+    return SafeArea(
+      top: false,
+      child: ClipRect(
+        child: SlideTransition(
+          position: _offsetAnimation,
+          child: Container(
+            height: kBottomNavigationBarHeight + 10,
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(navItems.length, (index) {
+                final selected = index == 0; // 예시
+                final item = navItems[index];
+                return Expanded(
+                  child: BlurBottomBarItem(
+                    selected: selected,
+                    iconData: item.iconData,
+                    label: item.label ?? '',
+                    onTap: () => _onTap(index),
+                  ),
+                );
+              }),
+            ),
           ),
         ),
       ),

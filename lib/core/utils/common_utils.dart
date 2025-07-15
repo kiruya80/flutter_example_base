@@ -12,7 +12,7 @@ class CommonUtils {
     final leftInset = MediaQuery.of(context).padding.left;
     final rightInset = MediaQuery.of(context).padding.right;
     final displayWidth = totalWidth - leftInset - rightInset;
-    QcLog.d('displayWidth ====== $displayWidth , ($leftInset , $rightInset)');
+    // QcLog.d('displayWidth ====== $displayWidth , ($leftInset , $rightInset)');
     return displayWidth;
   }
 
@@ -24,7 +24,7 @@ class CommonUtils {
     final statusBarHeight = MediaQuery.of(context).padding.top; // 상단 상태바
     final bottomInset = MediaQuery.of(context).padding.bottom; // 하단 시스템 영역 (네비게이션 바 등)
     final displayHeight = totalHeight - statusBarHeight - bottomInset;
-    QcLog.d('displayHeight ====== $displayHeight ($statusBarHeight ,$bottomInset)');
+    // QcLog.d('displayHeight ====== $displayHeight ($statusBarHeight ,$bottomInset)');
     return displayHeight;
   }
 

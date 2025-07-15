@@ -60,7 +60,7 @@ class _EdgeCustomScrollviewState extends State<EdgeCustomScrollview> {
   List<Widget> getSliversContents(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
-    QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
+    // QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
 
     List<Widget> scrollSlivers = [];
 

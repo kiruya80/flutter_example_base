@@ -76,6 +76,12 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
   final Widget? bottomSheet;
   final Widget? bottomNavigationBar;
 
+  final VoidCallback? onScrollTop;
+  final ValueChanged<double>? onScrollUpdate;
+  final VoidCallback? onScrollEnd;
+
+  final ValueChanged<bool>? onShowBottomBar;
+
   const CommonDefaultEdgePage({
     super.key,
     required this.child,
@@ -99,6 +105,12 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
     this.floatingActionButton,
     this.bottomSheet,
     this.bottomNavigationBar,
+
+    this.onScrollTop,
+    this.onScrollUpdate,
+    this.onScrollEnd,
+
+    this.onShowBottomBar,
   });
 
   @override
@@ -108,6 +120,8 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
 class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   bool? isScroll = false;
   bool? isDark = false;
+  bool isBottomBarVisible = true;
+  double lastOffset = 0;
 
   @override
   void initState() {
@@ -117,6 +131,8 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
       '${widget.safeAreaTop} , ${widget.safeAreaBottom}',
     );
     isScroll = false;
+    isBottomBarVisible = true;
+    lastOffset = 0;
     // WidgetsBinding.instance.addPostFrameCallback((_) async {
     //   _setSystemUiOverlayStyle();
     // });
@@ -133,6 +149,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   ///
   @override
   Widget build(BuildContext context) {
+    overlayColor = Theme.of(context).colorScheme.surfaceBright;
     CommonUtils.isTablet(context);
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
@@ -152,7 +169,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification onNotification) {
         //스크롤 시 이 부분에서 이벤트가 발생한다.
-        // _onNotification(onNotification);
+        _onNotification(context, onNotification);
         return false; // 이벤트 계속 전달
       },
 
@@ -185,7 +202,14 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
 
             /// appBar 유무에 따라 높이 달라짐
             if (Platform.isIOS || widget.isBlur == true)
-              Align(alignment: Alignment.topCenter, child: BlurOverlay(isDark: isDark)),
+              Align(
+                alignment: Alignment.topCenter,
+                child: BlurOverlay(
+                  isBlur: false,
+                  isDark: isDark,
+                  backgroundColor: Theme.of(context).colorScheme.surfaceBright,
+                ),
+              ),
 
             /// Blur Navigation Bar
             if (Platform.isAndroid && widget.isBlur == true)
@@ -193,9 +217,11 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
                 alignment: Alignment.bottomCenter,
                 child: BlurOverlay(
                   height: bottomInset,
+                  isBlur: false,
                   isDark: isDark,
                   isBottom: true,
-                  backgroundColor: Theme.of(context).colorScheme.surfaceBright,
+                  // backgroundColor: Theme.of(context).colorScheme.surfaceBright.withOpacitySafe(0.5),
+                  backgroundColor: overlayColor,
                 ),
               ),
           ],
@@ -203,6 +229,8 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
       ),
     );
   }
+
+  var overlayColor;
 
   ///
   ///
@@ -216,91 +244,128 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   /// ㄴ Brightness.dark 흰색
   /// ㄴ Brightness.light 검은색
   ///
-  // _onNotification(ScrollNotification notification) {
-  //   // QcLog.d('_onNotification  CommonEdgeToEdgePage ====== ');
-  //   final metrics = notification.metrics;
-  //
-  //   //세로 스크롤인 경우에만 추적
-  //   if (metrics.axisDirection != AxisDirection.down) return false;
-  //
-  //   final isTop = metrics.pixels <= metrics.minScrollExtent + 1;
-  //   final isBottom = metrics.pixels >= metrics.maxScrollExtent - 1;
-  //
-  //   if (isTop) {
-  //     QcLog.d("📍 최상단입니다.");
-  //     isScroll = false;
-  //
-  //     /// 리스트 상단
-  //     _setSystemUiOverlayStyle();
-  //   } else {
-  //     /// 최상단은 지나감
-  //     if (isBottom) {
-  //       QcLog.d("📍 최하단입니다.");
-  //       isScroll = false;
-  //
-  //       /// 리스트 최하단
-  //       _setSystemUiOverlayStyle(
-  //         statusBarColor:
-  //             widget.isBlur == true
-  //                 ? Colors.transparent
-  //                 : widget.statusBarColor?.withOpacitySafe(1),
-  //         // systemNavigationBarColor: Colors.transparent,
-  //         systemNavigationBarColor: Colors.deepPurple, // todo test
-  //         systemNavigationBarDividerColor: Colors.transparent,
-  //       );
-  //     } else if (isScroll == false) {
-  //       QcLog.d("📍 최상단을 지남.");
-  //       isScroll = true;
-  //       _setSystemUiOverlayStyle(
-  //         /// iOS에서는 statusBarColor는 완전히 무시
-  //         statusBarColor:
-  //             widget.isBlur == true
-  //                 ? Colors.transparent
-  //                 : widget.statusBarColor?.withOpacitySafe(0.4),
-  //         systemNavigationBarColor: Colors.transparent,
-  //         // systemNavigationBarColor:  Colors.white.withOpacity(0.5),
-  //         systemNavigationBarDividerColor: Colors.transparent,
-  //       );
-  //     }
-  //   }
-  // }
+  _onNotification(BuildContext context, ScrollNotification notification) {
+    CommonUtils.getDisplayWidth(context);
+    var displayHeight = CommonUtils.getDisplayHeight(context);
+    // QcLog.d('_onNotification  CommonEdgeToEdgePage ====== ');
+    final metrics = notification.metrics;
 
-  // void _setSystemUiOverlayStyle({
-  //   Color? statusBarColor,
-  //   Color? systemNavigationBarColor,
-  //   Color? systemNavigationBarDividerColor,
-  // }) {
-  //   ///
-  //   /// statusBarIconBrightness
-  //   /// ㄴ ThemeMode.dark - 아이콘 검은색 - 블러 처리시
-  //   /// ㄴ Brightness.light - 아이콘 흰색
-  //   ///
-  //   ///
-  //   SystemChrome.setSystemUIOverlayStyle(
-  //     SystemUiOverlayStyle(
-  //       statusBarColor: statusBarColor ?? Colors.transparent,
-  //
-  //       /// ios
-  //       statusBarBrightness:
-  //           widget.isBlur == true
-  //               ? Brightness.dark
-  //               : (isDark == true ? Brightness.dark : Brightness.light),
-  //       // 아이폰 상단 글씨(시계, 배터리) 색상
-  //       statusBarIconBrightness:
-  //           widget.isBlur == true
-  //               ? Brightness.dark
-  //               : (isDark == true ? Brightness.dark : Brightness.light),
-  //
-  //       // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
-  //       systemNavigationBarColor: systemNavigationBarColor ?? Colors.transparent,
-  //       // 네비게이션 바 구분선 색상 설정
-  //       systemNavigationBarDividerColor: systemNavigationBarDividerColor ?? Colors.transparent,
-  //       // 아이콘 색상 (흰색)
-  //       systemNavigationBarIconBrightness:
-  //           widget.isBlur == true
-  //               ? Brightness.light
-  //               : (isDark == true ? Brightness.dark : Brightness.light),
-  //     ),
-  //   );
-  // }
+    //세로 스크롤인 경우에만 추적
+    if (metrics.axisDirection != AxisDirection.down) return false;
+
+    // final isTop = metrics.pixels <= metrics.minScrollExtent + 1;
+    final isTop = metrics.pixels <= metrics.minScrollExtent + (displayHeight / 2);
+    final isBottom = metrics.pixels >= metrics.maxScrollExtent - 1;
+
+    print(
+      '_onNotification ==== ${metrics.pixels} | ${metrics.minScrollExtent} , ${metrics.maxScrollExtent}',
+    );
+
+    if (isTop) {
+      QcLog.d("📍 최상단입니다.");
+      isScroll = false;
+
+      setState(() {
+        overlayColor = Theme.of(context).colorScheme.surfaceBright;
+      });
+
+      /// 리스트 상단
+      // _setSystemUiOverlayStyle();
+      // SystemSettingUtils().setSystemUiOverlayStyle(
+      //   isDark: isDark,
+      //   isBlur: false,
+      // );
+      if (widget.onScrollTop != null) {
+        widget.onScrollTop!();
+      }
+    } else {
+      /// 최상단은 지나감
+      if (isBottom) {
+        QcLog.d("📍 최하단입니다.");
+        isScroll = false;
+
+        setState(() {
+          overlayColor = Theme.of(context).colorScheme.primary;
+        });
+
+        /// 리스트 최하단
+        // _setSystemUiOverlayStyle(
+        //   statusBarColor:
+        //       widget.isBlur == true
+        //           ? Colors.transparent
+        //           : widget.statusBarColor?.withOpacitySafe(1),
+        //   // systemNavigationBarColor: Colors.transparent,
+        //   systemNavigationBarColor: Colors.deepPurple, // todo test
+        //   systemNavigationBarDividerColor: Colors.transparent,
+        // );
+        if (widget.onScrollEnd != null) {
+          widget.onScrollEnd!();
+        }
+      } else if (isScroll == false) {
+        QcLog.d("📍 최상단을 지남.");
+        // isScroll = true;
+
+        setState(() {
+          overlayColor = Theme.of(context).colorScheme.surfaceBright.withOpacitySafe(0.5);
+        });
+        // SystemSettingUtils().setSystemUiOverlayStyle(
+        //   isDark: isDark,
+        //   isBlur: false,
+        // );
+
+        if (widget.onScrollUpdate != null) {
+          widget.onScrollUpdate!(metrics.pixels);
+        }
+        // _setSystemUiOverlayStyle(
+        //   /// iOS에서는 statusBarColor는 완전히 무시
+        //   statusBarColor:
+        //       widget.isBlur == true
+        //           ? Colors.transparent
+        //           : widget.statusBarColor?.withOpacitySafe(0.4),
+        //   systemNavigationBarColor: Colors.transparent,
+        //   // systemNavigationBarColor:  Colors.white.withOpacity(0.5),
+        //   systemNavigationBarDividerColor: Colors.transparent,
+        // );
+      }
+    }
+  }
+
+  void _setSystemUiOverlayStyle({
+    Color? statusBarColor,
+    Color? systemNavigationBarColor,
+    Color? systemNavigationBarDividerColor,
+  }) {
+    ///
+    /// statusBarIconBrightness
+    /// ㄴ ThemeMode.dark - 아이콘 검은색 - 블러 처리시
+    /// ㄴ Brightness.light - 아이콘 흰색
+    ///
+    ///
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: statusBarColor ?? Colors.transparent,
+
+        /// ios
+        statusBarBrightness:
+            widget.isBlur == true
+                ? Brightness.dark
+                : (isDark == true ? Brightness.dark : Brightness.light),
+        // 아이폰 상단 글씨(시계, 배터리) 색상
+        statusBarIconBrightness:
+            widget.isBlur == true
+                ? Brightness.dark
+                : (isDark == true ? Brightness.dark : Brightness.light),
+
+        // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
+        systemNavigationBarColor: systemNavigationBarColor ?? Colors.transparent,
+        // 네비게이션 바 구분선 색상 설정
+        systemNavigationBarDividerColor: systemNavigationBarDividerColor ?? Colors.transparent,
+        // 아이콘 색상 (흰색)
+        systemNavigationBarIconBrightness:
+            widget.isBlur == true
+                ? Brightness.light
+                : (isDark == true ? Brightness.dark : Brightness.light),
+      ),
+    );
+  }
 }
