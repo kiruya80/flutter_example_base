@@ -41,7 +41,7 @@ class BlurOverlay extends StatelessWidget {
     // CommonEdgeToEdgePage 그릴때, 앱바가 있고 없고에 따라 달라짐
     // 28.571428571428573
     // 84.57142857142857
-    QcLog.d('isDark, statusBarHeight === $isDark , $statusBarHeight');
+    QcLog.d('isDark, statusBarHeight === $isDark ,$isBottom ,  $statusBarHeight');
 
     ///
     ///  •	sigmaX: 5, sigmaY: 5 → 살짝 흐려진 유리창 느낌
@@ -57,11 +57,11 @@ class BlurOverlay extends StatelessWidget {
           height: height ?? statusBarHeight,
           // 반투명 오버레이
           color:
-              isDark == true
-                  ? Colors.black.withOpacitySafe(0.2)
-                  : isBottom == true
-                  ? Colors.white.withOpacitySafe(0.5)
-                  : Colors.white.withOpacitySafe(0.2),
+              backgroundColor != null
+                  ? backgroundColor?.withOpacitySafe(0.5)
+                  : (isDark == true
+                      ? Colors.black.withOpacitySafe(0.2)
+                      : Colors.white.withOpacitySafe(isBottom == true ? 0.5 : 0.2)),
         ),
       ),
     );

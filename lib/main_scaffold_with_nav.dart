@@ -249,16 +249,11 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       // ),
       child: Stack(
         children: [
-          Positioned.fill(
-            child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover),
-          ),
-
-          // Center(
-          //   child: Text(
-          //     'Content',
-          //     style: TextStyle(fontSize: 24, color: Colors.white),
-          //   ),
+          /// 배경 필요시
+          // Positioned.fill(
+          //   child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover),
           // ),
+          /// 탭 컨텐츠
           IndexedStack(
             index: widget.navigationShell.currentIndex,
             children: [
@@ -292,8 +287,9 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
           height: kBottomNavigationBarHeight + 10,
           decoration: BoxDecoration(
             // color: Colors.white.withOpacitySafe(0.15),
-            // border: Border(top: BorderSide(color: Colors.white24, width: 0.5)),
-            color: Theme.of(context).colorScheme.secondary.withOpacitySafe(0.2),
+            color: Theme.of(context).colorScheme.surfaceBright.withOpacitySafe(0.3),
+            // color: Theme.of(context).colorScheme.secondary.withOpacitySafe(0.2),
+            /// 바텀 네비 위 줄
             // border: Border(top: BorderSide(color: Theme.of(context).colorScheme.secondary, width: 0.5)),
           ),
           child: Row(

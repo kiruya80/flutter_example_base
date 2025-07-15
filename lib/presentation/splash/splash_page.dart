@@ -25,7 +25,6 @@ class _SplashPageState extends BaseConState<SplashPage> {
     QcLog.d('initState ====== ');
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // _setSystemUiOverlayStyle();
       _init();
     });
   }
@@ -34,14 +33,6 @@ class _SplashPageState extends BaseConState<SplashPage> {
     if (mounted) {
       context.goNamed(AppRoutesInfo.tabHome.name);
     }
-  }
-
-  void _setSystemUiOverlayStyle() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent, // 네비게이션 바 색상 설정
-      // systemNavigationBarDividerColor: Colors.red, // 네비게이션 바 구분선 색상 설정
-      // statusBarColor: Colors.green, // 상태 바 색상 설정
-    ));
   }
 
   @override

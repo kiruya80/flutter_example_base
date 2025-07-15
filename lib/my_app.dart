@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_example_base/presentation/dialog/dialog_queue_listener.dart';
+import 'package:flutter_example_base/shared/utils/system_setting_utils.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'app/routes/app_router.dart';
 import 'core/theme/app_theme_provider.dart';
-import 'core/theme/theme.dart';
 import 'core/utils/print_log.dart';
 
 class MyApp extends ConsumerWidget {
@@ -29,30 +29,27 @@ class MyApp extends ConsumerWidget {
   /// light : 검은색 아이콘
   /// dark : 흰색 아이콘
   ///
-  void _setSystemUiOverlayStyle(ThemeMode themeMode) {
-    QcLog.d('_setSystemUiOverlayStyle ==== $themeMode');
-
-    /// default - black
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        // ✅ iOS 상태바 아이콘 밝기 light(black ison), dark(white icon)
-        statusBarBrightness: themeMode == ThemeMode.light ? Brightness.light : Brightness.dark,
-        // ✅ Android 상태바 아이콘 밝기 → light(white ison), dark(black icon)
-        statusBarIconBrightness: themeMode == ThemeMode.light ? Brightness.dark : Brightness.light,
-
-        systemNavigationBarColor: Colors.transparent,
-        // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
-        systemNavigationBarDividerColor: Colors.transparent,
-        // ✅ Android 네비게이션 아이콘 밝기 → light(white ison, 검은색 반투명 배경), dark(black icon, 흰색 반투명 배경)
-        systemNavigationBarIconBrightness:
-            themeMode == ThemeMode.light ? Brightness.dark : Brightness.light,
-        // systemNavigationBarIconBrightness:Brightness.dark,
-        // 자동 대비 조정 끄기 (Android 10+) false : 검은색,흰색 반투명 삭제
-        systemNavigationBarContrastEnforced: false,
-      ),
-    );
-  }
+  // void _setSystemUiOverlayStyle(ThemeMode themeMode) {
+  //   /// default - black
+  //   SystemChrome.setSystemUIOverlayStyle(
+  //     SystemUiOverlayStyle(
+  //       statusBarColor: Colors.transparent,
+  //       // ✅ iOS 상태바 아이콘 밝기 light(black ison), dark(white icon)
+  //       statusBarBrightness: themeMode == ThemeMode.light ? Brightness.light : Brightness.dark,
+  //       // ✅ Android 상태바 아이콘 밝기 → light(white ison), dark(black icon)
+  //       statusBarIconBrightness: themeMode == ThemeMode.light ? Brightness.dark : Brightness.light,
+  //
+  //       systemNavigationBarColor: Colors.transparent,
+  //       // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
+  //       systemNavigationBarDividerColor: Colors.transparent,
+  //       // ✅ Android 네비게이션 아이콘 밝기 → light(white ison, 검은색 반투명 배경), dark(black icon, 흰색 반투명 배경)
+  //       systemNavigationBarIconBrightness:
+  //           themeMode == ThemeMode.light ? Brightness.dark : Brightness.light,
+  //       // 자동 대비 조정 끄기 (Android 10+) false : 검은색,흰색 반투명 삭제
+  //       systemNavigationBarContrastEnforced: false,
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,7 +68,10 @@ class MyApp extends ConsumerWidget {
         QcLog.d("앱 테마 초기 설정 addPostFrameCallback ");
       }
       final appThemeMode = ref.read(appThemeModeProvider) ?? ThemeMode.system;
-      _setSystemUiOverlayStyle(appThemeMode);
+      SystemSettingUtils().setSystemUiOverlayStyle(
+        isDark: appThemeMode == ThemeMode.dark,
+        isBlur: false,
+      );
     });
 
     final appThemeMode = ref.watch(appThemeModeProvider) ?? ThemeMode.system;
@@ -103,28 +103,29 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: AppRouter.appRouter,
       title: 'Post App',
-      themeMode: appThemeMode, // ThemeMode.system
+      themeMode: appThemeMode,
+      // ThemeMode.system
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         // scaffoldBackgroundColor: Colors.white,
         // platform: TargetPlatform.iOS, // 👈 전체를 iOS 스타일로
-        // colorScheme: ColorScheme.fromSeed(
-        //   seedColor: Color(0xff4c662b),
-        //   brightness: Brightness.light,
-        // ),
-        colorScheme: MaterialTheme.lightScheme()
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xff4c662b),
+          brightness: Brightness.light,
+        ),
+        // colorScheme: MaterialTheme.lightScheme(),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         // brightness: Brightness.dark,
         // scaffoldBackgroundColor: Colors.black,
         // platform: TargetPlatform.iOS, // 👈 전체를 iOS 스타일로
-        // colorScheme: ColorScheme.fromSeed(
-        //   seedColor: Color(0xffb1d18a),
-        //   brightness: Brightness.dark,
-        // ),
-          colorScheme: MaterialTheme.darkScheme()
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xffb1d18a),
+          brightness: Brightness.dark,
+        ),
+        // colorScheme: MaterialTheme.darkScheme(),
       ),
 
       builder: (context, child) {
