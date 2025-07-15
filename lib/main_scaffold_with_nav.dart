@@ -249,7 +249,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       child: widget.navigationShell,
     );
   }
-
+    double scrollThreshold = 20;
   /// 2-1 .블러 처리된 네비게이션 애니메이션
   /// ㄴ 백키 종료 가능
   getBottomNavBlurAni() {
@@ -262,14 +262,20 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
         showBottomBar(true);
       },
       onScrollUpdate: (offset) {
+        print('onScrollUpdate ==== $offset | $lastOffset');
+        final difference = offset - lastOffset;
         // setState(() => isBottomBarVisible = false);
-        // showBottomBar(false);
+
+        // if (difference > scrollThreshold && isBottomBarVisible) {
+        //   showBottomBar(false);
+        // } else if (difference < -scrollThreshold && !isBottomBarVisible) {
+        //   showBottomBar(true);
+        // }
+
         // offset 값 변화에 따라 위/아래 감지해서 show/hide
         if (offset > lastOffset && isBottomBarVisible) {
-          // setState(() => isBottomBarVisible = false);
           showBottomBar(false);
         } else if (offset < lastOffset && !isBottomBarVisible) {
-          // setState(() => isBottomBarVisible = true);
           showBottomBar(true);
         }
         lastOffset = offset;
