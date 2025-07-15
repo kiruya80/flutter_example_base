@@ -16,10 +16,7 @@ abstract class PostApi {
   Future<PostModel> createPost(@Body() Map<String, dynamic> body);
 
   @PUT("/posts/{id}")
-  Future<PostModel> updatePost(
-    @Path("id") int id,
-    @Body() Map<String, dynamic> body,
-  );
+  Future<PostModel> updatePost(@Path("id") int id, @Body() Map<String, dynamic> body);
 
   @DELETE("/posts/{id}")
   Future<void> deletePost(@Path("id") int id);

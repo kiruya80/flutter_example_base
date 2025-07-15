@@ -15,12 +15,7 @@ class CommonPopScopeWidget extends StatefulWidget {
   final Widget child;
   final Function? onPressedPopScope; // 백버튼
 
-  const CommonPopScopeWidget({
-    super.key,
-    this.canPop,
-    this.onPressedPopScope,
-    required this.child,
-  });
+  const CommonPopScopeWidget({super.key, this.canPop, this.onPressedPopScope, required this.child});
 
   @override
   State<CommonPopScopeWidget> createState() => _CommonPopScopeWidgetState();
@@ -59,7 +54,8 @@ class _CommonPopScopeWidgetState extends State<CommonPopScopeWidget> {
       /// currentFocus.hasFocus 추가이유는 영역터치로 키보드 내리는 경우 hasPrimaryFocus값이 true로 변경 안됨
    */
   _defaultCanPop() {
-    isCanPop = (currentFocus?.hasPrimaryFocus == true && currentFocus?.hasFocus == true) ||
+    isCanPop =
+        (currentFocus?.hasPrimaryFocus == true && currentFocus?.hasFocus == true) ||
         (currentFocus?.hasPrimaryFocus == false && currentFocus?.hasFocus == false);
   }
 
@@ -80,52 +76,55 @@ class _CommonPopScopeWidgetState extends State<CommonPopScopeWidget> {
     _defaultCanPop();
 
     return PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (bool didPop, Object? result) {
-          // final route = ModalRoute.of(context);
-          // final routeName = route?.settings.name;
-          QcLog.d('onPopInvokedWithResult ======== didPop: $didPop , $result ,'
-              ' canPop: $canPop, isCanPop: $isCanPop,  ');
-          // if (Platform.isIOS == true) {
-          //   return;
-          // }
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        // final route = ModalRoute.of(context);
+        // final routeName = route?.settings.name;
+        QcLog.d(
+          'onPopInvokedWithResult ======== didPop: $didPop , $result ,'
+          ' canPop: $canPop, isCanPop: $isCanPop,  ',
+        );
+        // if (Platform.isIOS == true) {
+        //   return;
+        // }
 
-          if (currentFocus?.hasPrimaryFocus == false &&
-              currentFocus?.focusedChild != null &&
-              currentFocus?.focusedChild?.hasPrimaryFocus == true) {
-            FocusManager.instance.primaryFocus?.unfocus();
-            FocusScope.of(context).unfocus();
+        if (currentFocus?.hasPrimaryFocus == false &&
+            currentFocus?.focusedChild != null &&
+            currentFocus?.focusedChild?.hasPrimaryFocus == true) {
+          FocusManager.instance.primaryFocus?.unfocus();
+          FocusScope.of(context).unfocus();
+          return;
+        }
+
+        if (canPop != null) {
+          /// canPop 값을 넘겨받고
+          /// true : 화면 종료
+          /// false : 백키 막기
+          if (canPop == true) {
+            Navigator.pop(context, result);
+          } else {
+            if (widget.onPressedPopScope != null) {
+              widget.onPressedPopScope!(result);
+            }
             return;
           }
-
-          if (canPop != null) {
-            /// canPop 값을 넘겨받고
-            /// true : 화면 종료
-            /// false : 백키 막기
-            if (canPop == true) {
-              Navigator.pop(context, result);
+        } else {
+          if (!didPop) {
+            /// 리턴값이 있어 pop을 해야하는 경우 maybePop 로 하는 경우
+            /// 다시 onPopInvokedWithResult 반복된다
+            /// auto router는 maybePop만 있어 Navigator.pop으로 한다
+            /// maybePop는 왜 안되는지
+            if (widget.onPressedPopScope != null) {
+              widget.onPressedPopScope!();
             } else {
-              if (widget.onPressedPopScope != null) {
-                widget.onPressedPopScope!(result);
-              }
-              return;
+              Navigator.pop(context, result);
             }
-          } else {
-            if (!didPop) {
-              /// 리턴값이 있어 pop을 해야하는 경우 maybePop 로 하는 경우
-              /// 다시 onPopInvokedWithResult 반복된다
-              /// auto router는 maybePop만 있어 Navigator.pop으로 한다
-              /// maybePop는 왜 안되는지
-              if (widget.onPressedPopScope != null) {
-                widget.onPressedPopScope!();
-              } else {
-                Navigator.pop(context, result);
-              }
 
-              /// context.router.maybePop(result); 무한 반복
-            }
+            /// context.router.maybePop(result); 무한 반복
           }
-        },
-        child: widget.child);
+        }
+      },
+      child: widget.child,
+    );
   }
 }

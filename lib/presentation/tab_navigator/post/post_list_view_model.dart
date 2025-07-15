@@ -19,8 +19,7 @@ class PostListViewModel extends StateNotifier<PostListState> {
   final GetPosts getPosts;
   final DeletePost deletePost;
 
-  PostListViewModel(this.getPosts, this.deletePost)
-    : super(PostListState.initial()) {
+  PostListViewModel(this.getPosts, this.deletePost) : super(PostListState.initial()) {
     // loadPosts();
   }
 
@@ -59,10 +58,7 @@ class PostListViewModel extends StateNotifier<PostListState> {
     await Future.delayed(Duration(seconds: 3));
 
     // state = state.copyWith(isLoading: false);
-    state = state.copyWith(
-      isLoading: false,
-      error: ServerFailure('ServerFailure 에러'),
-    );
+    state = state.copyWith(isLoading: false, error: ServerFailure('ServerFailure 에러'));
     // Future.delayed(Duration(milliseconds: 100), () {
     // state = state.copyWith(error: ServerFailure('ServerFailure 에러'));
     // });

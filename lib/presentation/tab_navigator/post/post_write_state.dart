@@ -9,17 +9,11 @@ part 'post_write_state.g.dart';
 
 @freezed
 abstract class PostWriteState with _$PostWriteState implements BaseUiStatus {
-  const factory PostWriteState({
-    bool? isLoading,
-    Failure? error,
-    RouteInfo? navigateTo,
-  }) = _PostWriteState;
+  const factory PostWriteState({bool? isLoading, Failure? error, RouteInfo? navigateTo}) =
+      _PostWriteState;
 
-  factory PostWriteState.initial() => const PostWriteState(
-    isLoading: false,
-    error: null,
-    navigateTo: null,
-  );
+  factory PostWriteState.initial() =>
+      const PostWriteState(isLoading: false, error: null, navigateTo: null);
 
   factory PostWriteState.fromJson(Map<String, dynamic> json) => _$PostWriteStateFromJson(json);
 }

@@ -350,7 +350,6 @@ class MaterialTheme {
     return theme(darkHighContrastScheme());
   }
 
-
   ThemeData theme(ColorScheme colorScheme) => ThemeData(
     useMaterial3: true,
     brightness: colorScheme.brightness,
@@ -363,9 +362,7 @@ class MaterialTheme {
     canvasColor: colorScheme.surface,
   );
 
-
-  List<ExtendedColor> get extendedColors => [
-  ];
+  List<ExtendedColor> get extendedColors => [];
 }
 
 class ExtendedColor {

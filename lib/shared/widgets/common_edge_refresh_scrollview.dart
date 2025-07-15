@@ -112,9 +112,9 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
       'initState ====== ${widget.extendBody}, ${widget.extendBodyBehindAppBar} /'
       '${widget.safeAreaTop} , ${widget.safeAreaBottom} ',
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _setSystemUiOverlayStyle();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   _setSystemUiOverlayStyle();
+    // });
   }
 
   void _setSystemUiOverlayStyle() {

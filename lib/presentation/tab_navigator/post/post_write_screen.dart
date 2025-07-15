@@ -54,9 +54,7 @@ class _PostWriteScreenState extends BaseConState<PostWriteScreen>
       return;
     }
 
-    final success = await ref
-        .read(postWriteViewModelProvider.notifier)
-        .submit(title, body);
+    final success = await ref.read(postWriteViewModelProvider.notifier).submit(title, body);
 
     if (!mounted) return;
 
@@ -101,11 +99,8 @@ class _PostWriteScreenState extends BaseConState<PostWriteScreen>
             const SizedBox(height: 20),
             state.isLoading == true
                 // ? const CircularProgressIndicator()
-            ?Container()
-                : ElevatedButton(
-                  onPressed: _onSubmit,
-                  child: const Text('작성 완료'),
-                ),
+                ? Container()
+                : ElevatedButton(onPressed: _onSubmit, child: const Text('작성 완료')),
           ],
         ),
       ),

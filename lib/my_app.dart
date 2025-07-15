@@ -103,8 +103,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: AppRouter.appRouter,
       title: 'Post App',
-      themeMode: appThemeMode,
-      // ThemeMode.system
+      themeMode: appThemeMode, // ThemeMode.system
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,

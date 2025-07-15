@@ -10,8 +10,8 @@ import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_theme_provider.dart';
 import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
+import '../../shared/widgets/common_default_edge_page.dart';
 import '../../shared/widgets/common_edge_refresh_scrollview.dart';
-import '../../shared/widgets/common_edge_to_edge_page.dart';
 import '../../shared/widgets/my_sliver_persistent_header_delegate.dart';
 import '../../shared/widgets/refresh_more_scrollview.dart';
 import '../tab_navigator/profile/profile_tab.dart';
@@ -69,17 +69,13 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
   // 100개의 샘플 텍스트 리스트 생성
   final items = List.generate(30, (index) => 'Item ${index + 1}');
   bool? isDark;
+  NetState? netState = NetState.Paging;
 
-  @override
-  void dispose() {
-    super.dispose();
-    QcLog.d('EdgeToEdgePage === ');
-  }
 
   @override
   Widget build(BuildContext context) {
     QcLog.d('build ==== id : ${widget.id} , type : ${widget.type} , appbar : ${widget.appbar}');
-    CommonUtils.isTablet(context);
+    // CommonUtils.isTablet(context);
     // final statusBarHeight = MediaQuery.of(context).padding.top;
     // final bottomInset = MediaQuery.of(context).padding.bottom;
     // QcLog.d('statusBarHeight === $statusBarHeight , bottomInset === $bottomInset');
@@ -95,25 +91,29 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     if (widget.type == EdgeToEdgeType.Default.name) {
       return getDefault();
     } else if (widget.type == EdgeToEdgeType.Common.name) {
-      // if (widget.appbar == true) {
-      //   return getCommonAppBar();
-      // } else {
-      //   return getCommon();
-      // }
-      return getCommon();
+      if (widget.appbar == true) {
+        return getCommonAppBar();
+      } else {
+        return getCommon();
+      }
+      // return getCommon();
+
     } else if (widget.type == EdgeToEdgeType.Refresh.name) {
       return getRefresh();
+
     } else if (widget.type == EdgeToEdgeType.CommonRefresh.name) {
       return getCommonRefresh();
+
     } else if (widget.type == EdgeToEdgeType.CustomScrollView.name) {
+      /// CommonEdgeRefreshScrollview
       if (widget.appbar == true) {
         netState = NetState.Paging;
         return getCustomScrollViewAppBar();
       } else {
         return getCustomScrollView();
       }
-    } else if (widget.type == EdgeToEdgeType.iosCupertino.name) {
-      return getIosCupertino();
+    // } else if (widget.type == EdgeToEdgeType.iosCupertino.name) {
+    //   return getIosCupertino();
     } else {
       return Container();
     }
@@ -124,8 +124,8 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
   ///  SafeArea {
   ///
   getDefault() {
-    final statusBarHeight = MediaQuery.of(context).padding.top;
-    final bottomInset = MediaQuery.of(context).padding.bottom;
+    // final statusBarHeight = MediaQuery.of(context).padding.top;
+    // final bottomInset = MediaQuery.of(context).padding.bottom;
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -153,8 +153,39 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     );
   }
 
+  getCommonAppBar() {
+    return CommonDefaultEdgePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      // appBar: Container(height: kToolbarHeight, color: Colors.deepPurple,),
+      // appBar: Container(height: kToolbarHeight,),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: AppBar(
+          title: Text('긴 텍스트'),
+        ),
+      ),
+      child: ListView.builder(
+        // padding: EdgeInsets.zero,
+        /// 상하단에 공간
+        /// 상단은 스테이터스바 겹치지 않고
+        /// 하단은 네비게이션에 가르지 않게
+        itemCount: items.length,
+        itemBuilder: (_, index) {
+          return ListTile(
+            leading: CircleAvatar(child: Text('${index + 1}')),
+            title: Text(items[index]),
+            subtitle: Text('This is item number ${index + 1}'),
+          );
+        },
+      ),
+    );
+  }
+
+  /// ok
   getCommon() {
-    return CommonEdgeToEdgePage(
+    return CommonDefaultEdgePage(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+
       child: ListView.builder(
         // padding: EdgeInsets.zero,
         /// 상하단에 공간
@@ -179,7 +210,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
-    return CommonEdgeToEdgePage(
+    return CommonDefaultEdgePage(
       // backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
       child: refreshScroll(
@@ -207,14 +238,14 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     return Scaffold(body: customScrollView());
   }
 
-  NetState? netState = NetState.Paging;
 
   Widget getCustomScrollViewAppBar() {
     return CommonEdgeRefreshScrollview(
-      appTitle: 'Edge refresh',
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appTitle: 'CustomScrollView appbar',
       itemCount: items.length,
       // isMoreDataScroll: _isLastPage(),
-      isMoreDataScroll : MoreDataScroll.HAS,
+      isMoreDataScroll: MoreDataScroll.HAS,
       netState: NetState.Completed,
       // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
       onRefresh: () async {
@@ -257,10 +288,6 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
       },
     );
   }
-
-
-
-
 
   getCustomScrollViewAppBar1() {
     return Scaffold(
@@ -361,7 +388,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
-    return CommonEdgeToEdgePage(
+    return CommonDefaultEdgePage(
       // backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
       isBlur: true,
@@ -526,5 +553,3 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     );
   }
 }
-
-

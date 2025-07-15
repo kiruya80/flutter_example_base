@@ -30,7 +30,6 @@ abstract class AuthState with _$AuthState implements BaseUiStatus {
 
   factory AuthState.loggedIn(User user) =>
       AuthState(isLoggedIn: true, isLoading: false, user: user, error: null, navigateTo: null);
-
 }
 
 // class AuthState extends BaseUiStatus {

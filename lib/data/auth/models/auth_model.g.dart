@@ -13,10 +13,9 @@ _AuthModel _$AuthModelFromJson(Map<String, dynamic> json) => _AuthModel(
   userId: (json['userId'] as num?)?.toInt(),
 );
 
-Map<String, dynamic> _$AuthModelToJson(_AuthModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'body': instance.body,
-      'userId': instance.userId,
-    };
+Map<String, dynamic> _$AuthModelToJson(_AuthModel instance) => <String, dynamic>{
+  'id': instance.id,
+  'title': instance.title,
+  'body': instance.body,
+  'userId': instance.userId,
+};

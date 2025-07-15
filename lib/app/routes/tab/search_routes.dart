@@ -15,11 +15,10 @@ final List<GoRoute> searchTabRoutes = [
     // pageBuilder: (context, state) => NoTransitionPage(child: SearchTab()),
     pageBuilder: (context, state) {
       final mainScaffoldState = context.findAncestorStateOfType<MainScaffoldWithNavState>();
-      final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabSearch.tabIndex]; // 게시글 탭 인덱스
+      final controller =
+          mainScaffoldState?.controllers[AppRoutesInfo.tabSearch.tabIndex]; // 게시글 탭 인덱스
 
-      return NoTransitionPage(
-        child: SearchTab(mainNavScrollController: controller),
-      );
+      return NoTransitionPage(child: SearchTab(mainNavScrollController: controller));
     },
     routes: [
       GoRoute(

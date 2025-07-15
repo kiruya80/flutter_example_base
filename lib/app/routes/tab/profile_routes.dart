@@ -15,11 +15,10 @@ final List<GoRoute> profileTabRoutes = [
     // pageBuilder: (context, state) => NoTransitionPage(child: ProfileTab()),
     pageBuilder: (context, state) {
       final mainScaffoldState = context.findAncestorStateOfType<MainScaffoldWithNavState>();
-      final controller = mainScaffoldState?.controllers[AppRoutesInfo.tabProfile.tabIndex]; // 게시글 탭 인덱스
+      final controller =
+          mainScaffoldState?.controllers[AppRoutesInfo.tabProfile.tabIndex]; // 게시글 탭 인덱스
 
-      return NoTransitionPage(
-        child: ProfileTab(mainNavScrollController: controller),
-      );
+      return NoTransitionPage(child: ProfileTab(mainNavScrollController: controller));
     },
     routes: [
       GoRoute(

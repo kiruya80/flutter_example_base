@@ -9,8 +9,12 @@ import 'package:flutter/cupertino.dart';
 ///
 class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   MySliverPersistentHeaderDelegate({
-    required this.minHeight, /// 스크롤시 상단에서 최소 보여지는 높이
-    required this.maxHeight, /// 전체 높이
+    required this.minHeight,
+
+    /// 스크롤시 상단에서 최소 보여지는 높이
+    required this.maxHeight,
+
+    /// 전체 높이
     required this.child,
   });
 

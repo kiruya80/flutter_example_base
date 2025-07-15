@@ -5,11 +5,9 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-final RouteObserver<ModalRoute<void>> conWidgetRouteObserver =
-    RouteObserver<ModalRoute<void>>();
+final RouteObserver<ModalRoute<void>> conWidgetRouteObserver = RouteObserver<ModalRoute<void>>();
 
-abstract class BaseConState<T extends ConsumerStatefulWidget>
-    extends ConsumerState<T>
+abstract class BaseConState<T extends ConsumerStatefulWidget> extends ConsumerState<T>
     with RouteAware {
   String _location = '';
   bool _didPop = false;
@@ -18,8 +16,7 @@ abstract class BaseConState<T extends ConsumerStatefulWidget>
   String get currentLocation => _location;
 
   /// 현재 이 페이지가 화면에 보이는 상태인지
-  bool get isThisPageVisible =>
-      mounted && _didPop && ModalRoute.of(context)!.isCurrent;
+  bool get isThisPageVisible => mounted && _didPop && ModalRoute.of(context)!.isCurrent;
 
   /// 페이지 트리에 있는지만 확인 (화면에 보이는지 여부와는 무관)
   bool get isActivePage => mounted;

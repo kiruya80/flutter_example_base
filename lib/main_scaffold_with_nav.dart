@@ -31,6 +31,10 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// 바텀 네비게이션 가리기 애니메이션
   // late final AnimationController _bottomBarAnimationController;
 
+  ///
+  /// tab 내부  스크롤 컨트럴러
+  /// 동일 탭 클릭시 - 컨텐츠 스크롤 최상단 이동을 위해서
+  ///
   final Map<int, ScrollController> controllers = {
     AppRoutesInfo.tabHome.tabIndex ?? 0: ScrollController(),
     AppRoutesInfo.tabPosts.tabIndex ?? 1: ScrollController(),
@@ -45,6 +49,9 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   //   BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
   // ];
 
+  /// 네비게이터 아이템
+  /// tab item
+  ///
   final List<NavItem> navItems = [
     NavItem(iconData: Icons.home, label: 'Home'),
     NavItem(iconData: Icons.post_add, label: 'Post'),
@@ -64,6 +71,11 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     }
   }
 
+  ///
+  /// 탭 클릭시
+  /// ㄴ 동일 탭이면 스크롤 최상단 이동
+  /// ㄴ 아닌 경우 탭 이동
+  ///
   void _onTap(int index) {
     QcLog.d(
       'state before ===== ${GoRouterState.of(context).topRoute.toString()} , ${GoRouterState.of(context).uri} , ${widget.navigationShell.currentIndex} ',
@@ -197,7 +209,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// ㄴ 백키 종료 가능
   getBottomNavBlur() {
     var bottom = MediaQuery.of(context).padding.bottom;
-    return CommonEdgeToEdgePage(
+    return CommonDefaultEdgePage(
       extendBodyBehindAppBar: true,
       extendBody: true,
       // bottomNavigationBar: ClipRect(
@@ -230,52 +242,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     );
   }
 
-  /// stack으로 구성
-  /// ㄴ 단, 뒤로가기시 종료가 안되는 이슈
-  getCustomNavStack() {
-    return CommonEdgeToEdgePage(
-      // body: widget.shell,
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-
-      // body: IndexedStack(
-      //   index: widget.navigationShell.currentIndex,
-      //   children: [
-      //     HomeTab(mainNavScrollController: controllers[0]!),
-      //     PostListScreen(mainNavScrollController: controllers[1]!),
-      //     ProfileTab(mainNavScrollController: controllers[2]!),
-      //     SearchTab(mainNavScrollController: controllers[3]!),
-      //   ],
-      // ),
-      child: Stack(
-        children: [
-          /// 배경 필요시
-          // Positioned.fill(
-          //   child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover),
-          // ),
-          /// 탭 컨텐츠
-          IndexedStack(
-            index: widget.navigationShell.currentIndex,
-            children: [
-              HomeTab(mainNavScrollController: controllers[0]!),
-              PostListScreen(mainNavScrollController: controllers[1]!),
-              ProfileTab(mainNavScrollController: controllers[2]!),
-              SearchTab(mainNavScrollController: controllers[3]!),
-            ],
-          ),
-
-          // ✅ blur 처리된 BottomNavigationBar
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: MediaQuery.of(context).padding.bottom,
-            child: _buildBlurBottomBar(),
-          ),
-        ],
-      ),
-    );
-  }
-
+  ///
   /// blur 처리된 바텀네이게이션
   ///
   Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Scale}) {
@@ -283,7 +250,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: Container(
-          padding: EdgeInsets.only(left: 5,right: 5 ),
+          padding: EdgeInsets.only(left: 5, right: 5),
           height: kBottomNavigationBarHeight + 10,
           decoration: BoxDecoration(
             // color: Colors.white.withOpacitySafe(0.15),
@@ -312,4 +279,55 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       ),
     );
   }
+
+  /// stack으로 구성
+  /// ㄴ 단, 뒤로가기시 종료가 안되는 이슈
+  // getCustomNavStack() {
+  //   return CommonDefaultEdgePage(
+  //     // body: widget.shell,
+  //     extendBodyBehindAppBar: true,
+  //     extendBody: true,
+  //
+  //     // body: IndexedStack(
+  //     //   index: widget.navigationShell.currentIndex,
+  //     //   children: [
+  //     //     HomeTab(mainNavScrollController: controllers[0]!),
+  //     //     PostListScreen(mainNavScrollController: controllers[1]!),
+  //     //     ProfileTab(mainNavScrollController: controllers[2]!),
+  //     //     SearchTab(mainNavScrollController: controllers[3]!),
+  //     //   ],
+  //     // ),
+  //     child: Stack(
+  //       children: [
+  //         Positioned.fill(
+  //           child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover),
+  //         ),
+  //
+  //         // Center(
+  //         //   child: Text(
+  //         //     'Content',
+  //         //     style: TextStyle(fontSize: 24, color: Colors.white),
+  //         //   ),
+  //         // ),
+  //         IndexedStack(
+  //           index: widget.navigationShell.currentIndex,
+  //           children: [
+  //             HomeTab(mainNavScrollController: controllers[0]!),
+  //             PostListScreen(mainNavScrollController: controllers[1]!),
+  //             ProfileTab(mainNavScrollController: controllers[2]!),
+  //             SearchTab(mainNavScrollController: controllers[3]!),
+  //           ],
+  //         ),
+  //
+  //         // ✅ blur 처리된 BottomNavigationBar
+  //         Positioned(
+  //           left: 0,
+  //           right: 0,
+  //           bottom: MediaQuery.of(context).padding.bottom,
+  //           child: _buildBlurBottomBar(),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

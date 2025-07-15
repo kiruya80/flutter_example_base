@@ -6,8 +6,7 @@ part of 'post_ge_auto_list_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postGeAutoListNotifierHash() =>
-    r'd6f685689d8ade0086194bf0a5e13ee6492fd764';
+String _$postGeAutoListNotifierHash() => r'd6f685689d8ade0086194bf0a5e13ee6492fd764';
 
 ///
 /// 초기값으로 api 호출
@@ -34,9 +33,7 @@ final postGeAutoListNotifierProvider = AutoDisposeAsyncNotifierProvider<
   PostGeAutoListNotifier.new,
   name: r'postGeAutoListNotifierProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$postGeAutoListNotifierHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$postGeAutoListNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

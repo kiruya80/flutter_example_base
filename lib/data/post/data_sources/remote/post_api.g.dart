@@ -27,21 +27,14 @@ class _PostApi implements PostApi {
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<List<PostModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/posts',
-            queryParameters: queryParameters,
-            data: _data,
-          )
+          .compose(_dio.options, '/posts', queryParameters: queryParameters, data: _data)
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<List<dynamic>>(_options);
     late List<PostModel> _value;
     try {
       _value =
-          _result.data!
-              .map((dynamic i) => PostModel.fromJson(i as Map<String, dynamic>))
-              .toList();
+          _result.data!.map((dynamic i) => PostModel.fromJson(i as Map<String, dynamic>)).toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -58,12 +51,7 @@ class _PostApi implements PostApi {
     _data.addAll(body);
     final _options = _setStreamType<PostModel>(
       Options(method: 'POST', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/posts',
-            queryParameters: queryParameters,
-            data: _data,
-          )
+          .compose(_dio.options, '/posts', queryParameters: queryParameters, data: _data)
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
@@ -86,12 +74,7 @@ class _PostApi implements PostApi {
     _data.addAll(body);
     final _options = _setStreamType<PostModel>(
       Options(method: 'PUT', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/posts/${id}',
-            queryParameters: queryParameters,
-            data: _data,
-          )
+          .compose(_dio.options, '/posts/${id}', queryParameters: queryParameters, data: _data)
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
@@ -113,12 +96,7 @@ class _PostApi implements PostApi {
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<void>(
       Options(method: 'DELETE', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/posts/${id}',
-            queryParameters: queryParameters,
-            data: _data,
-          )
+          .compose(_dio.options, '/posts/${id}', queryParameters: queryParameters, data: _data)
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     await _dio.fetch<void>(_options);

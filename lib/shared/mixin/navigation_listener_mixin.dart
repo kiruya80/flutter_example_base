@@ -11,18 +11,14 @@ import '../base/base_ui_status.dart';
 /// 	•	예: 글 작성 완료 후 → 리스트 화면으로 이동
 /// 	•	로그인 성공 후 → 메인 화면으로 이동
 ///
-mixin NavigationListenerMixin<
-  T extends BaseUiStatus,
-  W extends ConsumerStatefulWidget
->
+mixin NavigationListenerMixin<T extends BaseUiStatus, W extends ConsumerStatefulWidget>
     on ConsumerState<W> {
   late ProviderSubscription<T> _subscription;
 
   void setupNavigationListener(WidgetRef ref, ProviderListenable<T> provider) {
     _subscription = ref.listenManual<T>(provider, (prev, next) {
       QcLog.d('listenManual ==== ${prev?.error} , ${next.error}');
-      if (next.navigateTo != null &&
-          next.navigateTo?.path.isNotNullOrEmpty == true) {
+      if (next.navigateTo != null && next.navigateTo?.path.isNotNullOrEmpty == true) {
         RouterController.instance.pushName(next.navigateTo!);
       }
     });

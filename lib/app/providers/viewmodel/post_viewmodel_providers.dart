@@ -7,15 +7,13 @@ import '../usecase/post_usecase_providers.dart';
 
 /// PostListViewModel, PostEditViewModel provider
 ///
-final postListViewModelProvider =
-    StateNotifierProvider<PostListViewModel, PostListState>((ref) {
-      final getPosts = ref.watch(getPostsUseCaseProvider);
-      final deletePost = ref.watch(deletePostUseCaseProvider);
-      return PostListViewModel(getPosts, deletePost);
-    });
+final postListViewModelProvider = StateNotifierProvider<PostListViewModel, PostListState>((ref) {
+  final getPosts = ref.watch(getPostsUseCaseProvider);
+  final deletePost = ref.watch(deletePostUseCaseProvider);
+  return PostListViewModel(getPosts, deletePost);
+});
 
-final postWriteViewModelProvider =
-    StateNotifierProvider<PostWriteViewModel, PostWriteState>((ref) {
-      // final createPost = ref.watch(createPostUseCaseProvider);
-      return PostWriteViewModel(ref.watch(createPostUseCaseProvider));
-    });
+final postWriteViewModelProvider = StateNotifierProvider<PostWriteViewModel, PostWriteState>((ref) {
+  // final createPost = ref.watch(createPostUseCaseProvider);
+  return PostWriteViewModel(ref.watch(createPostUseCaseProvider));
+});

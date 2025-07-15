@@ -54,7 +54,6 @@ class _PostListScreenState extends BaseConState<PostListScreen>
     return EdgeCustomScrollview(
       content: _content(),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      isRefresh: false,
       //   isMoreDataScroll: MoreDataScroll.HAS,
     );
   }
@@ -150,7 +149,7 @@ class _PostListScreenState extends BaseConState<PostListScreen>
             ? Center(child: Text('Error: ${state.error?.message}'))
             : ListView.builder(
               shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: state.posts.length,
               itemBuilder: (context, index) {
                 final post = state.posts[index];

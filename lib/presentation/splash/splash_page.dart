@@ -43,16 +43,9 @@ class _SplashPageState extends BaseConState<SplashPage> {
       appBar: AppBar(title: Text('SplashPage')),
       backgroundColor: Colors.white,
       body: Container(
-          color: Colors.blue,
-        child: Center(
-          child: Column(
-            children: [
-              CircularProgressIndicator(),
-            ],
-          ),
-        ),
+        color: Colors.blue,
+        child: Center(child: Column(children: [CircularProgressIndicator()])),
       ),
     );
   }
-
 }

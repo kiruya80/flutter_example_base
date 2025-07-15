@@ -40,7 +40,7 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
     if (widget.blurType == BlurBottomType.Scale) {
       return getTabScale();
     } else if (widget.blurType == BlurBottomType.NoScale) {
-    return getTabNoScale();
+      return getTabNoScale();
     } else {
       return getRipple();
     }
@@ -79,7 +79,6 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
                   child: Icon(
                     widget.iconData,
                     key: ValueKey<bool>(widget.selected),
-                    // color: widget.selected ? Colors.black : Colors.white60,
                     color:
                         widget.selected
                             ? Theme.of(context).colorScheme.onPrimary
@@ -89,22 +88,12 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
                 const SizedBox(height: 2),
                 Text(
                   widget.label,
-                  // style: TextStyle(
-                  //   // color: widget.selected ? Colors.black : Colors.white60,
-                  //   color:
-                  //       widget.selected
-                  //           ? Theme.of(context).colorScheme.onPrimary
-                  //           : Theme.of(context).colorScheme.outline.withOpacitySafe(0.6),
-                  //   fontSize: 12,
-                  // ),
-
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     // fontWeight: FontWeight.w600,
-                      color:
-                          widget.selected
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : Theme.of(context).colorScheme.outline.withOpacitySafe(0.6),
-
+                    color:
+                        widget.selected
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : Theme.of(context).colorScheme.outline.withOpacitySafe(0.6),
                   ),
                 ),
               ],
@@ -122,25 +111,25 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.symmetric(vertical: 6),
-        decoration: BoxDecoration(         color:
-        widget.selected
-            ? Theme.of(context).colorScheme.primary.withOpacitySafe(0.5)
-            : Colors.transparent,
+        decoration: BoxDecoration(
+          color:
+              widget.selected
+                  ? Theme.of(context).colorScheme.primary.withOpacitySafe(0.5)
+                  : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Icon(item.icon, color: selected ? Colors.black : Colors.white60),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               child: Icon(
                 widget.iconData,
                 key: ValueKey<bool>(widget.selected),
                 color:
-                widget.selected
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
+                    widget.selected
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
               ),
             ),
             // item.icon,
@@ -149,9 +138,9 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
               widget.label ?? '',
               style: TextStyle(
                 color:
-                widget.selected
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
+                    widget.selected
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
                 fontSize: 12,
               ),
             ),
@@ -170,10 +159,11 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           padding: const EdgeInsets.symmetric(vertical: 6),
-          decoration: BoxDecoration(         color:
-          widget.selected
-              ? Theme.of(context).colorScheme.primary.withOpacitySafe(0.5)
-              : Colors.transparent,
+          decoration: BoxDecoration(
+            color:
+                widget.selected
+                    ? Theme.of(context).colorScheme.primary.withOpacitySafe(0.5)
+                    : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -185,9 +175,9 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
                   widget.iconData,
                   key: ValueKey<bool>(widget.selected),
                   color:
-                    widget.selected
-                    ? Theme.of(context).colorScheme.onPrimary
-                : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
+                      widget.selected
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
                 ),
               ),
               const SizedBox(height: 2),
@@ -195,9 +185,9 @@ class BlurBottomBarItemState extends State<BlurBottomBarItem> with SingleTickerP
                 widget.label,
                 style: TextStyle(
                   color:
-                  widget.selected
-                      ? Theme.of(context).colorScheme.onPrimary
-                      : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
+                      widget.selected
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.outline.withOpacitySafe(0.7),
                   fontSize: 12,
                 ),
               ),

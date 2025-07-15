@@ -6,16 +6,11 @@ part 'auth_model.freezed.dart';
 
 @freezed
 abstract class AuthModel with _$AuthModel {
-  const factory AuthModel({
-    required int? id,
-    String? title,
-    String? body,
-    int? userId,
-  }) = _AuthModel;
+  const factory AuthModel({required int? id, String? title, String? body, int? userId}) =
+      _AuthModel;
 
   /// 	•	API 응답 → UserInfoModel.fromJson()
-  factory AuthModel.fromJson(Map<String, dynamic> json) =>
-      _$AuthModelFromJson(json);
+  factory AuthModel.fromJson(Map<String, dynamic> json) => _$AuthModelFromJson(json);
 
   // /// ✅ Model → Entity
   // /// 	•	model.toEntity() → UseCase로 전달

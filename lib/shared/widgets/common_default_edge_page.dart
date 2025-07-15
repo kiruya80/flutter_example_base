@@ -49,7 +49,7 @@ import 'my_sliver_persistent_header_delegate.dart';
 /// 2. 블러 on 인 경우 & 앱바 있는 경우
 /// ㄴ
 ///
-class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
+class CommonDefaultEdgePage extends ConsumerStatefulWidget {
   final Widget child;
   final Widget? background;
   final Widget? appBar;
@@ -76,7 +76,7 @@ class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
   final Widget? bottomSheet;
   final Widget? bottomNavigationBar;
 
-  const CommonEdgeToEdgePage({
+  const CommonDefaultEdgePage({
     super.key,
     required this.child,
     this.background,
@@ -102,10 +102,10 @@ class CommonEdgeToEdgePage extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<CommonEdgeToEdgePage> createState() => _CommonEdgeToEdgePageState();
+  ConsumerState<CommonDefaultEdgePage> createState() => _CommonDefaultEdgePageState();
 }
 
-class _CommonEdgeToEdgePageState extends BaseConState<CommonEdgeToEdgePage> {
+class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   bool? isScroll = false;
   bool? isDark = false;
 
