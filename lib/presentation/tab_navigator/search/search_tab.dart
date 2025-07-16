@@ -41,6 +41,7 @@ class _SearchTabState extends BaseConState<SearchTab> {
 
     return EdgeCustomScrollview(
       content: _content(),
+      controller: widget.mainNavScrollController,
       backgroundColor: Theme.of(context).colorScheme.surface,
       isPhysics: true,
       //   isMoreDataScroll: MoreDataScroll.HAS,
@@ -53,7 +54,6 @@ class _SearchTabState extends BaseConState<SearchTab> {
         // 배경 이미지
         // Positioned.fill(child: Image.network('https://picsum.photos/1080/1920', fit: BoxFit.cover)),
         SingleChildScrollView(
-          controller: widget.mainNavScrollController,
           child: Column(
             children: [
               ItemTitle('context Go path'),

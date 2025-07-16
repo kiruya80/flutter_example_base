@@ -29,7 +29,6 @@ class MainScaffoldWithNav extends StatefulWidget {
 class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     with SingleTickerProviderStateMixin {
   /// 바텀 네비게이션 가리기 애니메이션
-  // late final AnimationController _bottomBarAnimationController;
   late final AnimationController _controller;
   late final Animation<Offset> _offsetAnimation;
 
@@ -43,13 +42,6 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     AppRoutesInfo.tabProfile.tabIndex ?? 2: ScrollController(),
     AppRoutesInfo.tabSearch.tabIndex ?? 3: ScrollController(),
   };
-
-  // var bottomNavItems = [
-  //   BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-  //   BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
-  //   BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-  //   BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-  // ];
 
   /// 네비게이터 아이템
   /// tab item
@@ -103,15 +95,19 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       final mainNavScrollController = controllers[index];
       QcLog.d('중복 탭 시 스크롤 최상단 ===  ${mainNavScrollController?.hasClients}');
 
-      if (mainNavScrollController?.hasClients == true) {
-        mainNavScrollController?.animateTo(
-          0,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
+      _scrollToTop(mainNavScrollController);
     } else {
       widget.navigationShell.goBranch(index);
+    }
+  }
+
+  void _scrollToTop(mainNavScrollController) {
+    if (mainNavScrollController?.hasClients == true) {
+      mainNavScrollController.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
     }
   }
 
@@ -127,26 +123,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   @override
   void initState() {
     super.initState();
-
-    /// 바텀 네비게이션 가리기 애니메이션
-    // 하단 바 애니메이션 컨트롤러
-    // _bottomBarAnimationController = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(milliseconds: 200),
-    // );
-    //
-    // // 각 탭의 스크롤 방향 감지
-    // for (final entry in controllers.entries) {
-    //   entry.value.addListener(() {
-    //     final direction = entry.value.position.userScrollDirection;
-    //     if (direction == ScrollDirection.reverse) {
-    //       _bottomBarAnimationController.forward(); // 아래로 → 숨김
-    //     } else if (direction == ScrollDirection.forward) {
-    //       _bottomBarAnimationController.reverse(); // 위로 → 다시 나타남
-    //     }
-    //   });
-    // }
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 100));
     _offsetAnimation = Tween<Offset>(
       begin: const Offset(0, 1), // 아래에 감춰짐
       end: Offset.zero, // 제자리로 올라옴
@@ -172,11 +149,12 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   @override
   Widget build(BuildContext context) {
     // return getDefault();
-
     // return getBottomNavBlur();
-    // return getBottomNavBlurAni();
-    return getBottomNavBlurAni2();
-    // return getCustomNavStack();
+
+    return getBottomNavBlurAni(false);
+
+    /// test pass
+    // return getBottomNavBlurAni2();
   }
 
   /// 1. 기본 네비게이션바
@@ -234,12 +212,10 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     );
   }
 
-  /// 2 .블러 처리된 네비게이션
+  /// 2-1 .블러 처리된 네비게이션
   /// ㄴ 백키 종료 가능
   getBottomNavBlur() {
-    var bottom = MediaQuery.of(context).padding.bottom;
-    QcLog.d('bottom  $bottom , kBottomNavigationBarHeight ==== $kBottomNavigationBarHeight');
-
+    // var bottom = MediaQuery.of(context).padding.bottom;
     return CommonDefaultEdgePage(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -250,10 +226,60 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       child: widget.navigationShell,
     );
   }
-    double scrollThreshold = 20;
-  /// 2-1 .블러 처리된 네비게이션 애니메이션
+
+  /// 2-2 .블러 처리된 네비게이션 애니메이션
   /// ㄴ 백키 종료 가능
-  getBottomNavBlurAni() {
+  ///
+  getBottomNavBlurAni(isBlur) {
+    return CommonDefaultEdgePage(
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      isBlur: isBlur,
+      onShowBottomBar: (isVisible) {
+        showBottomBar(isVisible);
+      },
+      bottomNavigationBar: _buildBlurBottomBar(),
+      child: widget.navigationShell,
+    );
+  }
+
+  ///
+  ///
+  Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Scale}) {
+    return SafeArea(
+      top: false,
+      child: ClipRect(
+        child: SlideTransition(
+          position: _offsetAnimation,
+          child: Container(
+            height: kBottomNavigationBarHeight + 10,
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(navItems.length, (index) {
+                final selected = index == widget.navigationShell.currentIndex;
+                final item = navItems[index];
+                return Expanded(
+                  child: BlurBottomBarItem(
+                    selected: selected,
+                    iconData: item.iconData,
+                    label: item.label ?? '',
+                    onTap: () => _onTap(index),
+                  ),
+                );
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 2-3 .블러 처리된 네비게이션 애니메이션
+  /// ㄴ 백키 종료 가능
+  getBottomNavBlurAni2() {
     return CommonDefaultEdgePage(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -289,18 +315,6 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     );
   }
 
-  getBottomNavBlurAni2() {
-    return CommonDefaultEdgePage(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      onShowBottomBar: (isVisible) {
-        showBottomBar(isVisible);
-      },
-      bottomNavigationBar: _buildBlurBottomBar(),
-      child: widget.navigationShell,
-    );
-  }
-
   ///
   /// blur 처리된 바텀네이게이션
   ///
@@ -329,38 +343,6 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
                 return Expanded(
                   child: BlurBottomBarItem(
                     blurType: blurType,
-                    selected: selected,
-                    iconData: item.iconData,
-                    label: item.label ?? '',
-                    onTap: () => _onTap(index),
-                  ),
-                );
-              }),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Scale}) {
-    return SafeArea(
-      top: false,
-      child: ClipRect(
-        child: SlideTransition(
-          position: _offsetAnimation,
-          child: Container(
-            height: kBottomNavigationBarHeight + 10,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(navItems.length, (index) {
-                final selected = index == 0; // 예시
-                final item = navItems[index];
-                return Expanded(
-                  child: BlurBottomBarItem(
                     selected: selected,
                     iconData: item.iconData,
                     label: item.label ?? '',

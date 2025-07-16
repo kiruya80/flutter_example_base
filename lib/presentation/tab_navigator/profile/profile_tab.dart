@@ -37,109 +37,108 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
     QcLog.d("앱 테마 : ${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
 
     return EdgeCustomScrollview(
-      content: SingleChildScrollView(
-        controller: widget.mainNavScrollController,
-        child: _getMoveEdgeToEdge(),
-      ),
+      content: _getMoveEdgeToEdge(),
+      controller: widget.mainNavScrollController,
       backgroundColor: Theme.of(context).colorScheme.surface,
       //   isMoreDataScroll: MoreDataScroll.HAS,
     );
   }
 
   _getMoveEdgeToEdge() {
-    return Column(
-      children: [
-        ItemTitle('앱 테마 : ${isDark == true ? "🌙 다크 모드" : "☀️ 라이트 모드"}'),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ItemTitle('앱 테마 : ${isDark == true ? "🌙 다크 모드" : "☀️ 라이트 모드"}'),
 
-        RouterMoveItem('테마 변경', () {
-          QcLog.d('테마변경 === ');
-          // final appThemeMode = ref.read(appThemeModeProvider);
-          // isDark = appThemeMode == ThemeMode.dark;
-          ref.read(appThemeModeProvider.notifier).state =
-              (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
-        }),
+          RouterMoveItem('테마 변경', () {
+            QcLog.d('테마변경 === ');
+            // final appThemeMode = ref.read(appThemeModeProvider);
+            // isDark = appThemeMode == ThemeMode.dark;
+            ref.read(appThemeModeProvider.notifier).state =
+                (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
+          }),
 
-        RouterMoveItem('edgeToEdge Default', () {
-          context.pushNamed(
-            AppRoutesInfo.edgeToEdge.name,
-            pathParameters: {'id': 'id_123'},
-            queryParameters: {'type': EdgeToEdgeType.Default.name, 'isAppbar': 'false'},
-          );
-        }),
+          RouterMoveItem('edgeToEdge Default', () {
+            context.pushNamed(
+              AppRoutesInfo.edgeToEdge.name,
+              pathParameters: {'id': 'id_123'},
+              queryParameters: {'type': EdgeToEdgeType.Default.name, 'isAppbar': 'false'},
+            );
+          }),
 
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('edgeToEdge Common', () {
-          context.pushNamed(
-            AppRoutesInfo.edgeToEdge.name,
-            pathParameters: {'id': 'id_123'},
-            queryParameters: {'type': EdgeToEdgeType.Common.name, 'isAppbar': 'false'},
-          );
-        }),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('edgeToEdge Common', () {
+            context.pushNamed(
+              AppRoutesInfo.edgeToEdge.name,
+              pathParameters: {'id': 'id_123'},
+              queryParameters: {'type': EdgeToEdgeType.Common.name, 'isAppbar': 'false'},
+            );
+          }),
 
-        RouterMoveItem('edgeToEdge Common Appbar', () {
-          context.pushNamed(
-            AppRoutesInfo.edgeToEdge.name,
-            pathParameters: {'id': 'id_123'},
-            queryParameters: {'type': EdgeToEdgeType.Common.name, 'isAppbar': 'true'},
-          );
-        }),
+          RouterMoveItem('edgeToEdge Common Appbar', () {
+            context.pushNamed(
+              AppRoutesInfo.edgeToEdge.name,
+              pathParameters: {'id': 'id_123'},
+              queryParameters: {'type': EdgeToEdgeType.Common.name, 'isAppbar': 'true'},
+            );
+          }),
 
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('edgeToEdge Refresh', () {
-          context.pushNamed(
-            AppRoutesInfo.edgeToEdge.name,
-            pathParameters: {'id': 'id_123'},
-            queryParameters: {'type': EdgeToEdgeType.Refresh.name, 'isAppbar': 'true'},
-          );
-        }),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('edgeToEdge Refresh', () {
+            context.pushNamed(
+              AppRoutesInfo.edgeToEdge.name,
+              pathParameters: {'id': 'id_123'},
+              queryParameters: {'type': EdgeToEdgeType.Refresh.name, 'isAppbar': 'true'},
+            );
+          }),
 
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('edgeToEdge CommonRefresh', () {
-          context.pushNamed(
-            AppRoutesInfo.edgeToEdge.name,
-            pathParameters: {'id': 'id_123'},
-            queryParameters: {'type': EdgeToEdgeType.CommonRefresh.name, 'isAppbar': 'true'},
-          );
-        }),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('edgeToEdge CommonRefresh', () {
+            context.pushNamed(
+              AppRoutesInfo.edgeToEdge.name,
+              pathParameters: {'id': 'id_123'},
+              queryParameters: {'type': EdgeToEdgeType.CommonRefresh.name, 'isAppbar': 'true'},
+            );
+          }),
 
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('CustomScrollView', () {
-          context.pushNamed(
-            AppRoutesInfo.edgeToEdge.name,
-            pathParameters: {'id': 'id_123'},
-            queryParameters: {'type': EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'false'},
-          );
-        }),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('CustomScrollView', () {
+            context.pushNamed(
+              AppRoutesInfo.edgeToEdge.name,
+              pathParameters: {'id': 'id_123'},
+              queryParameters: {'type': EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'false'},
+            );
+          }),
 
-        RouterMoveItem('CustomScrollView isAppbar', () {
-          context.pushNamed(
-            AppRoutesInfo.edgeToEdge.name,
-            pathParameters: {'id': 'id_123'},
-            queryParameters: {'type': EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'true'},
-          );
-        }),
+          RouterMoveItem('CustomScrollView isAppbar', () {
+            context.pushNamed(
+              AppRoutesInfo.edgeToEdge.name,
+              pathParameters: {'id': 'id_123'},
+              queryParameters: {'type': EdgeToEdgeType.CustomScrollView.name, 'isAppbar': 'true'},
+            );
+          }),
 
-        // RouterMoveItem('edgeToEdge iosCupertino', () {
-        //   context.pushNamed(
-        //     AppRoutesInfo.edgeToEdge.name,
-        //     pathParameters: {'id': 'id_123'},
-        //     queryParameters: {'type': EdgeToEdgeType.iosCupertino.name, 'isAppbar': 'true'},
-        //   );
-        // }),
-
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-        RouterMoveItem('=====', () {}),
-      ],
+          // RouterMoveItem('edgeToEdge iosCupertino', () {
+          //   context.pushNamed(
+          //     AppRoutesInfo.edgeToEdge.name,
+          //     pathParameters: {'id': 'id_123'},
+          //     queryParameters: {'type': EdgeToEdgeType.iosCupertino.name, 'isAppbar': 'true'},
+          //   );
+          // }),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+          RouterMoveItem('=====', () {}),
+        ],
+      ),
     );
   }
 

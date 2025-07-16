@@ -53,6 +53,7 @@ class _PostListScreenState extends BaseConState<PostListScreen>
   Widget build(BuildContext context) {
     return EdgeCustomScrollview(
       content: _content(),
+      controller: widget.mainNavScrollController,
       backgroundColor: Theme.of(context).colorScheme.surface,
       //   isMoreDataScroll: MoreDataScroll.HAS,
     );

@@ -29,7 +29,6 @@ class _HomeTabState extends BaseConState<HomeTab> {
   @override
   void initState() {
     super.initState();
-
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     // });
   }
@@ -54,6 +53,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
 
     return EdgeCustomScrollview(
       content: _content(),
+      controller: widget.mainNavScrollController,
       backgroundColor: Theme.of(context).colorScheme.surface,
       //   isMoreDataScroll: MoreDataScroll.HAS,
     );
@@ -61,7 +61,6 @@ class _HomeTabState extends BaseConState<HomeTab> {
 
   _content() {
     return SingleChildScrollView(
-      controller: widget.mainNavScrollController,
       child: Column(
         children: [
           ///

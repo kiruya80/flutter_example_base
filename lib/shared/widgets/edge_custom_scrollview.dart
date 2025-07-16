@@ -26,6 +26,7 @@ class EdgeCustomScrollview extends StatefulWidget {
   final bool? isSpaceStatus;
   final Color? backgroundColor;
   final Widget? content;
+  final ScrollController? controller;
 
   const EdgeCustomScrollview({
     super.key,
@@ -33,6 +34,7 @@ class EdgeCustomScrollview extends StatefulWidget {
     this.isSpaceStatus = true,
     this.backgroundColor,
     this.content,
+    this.controller,
   });
 
   @override
@@ -45,7 +47,7 @@ class _EdgeCustomScrollviewState extends State<EdgeCustomScrollview> {
     return Container(
       color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
       child: CustomScrollView(
-        // controller: pagingScrollController,
+        controller: widget.controller,
         physics:
             widget.isPhysics == true
                 ? const AlwaysScrollableScrollPhysics(
