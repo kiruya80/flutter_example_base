@@ -158,6 +158,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
 
   void showBottomBar(bool show) {
     if (show) {
+      /// 바텀 네비게이션 불투명 처리
       _controller.forward().then((v) {
         isBottomBarVisible = true;
       });
@@ -173,8 +174,8 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     // return getDefault();
 
     // return getBottomNavBlur();
-    return getBottomNavBlurAni();
-    // return getBottomNavBlurAni2();
+    // return getBottomNavBlurAni();
+    return getBottomNavBlurAni2();
     // return getCustomNavStack();
   }
 

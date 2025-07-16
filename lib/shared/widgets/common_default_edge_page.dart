@@ -122,6 +122,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   bool? isDark = false;
   bool isBottomBarVisible = true;
   double lastOffset = 0;
+  final double _threshold = 20.0; // 최소 스크롤 거리
 
   @override
   void initState() {
@@ -150,10 +151,10 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   @override
   Widget build(BuildContext context) {
     overlayColor = Theme.of(context).colorScheme.surfaceBright;
-    CommonUtils.isTablet(context);
+    // CommonUtils.isTablet(context);
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
-    QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
+    // QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
 
     // 실제 시스템 바 영역 (상태바, 내비게이션바)
     // final viewPadding = MediaQuery.of(context).viewPadding;
@@ -163,7 +164,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
     // QcLog.d(' viewPadding === $viewPadding , viewInsets == $viewInsets');
     //
     var appThemeMode = ref.watch(appThemeModeProvider);
-    QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "☀🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
+    // QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "☀🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
     isDark = appThemeMode == ThemeMode.dark;
 
     return NotificationListener<ScrollNotification>(
@@ -245,6 +246,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   /// ㄴ Brightness.light 검은색
   ///
   _onNotification(BuildContext context, ScrollNotification notification) {
+    if (notification is ScrollUpdateNotification) {}
     CommonUtils.getDisplayWidth(context);
     var displayHeight = CommonUtils.getDisplayHeight(context);
     // QcLog.d('_onNotification  CommonEdgeToEdgePage ====== ');
@@ -254,12 +256,12 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
     if (metrics.axisDirection != AxisDirection.down) return false;
 
     // final isTop = metrics.pixels <= metrics.minScrollExtent + 1;
-    final isTop = metrics.pixels <= metrics.minScrollExtent + (displayHeight / 2);
+    final isTop = metrics.pixels <= metrics.minScrollExtent + (displayHeight / 3);
     final isBottom = metrics.pixels >= metrics.maxScrollExtent - 1;
 
-    print(
-      '_onNotification ==== ${metrics.pixels} | ${metrics.minScrollExtent} , ${metrics.maxScrollExtent}',
-    );
+    // print(
+    //   '_onNotification ==== ${metrics.pixels} | ${metrics.minScrollExtent} , ${metrics.maxScrollExtent}',
+    // );
 
     if (isTop) {
       QcLog.d("📍 최상단입니다.");
@@ -275,8 +277,12 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
       //   isDark: isDark,
       //   isBlur: false,
       // );
-      if (widget.onScrollTop != null) {
-        widget.onScrollTop!();
+      // if (widget.onScrollTop != null) {
+      //   widget.onScrollTop!();
+      // }
+
+      if (widget.onShowBottomBar != null) {
+        widget.onShowBottomBar!(true);
       }
     } else {
       /// 최상단은 지나감
@@ -298,11 +304,18 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
         //   systemNavigationBarColor: Colors.deepPurple, // todo test
         //   systemNavigationBarDividerColor: Colors.transparent,
         // );
-        if (widget.onScrollEnd != null) {
-          widget.onScrollEnd!();
+        // if (widget.onScrollEnd != null) {
+        //   widget.onScrollEnd!();
+        // }
+
+        if (widget.onShowBottomBar != null) {
+          widget.onShowBottomBar!(false);
         }
-      } else if (isScroll == false) {
-        QcLog.d("📍 최상단을 지남.");
+
+        // } else if (isScroll == false) {
+      } else {
+        // QcLog.d("📍 최상단을 지남.");
+
         // isScroll = true;
 
         setState(() {
@@ -313,9 +326,48 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
         //   isBlur: false,
         // );
 
-        if (widget.onScrollUpdate != null) {
-          widget.onScrollUpdate!(metrics.pixels);
+        // if (widget.onScrollUpdate != null) {
+        //   widget.onScrollUpdate!(metrics.pixels);
+        // }
+
+        // final difference = metrics.pixels - lastOffset;
+        // setState(() => isBottomBarVisible = false);
+
+        final currentOffset = notification.metrics.pixels;
+        final delta = currentOffset - lastOffset;
+        print(
+          '_onNotification ==== $isBottomBarVisible | $delta ||0 ($currentOffset - $lastOffset ) '
+          '| ${metrics.minScrollExtent} , ${metrics.maxScrollExtent} , axisDirection : ${metrics.axisDirection}',
+        );
+
+        if (delta > _threshold) {
+          print('⬇️  아래로 스크롤 → 바텀바 숨김 (콘텐츠가 위로 이동)');
+          if (widget.onShowBottomBar != null) {
+            widget.onShowBottomBar!(false);
+          }
+        } else if (delta < -_threshold) {
+          print('⬆️ 위로 스크롤 → 바텀바 보여줌 (콘텐츠가 아래로 이동)');
+          if (widget.onShowBottomBar != null) {
+            widget.onShowBottomBar!(true);
+          }
         }
+
+        // lastOffset = currentOffset;
+        //
+        // if (difference > scrollThreshold && isBottomBarVisible) {
+        //   isBottomBarVisible = false;
+        //   if (widget.onShowBottomBar != null) {
+        //     widget.onShowBottomBar!(false);
+        //   }
+        // } else if (difference < -scrollThreshold && !isBottomBarVisible) {
+        //   isBottomBarVisible = true;
+        //   if (widget.onShowBottomBar != null) {
+        //     widget.onShowBottomBar!(true);
+        //   }
+        // }
+
+        lastOffset = currentOffset;
+
         // _setSystemUiOverlayStyle(
         //   /// iOS에서는 statusBarColor는 완전히 무시
         //   statusBarColor:
