@@ -206,9 +206,9 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
               Align(
                 alignment: Alignment.topCenter,
                 child: BlurOverlay(
-                  isBlur: false,
+                  isBlur: true,
                   isDark: isDark,
-                  backgroundColor: Theme.of(context).colorScheme.surfaceBright,
+                  overlayColor: Theme.of(context).colorScheme.surfaceBright,
                 ),
               ),
 
@@ -218,11 +218,11 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
                 alignment: Alignment.bottomCenter,
                 child: BlurOverlay(
                   height: bottomInset,
-                  isBlur: false,
+                  isBlur: true,
                   isDark: isDark,
                   isBottom: true,
                   // backgroundColor: Theme.of(context).colorScheme.surfaceBright.withOpacitySafe(0.5),
-                  backgroundColor: overlayColor,
+                  overlayColor: overlayColor,
                 ),
               ),
           ],
@@ -318,9 +318,9 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
 
         // isScroll = true;
 
-        setState(() {
-          overlayColor = Theme.of(context).colorScheme.surfaceBright.withOpacitySafe(0.5);
-        });
+        // setState(() {
+        //   overlayColor = Theme.of(context).colorScheme.surfaceBright.withOpacitySafe(0.5);
+        // });
         // SystemSettingUtils().setSystemUiOverlayStyle(
         //   isDark: isDark,
         //   isBlur: false,
@@ -342,11 +342,18 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
 
         if (delta > _threshold) {
           print('⬇️  아래로 스크롤 → 바텀바 숨김 (콘텐츠가 위로 이동)');
+          setState(() {
+            overlayColor = Theme.of(context).colorScheme.surfaceBright;
+          });
           if (widget.onShowBottomBar != null) {
             widget.onShowBottomBar!(false);
           }
+
         } else if (delta < -_threshold) {
           print('⬆️ 위로 스크롤 → 바텀바 보여줌 (콘텐츠가 아래로 이동)');
+          setState(() {
+            overlayColor = Theme.of(context).colorScheme.surfaceBright.withOpacitySafe(0.5);
+          });
           if (widget.onShowBottomBar != null) {
             widget.onShowBottomBar!(true);
           }

@@ -20,7 +20,7 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
     CommonEdgeToEdgePage에서 appBar가 있으면 빌드시 appBar까지 블러처리됨
  */
 class BlurOverlay extends StatelessWidget {
-  final Color? backgroundColor;
+  final Color? overlayColor;
   final double? height;
   final bool? isBlur;
   final bool? isDark;
@@ -28,7 +28,7 @@ class BlurOverlay extends StatelessWidget {
 
   const BlurOverlay({
     super.key,
-    this.backgroundColor,
+    this.overlayColor,
     this.height, // 상태바 + 상단 일부
     this.isBlur = true,
     this.isDark = false,
@@ -60,7 +60,7 @@ class BlurOverlay extends StatelessWidget {
             height: height ?? statusBarHeight,
             // 반투명 오버레이
             color:
-                backgroundColor ?? (isDark == true
+            overlayColor ?? (isDark == true
                         ? Colors.black.withOpacitySafe(0.2)
                         : Colors.white.withOpacitySafe(isBottom == true ? 0.5 : 0.2)),
           ),
@@ -73,8 +73,8 @@ class BlurOverlay extends StatelessWidget {
           height: height ?? statusBarHeight,
           // 반투명 오버레이
           color:
-          backgroundColor != null
-              ? backgroundColor?.withOpacitySafe(0.8)
+          overlayColor != null
+              ? overlayColor?.withOpacitySafe(0.8)
               : (isDark == true
               ? Colors.black.withOpacitySafe(0.2)
               : Colors.white.withOpacitySafe(isBottom == true ? 0.5 : 0.2)),
