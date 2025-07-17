@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_example_base/core/utils/device_info_util.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,6 +23,8 @@ class _SettingPageState extends BaseConState<SettingPage> {
   @override
   Widget build(BuildContext context) {
     QcLog.d('build =====  $isThisPageVisible ');
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+    QcLog.d('bottomInset ===== ${MediaQuery.of(context).padding} , $bottomInset ');
     // final name = GoRouter.of(context).routeInformationProvider.value.uri.toString();
     // QcLog.d('name =====  $name ');
     // final routeMatchList = GoRouter.of(context).routerDelegate.currentConfiguration;
@@ -37,19 +40,50 @@ class _SettingPageState extends BaseConState<SettingPage> {
 
     return Scaffold(
       appBar: AppBar(title: Text('Setting')),
-      body: Center(
-        child: Column(
-          children: [
-            Text('id:'),
-            ElevatedButton(
-              onPressed: () {
-                if (context.canPop()) {
-                  context.pop(); // 뒤로 가기
-                }
-              },
-              child: const Text('Back'),
-            ),
-          ],
+      body:
+      SafeArea(
+        bottom: false,
+        top: false,
+        child:
+        Container(
+          width: double.maxFinite,
+          color: Colors.orange,
+          child: Column(
+            children: [
+              Text('id:'),
+              ElevatedButton(
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop(); // 뒤로 가기
+                  }
+                },
+                child: const Text('Back'),
+              ),
+              Spacer(),
+              ///
+              /// android 15 sdk 35부터
+              /// 1. SafeArea 로 감싸지 않거나,
+              /// 2. SafeArea(top:false,bottom:false)
+              /// 인 경우 바텀네이게이터 또는 스테이터스바 영역을 침범한다
+              ///
+              /// 침범하지 않게 하려면 SafeArea로 감싸야한다
+              ///
+              /// ios 홈인디게이터 존재시
+              /// 1. SafeArea 로 감싸지 않거나,
+              /// 2. SafeArea(top:false,bottom:false)
+              /// 인 경우 바텀네이게이터 또는 스테이터스바 영역을 침범한다
+              ///
+              /// 반대로, SafeArea를 감싸는 경우 하단 홈 인디게이터 색상 이슈가 생길수 있다
+              /// >> 홈 인디게이터 영역까지 전체를 다 사용하고 하단 마진을 가지는걸로 색상이슈 해결
+              ///
+              ElevatedButton(
+                onPressed: () {
+                },
+                child: const Text('Bottom'),
+              ),
+              SizedBox(height: DeviceInfoUtil.instance.getBottomHeightEdgeToEdge(context, isEdgeToEdge: true),)
+            ],
+          ),
         ),
       ),
     );

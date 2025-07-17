@@ -102,9 +102,9 @@ dependencies:
   # 권한체크
   #  permission_handler: ^10.4.3
   # App추가 / 디바이스 정보 조회 / BSD-3-Clause / https://github.com/fluttercommunity/plus_plugins/tree/main/packages/device_info_plus/device_info_plus
-  #  device_info_plus: ^10.1.0
+  device_info_plus: ^11.5.0
   # App추가 / 패키지 정보 조회 / BSD-3-Clause / https://github.com/fluttercommunity/plus_plugins/tree/main/packages/package_info_plus/package_info_plus
-  #  package_info_plus: ^8.0.1
+  package_info_plus: ^8.3.0
   # App추가 / 디바이스 아이디 조회 / MIT / https://github.com/GigaDroid/flutter_udid
 #  flutter_udid: ^3.0.0
 

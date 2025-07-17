@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
+import 'package:flutter_example_base/core/utils/device_info_util.dart';
 import 'package:flutter_example_base/shared/entities/nav_item.dart';
 import 'package:flutter_example_base/shared/widgets/blur_bottom_bar_item.dart';
 import 'package:flutter_example_base/shared/widgets/common_default_edge_page.dart';
@@ -10,6 +12,7 @@ import 'package:go_router/go_router.dart';
 
 import 'app/routes/app_routes_info.dart';
 import 'app/routes/tab/tab_router.dart';
+import 'core/utils/common_utils.dart';
 import 'core/utils/print_log.dart';
 
 ///
@@ -169,6 +172,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
 
   @override
   Widget build(BuildContext context) {
+
     // return getDefault();
     // return getBottomNavBlur();
 
@@ -242,7 +246,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       extendBody: true,
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: 0),
-        child: _buildBlurBottomBarBlur(),
+        child: _buildBlurBottomBar(),
       ),
       child: widget.navigationShell,
     );
@@ -259,23 +263,25 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
       onShowBottomBar: (isVisible) {
         showBottomBar(isVisible);
       },
-      bottomNavigationBar: _buildBlurBottomBar(),
+      bottomNavigationBar: _buildBlurBottomBarAni(),
       child: widget.navigationShell,
     );
   }
 
   ///
+  /// ios 인 경우 safearea bottom을 풀고
+  /// 홈 인디게이터가 있는 모델인 경우
   ///
-  Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Scale}) {
+  ///
+  Widget _buildBlurBottomBarAni({BlurBottomType? blurType = BlurBottomType.Scale}) {
     return SafeArea(
-      top: false,
       child: ClipRect(
         child: SlideTransition(
           position: _offsetAnimation,
           child: Container(
             height: kBottomNavigationBarHeight + 10,
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 5),
+            padding: EdgeInsets.symmetric(horizontal: 5),
             decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -342,9 +348,9 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   ///
   /// blur 처리된 바텀네이게이션
   ///
-  Widget _buildBlurBottomBarBlur({BlurBottomType? blurType = BlurBottomType.Scale}) {
+  Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Scale}) {
     return SafeArea(
-      top: false,
+      // top: false,
       child: ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),

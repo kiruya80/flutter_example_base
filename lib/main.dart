@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/di/shared_prefs_provider.dart';
+import 'core/utils/device_info_util.dart';
 import 'my_app.dart';
 
 void main() async {
@@ -11,6 +13,17 @@ void main() async {
 
   /// 전체 화면 (edge-to-edge) 사용
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  // final deviceInfo = DeviceInfoUtil();
+  await DeviceInfoUtil.instance.init();
+
+
+  QcLog.d('deviceInfo.deviceModel == ${DeviceInfoUtil.instance.deviceModel}\n'
+      'deviceInfo.osVersion : ${DeviceInfoUtil.instance.osVersion}\n'
+      'deviceInfo.deviceId : ${DeviceInfoUtil.instance.deviceId} ,\n\n'
+      'deviceInfo.sdkInt ${DeviceInfoUtil.instance.sdkInt}');
+
+
 
   /// 상태바/내비게이션바 투명하게 만들기
   ///

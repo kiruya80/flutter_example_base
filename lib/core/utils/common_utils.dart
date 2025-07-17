@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 
@@ -84,26 +86,33 @@ class CommonUtils {
   ///
   /// 바텀 버튼용 마진 구하기
   ///
-  /// 아이폰 8 - EdgeInsets(0.0, 20.0, 0.0, 0.0) , 0.0, 16.0, ==== 16.0
-  /// 아이폰15프로 맥스 - EdgeInsets(0.0, 59.0, 0.0, 34.0) , 34.0, 0.0, ==== 34.0
+  /// 아이폰 8 - EdgeInsets(0.0, 20.0, 0.0, 0.0) , bottomInset : 0.0, extraBottomMargin: 16.0,
+  /// 아이폰15프로 맥스 - EdgeInsets(0.0, 59.0, 0.0, 34.0) , bottomInset : 34.0, extraBottomMargin: 0.0,
+  /// 아이폰15프로 맥스 - EdgeInsets(0.0, 62.0, 0.0, 34.0) , bottomInset : 34.0, extraBottomMargin: 0.0
   ///
-  /// 안드로이드 하드웨어키 - EdgeInsets(0.0, 24.0, 0.0, 0.0) , 0.0, 16.0, ==== 16.0
-  /// 안드로이드 소프트키 - EdgeInsets(0.0, 28.6, 0.0, 0.0) , 0.0, 16.0, ==== 16.0
+  /// 안드로이드 하드웨어키 - EdgeInsets(0.0, 24.0, 0.0, 0.0) , bottomInset : 0.0, === return extraBottomMargin: 16.0,
+  /// 안드로이드 소프트키 - EdgeInsets(0.0, 28.6, 0.0, 0.0) , bottomInset : 0.0, === return extraBottomMargin:  16.0,
   ///
-  static double getHomeBottomMargin(BuildContext context) {
-    /// // iPhone 8: padding.bottom == 0
-    /// // iPhone X: padding.bottom > 0 (보통 34px 정도)
-    /// // 안드로이드 소프트키 : padding.bottom == 0
-    final bottomInset = MediaQuery.of(context).padding.bottom;
-
-    /// bottomInset이 0이 아닌 경우는 설정된 바텀 마진으로
-    final extraBottomMargin = bottomInset == 0 ? 20.0 : 0.0;
-
-    QcLog.d(
-      'getHomeBottomMargin  ======= ${MediaQuery.of(context).padding} ,'
-      ' bottomInset : $bottomInset, extraBottomMargin: $extraBottomMargin',
-    );
-
-    return extraBottomMargin;
-  }
+  /// 갤럭시 S25[os15]  엣지투엣지  - EdgeInsets(0.0, 34.7, 0.0, 48.0) , bottomInset : 48.0, === return extraBottomMargin: 0.0
+  ///
+  // static double getHomeBottomMargin(BuildContext context) {
+  //   /// // iPhone 8: padding.bottom == 0
+  //   /// // iPhone X: padding.bottom > 0 (보통 34px 정도)
+  //   /// // 안드로이드 소프트키 : padding.bottom == 0
+  //   final bottomInset = MediaQuery.of(context).padding.bottom;
+  //
+  //   /// bottomInset이 0이 아닌 경우는 설정된 바텀 마진으로
+  //   final extraBottomMargin = bottomInset == 0 ? 20.0 : 0.0;
+  //
+  //
+  //   // if (Platform.isAndroid && isAosSdkInt >= 35) {
+  //   //
+  //   // }
+  //   QcLog.d(
+  //     'getHomeBottomMargin  ======= ${MediaQuery.of(context).padding} ,'
+  //     ' bottomInset : $bottomInset, === return extraBottomMargin: $extraBottomMargin',
+  //   );
+  //
+  //   return extraBottomMargin;
+  // }
 }
