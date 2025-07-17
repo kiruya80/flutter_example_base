@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
+import 'package:flutter_example_base/core/utils/print_log.dart';
 
 class SystemSettingUtils {
   ///
@@ -17,6 +18,7 @@ class SystemSettingUtils {
     Color? statusBarColor,
     // Color? systemNavigationBarDividerColor,
   }) {
+    QcLog.d('setSystemUiOverlayStyle ==== $isBlur , $isDark');
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         /// iOS에서는 statusBarColor는 완전히 무시

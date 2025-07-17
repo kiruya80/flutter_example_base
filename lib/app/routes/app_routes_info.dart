@@ -18,8 +18,8 @@ class AppRoutesInfo {
   ///
   static final tabHome = RouteRegistry.register('home', '/home', tabIndex: 0);
   static final tabPosts = RouteRegistry.register('posts', '/posts', tabIndex: 1);
-  static final tabSearch = RouteRegistry.register('search', '/search', tabIndex: 2);
-  static final tabProfile = RouteRegistry.register('profile', '/profile', tabIndex: 3);
+  static final tabProfile = RouteRegistry.register('profile', '/profile', tabIndex: 2);
+  static final tabSearch = RouteRegistry.register('search', '/search', tabIndex: 3);
 
   /// 상세 라우터
   ///

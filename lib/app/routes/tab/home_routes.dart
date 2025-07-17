@@ -14,13 +14,12 @@ import '../app_routes_info.dart';
 /// 	•	/ 없이 쓰면 상위 경로와 자동 조합
 /// 	•	/ 붙이면 루트 기준 절대 경로로 동작해서 브랜치 밖으로 이탈할 수 있음
 ///   예) '/detail' 실제 라우팅 결과: /detail  ❌ 절대경로로 인식되어 따로 떨어짐
+///   /// '/xxx'는 절대경로
 ///
 final List<GoRoute> homeTabRoutes = [
   GoRoute(
     name: AppRoutesInfo.tabHome.name,
     path: AppRoutesInfo.tabHome.path,
-
-    /// '/xxx'는 절대경로
     // pageBuilder: (context, state) => NoTransitionPage(child: HomeTab()),
     pageBuilder: (context, state) {
       final mainScaffoldState = context.findAncestorStateOfType<MainScaffoldWithNavState>();

@@ -36,7 +36,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
   @override
   Widget build(BuildContext context) {
     QcLog.d('build ===== $isThisPageVisible');
-    CommonUtils.isTablet(context);
+    // CommonUtils.isTablet(context);
 
     final appThemeMode = ref.watch(appThemeModeProvider);
     isDark = appThemeMode == ThemeMode.dark;

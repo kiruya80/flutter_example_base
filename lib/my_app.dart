@@ -59,8 +59,6 @@ class MyApp extends ConsumerWidget {
     final deviceTheme = MediaQuery.of(context).platformBrightness;
     final themeMode = deviceTheme == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
 
-    QcLog.d("디바이스 테마 : ${deviceTheme == Brightness.dark ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // provider에 처음 한 번만 설정
       if (ref.read(appThemeModeProvider) == null) {
@@ -76,7 +74,8 @@ class MyApp extends ConsumerWidget {
 
     final appThemeMode = ref.watch(appThemeModeProvider) ?? ThemeMode.system;
 
-    QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
+    QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다\n"}"
+    +"디바이스 테마 : ${deviceTheme == Brightness.dark ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
 
     /// 기본
     // return MaterialApp(

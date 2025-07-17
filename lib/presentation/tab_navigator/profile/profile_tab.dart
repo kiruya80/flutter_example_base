@@ -34,7 +34,7 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
     /// theme
     final appThemeMode = ref.watch(appThemeModeProvider);
     isDark = appThemeMode == ThemeMode.dark;
-    QcLog.d("앱 테마 : ${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
+    // QcLog.d("앱 테마 : ${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
 
     return EdgeCustomScrollview(
       content: _getMoveEdgeToEdge(),
@@ -125,18 +125,21 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
           //     queryParameters: {'type': EdgeToEdgeType.iosCupertino.name, 'isAppbar': 'true'},
           //   );
           // }),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
-          RouterMoveItem('=====', () {}),
+
+          // RouterMoveItem('=====', () {}),
+          ListView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: const ClampingScrollPhysics(),
+            itemCount: 50,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: CircleAvatar(child: Text('${index + 1}')),
+                title: Text('${index}'),
+                subtitle: Text('This is item number ${index + 1}'),
+              );
+            },
+          ),
         ],
       ),
     );

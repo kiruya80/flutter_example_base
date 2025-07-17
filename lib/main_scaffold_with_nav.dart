@@ -1,12 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
-import 'package:flutter_example_base/presentation/tab_navigator/home/home_tab.dart';
-import 'package:flutter_example_base/presentation/tab_navigator/post/post_list_screen.dart';
-import 'package:flutter_example_base/presentation/tab_navigator/profile/profile_tab.dart';
-import 'package:flutter_example_base/presentation/tab_navigator/search/search_tab.dart';
 import 'package:flutter_example_base/shared/entities/nav_item.dart';
 import 'package:flutter_example_base/shared/widgets/blur_bottom_bar_item.dart';
 import 'package:flutter_example_base/shared/widgets/common_default_edge_page.dart';
@@ -14,9 +9,14 @@ import 'package:flutter_example_base/shared/widgets/common_default_edge_page.dar
 import 'package:go_router/go_router.dart';
 
 import 'app/routes/app_routes_info.dart';
+import 'app/routes/tab/tab_router.dart';
 import 'core/utils/print_log.dart';
 
-/// 바텀네비게이터
+///
+/// 메인 바텀네비게이터
+/// ㄴ 하단 탭
+/// ㄴ 컨텐츠 스크롤에 따라 숨김, 보이기 처리
+///
 class MainScaffoldWithNav extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
 
@@ -36,27 +36,20 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// tab 내부  스크롤 컨트럴러
   /// 동일 탭 클릭시 - 컨텐츠 스크롤 최상단 이동을 위해서
   ///
-  final Map<int, ScrollController> controllers = {
-    AppRoutesInfo.tabHome.tabIndex ?? 0: ScrollController(),
-    AppRoutesInfo.tabPosts.tabIndex ?? 1: ScrollController(),
-    AppRoutesInfo.tabProfile.tabIndex ?? 2: ScrollController(),
-    AppRoutesInfo.tabSearch.tabIndex ?? 3: ScrollController(),
-  };
+  late Map<int, ScrollController> controllers = {};
 
   /// 네비게이터 아이템
   /// tab item
   ///
-  final List<NavItem> navItems = [
-    NavItem(iconData: Icons.home, label: 'Home'),
-    NavItem(iconData: Icons.post_add, label: 'Post'),
-    NavItem(iconData: Icons.person, label: 'Profile'),
-    NavItem(iconData: Icons.search, label: 'Search'),
-  ];
+  List<NavItem> navItems = [];
 
+  /// 마지막 탭 인덱스
   int _lastTappedIndex = 0;
-  bool isBottomBarVisible = true;
-  double lastOffset = 0;
 
+  /// 바텀네비게이션 숨김 여부
+  bool isBottomBarVisible = true;
+
+  /// 탭 인덱스 변경
   bool onTabChanged(int newIndex) {
     if (_lastTappedIndex != newIndex) {
       debugPrint('🟢 탭 변경: $_lastTappedIndex -> $newIndex');
@@ -73,24 +66,10 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// ㄴ 아닌 경우 탭 이동
   ///
   void _onTap(int index) {
-    QcLog.d(
-      'state before ===== ${GoRouterState.of(context).topRoute.toString()} , ${GoRouterState.of(context).uri} , ${widget.navigationShell.currentIndex} ',
-    );
+    // QcLog.d(
+    //   'state before ===== ${GoRouterState.of(context).topRoute.toString()} , ${GoRouterState.of(context).uri} , ${widget.navigationShell.currentIndex} ',
+    // );
 
-    // if (onTabChanged(index)) {
-    //   /// todo 만약 홈탭으로 돌아오고 리빌드 하고 싶을때는 프로바이더나 이벤트 버스등 명시적 호출 필요
-    //   /// if (index == 0) {
-    //   ///   eventBus.fire(HomeTabSelectedEvent());
-    //   ///   homeTabNotifier.refresh();
-    //   /// }
-    //   ///
-    //   /// 동일한 탭 다시 클릭하는 경우 홈으로 이동하게
-    //   widget.navigationShell.goBranch(index, initialLocation: true);
-    // } else {
-    //   widget.navigationShell.goBranch(index);
-    // }
-
-    // if (index == _lastTappedIndex) {
     if (onTabChanged(index) == false) {
       final mainNavScrollController = controllers[index];
       QcLog.d('중복 탭 시 스크롤 최상단 ===  ${mainNavScrollController?.hasClients}');
@@ -123,6 +102,41 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   @override
   void initState() {
     super.initState();
+    _initTabInfo();
+    _initTabNavAni();
+  }
+
+  ///
+  /// 탭 정보 초기 설정
+  ///
+  _initTabInfo() {
+    controllers = {};
+    navItems = [];
+    int index = 0;
+
+    for (StatefulShellBranch value in TabRouter.tabBranches) {
+      controllers[index] = ScrollController();
+      index++;
+      if (value.routes.isNotEmpty == true && value.routes.first is GoRoute) {
+        GoRoute route = value.routes.first as GoRoute;
+        QcLog.d('route.name ==== ${route.name} , ${route.path}');
+        if (route.name == AppRoutesInfo.tabHome.name) {
+          navItems.add(NavItem(iconData: Icons.home, label: AppRoutesInfo.tabHome.name));
+        } else if (route.name == AppRoutesInfo.tabPosts.name) {
+          navItems.add(NavItem(iconData: Icons.post_add, label: AppRoutesInfo.tabPosts.name));
+        } else if (route.name == AppRoutesInfo.tabProfile.name) {
+          navItems.add(NavItem(iconData: Icons.person, label: AppRoutesInfo.tabProfile.name));
+        } else if (route.name == AppRoutesInfo.tabSearch.name) {
+          navItems.add(NavItem(iconData: Icons.search, label: AppRoutesInfo.tabSearch.name));
+        }
+      }
+    }
+  }
+
+  ///
+  /// 탭 네비게이터 애니컨트럴러 설정
+  ///
+  _initTabNavAni() {
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 100));
     _offsetAnimation = Tween<Offset>(
       begin: const Offset(0, 1), // 아래에 감춰짐
@@ -133,16 +147,23 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     _controller.forward();
   }
 
+  ///
+  /// 바텀 네비게이터 숨김, 보이기 처리
+  ///
   void showBottomBar(bool show) {
     if (show) {
       /// 바텀 네비게이션 불투명 처리
-      _controller.forward().then((v) {
-        isBottomBarVisible = true;
-      });
+      if (isBottomBarVisible == false) {
+        _controller.forward().then((v) {
+          isBottomBarVisible = true;
+        });
+      }
     } else {
-      _controller.reverse().then((v) {
-        isBottomBarVisible = false;
-      });
+      if (isBottomBarVisible == true) {
+        _controller.reverse().then((v) {
+          isBottomBarVisible = false;
+        });
+      }
     }
   }
 
@@ -151,7 +172,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     // return getDefault();
     // return getBottomNavBlur();
 
-    return getBottomNavBlurAni(false);
+    return getBottomNavBlurAni(isBlur: true);
 
     /// test pass
     // return getBottomNavBlurAni2();
@@ -230,7 +251,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// 2-2 .블러 처리된 네비게이션 애니메이션
   /// ㄴ 백키 종료 가능
   ///
-  getBottomNavBlurAni(isBlur) {
+  getBottomNavBlurAni({bool? isBlur = false}) {
     return CommonDefaultEdgePage(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -277,6 +298,9 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     );
   }
 
+  ///
+  double lastOffset = 0;
+
   /// 2-3 .블러 처리된 네비게이션 애니메이션
   /// ㄴ 백키 종료 가능
   getBottomNavBlurAni2() {
@@ -300,9 +324,9 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
         // }
 
         // offset 값 변화에 따라 위/아래 감지해서 show/hide
-        if (offset > lastOffset && isBottomBarVisible) {
+        if (offset > lastOffset) {
           showBottomBar(false);
-        } else if (offset < lastOffset && !isBottomBarVisible) {
+        } else if (offset < lastOffset) {
           showBottomBar(true);
         }
         lastOffset = offset;

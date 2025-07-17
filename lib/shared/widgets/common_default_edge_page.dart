@@ -10,6 +10,7 @@ import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
 import 'blur_overlay.dart';
 
+
 ///
 /// 안드로이드
 /// https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ko
@@ -114,7 +115,6 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
 }
 
 class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
-  bool? isScroll = false;
   bool? isDark = false;
   bool? isBlur = true;
 
@@ -130,7 +130,6 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
       'initState ====== ${widget.extendBody}, ${widget.extendBodyBehindAppBar} /'
       '${widget.safeAreaTop} , ${widget.safeAreaBottom}',
     );
-    isScroll = false;
     isBottomBarVisible = true;
     lastOffset = 0;
     isBlur = widget.isBlur;
@@ -147,6 +146,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   ///
   @override
   Widget build(BuildContext context) {
+    QcLog.d('build ==== $isBlur , $isDark');
     // CommonUtils.isTablet(context);
     overlayColor ??= Theme.of(context).colorScheme.surface;
     final statusBarHeight = MediaQuery.of(context).padding.top;
@@ -162,6 +162,9 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
     //
     var appThemeMode = ref.watch(appThemeModeProvider);
     // QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "☀🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
+    if ((appThemeMode == ThemeMode.dark )!= isDark) {
+      /// 테마가 변경됨
+    }
     isDark = appThemeMode == ThemeMode.dark;
 
     return NotificationListener<ScrollNotification>(
@@ -254,15 +257,14 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
 
     if (isTop) {
       QcLog.d("📍 최상단입니다. $isBlur");
-      isScroll = false;
-
-      setState(() {
-        overlayColor ??= Theme.of(context).colorScheme.surface;
-      });
 
       if (widget.onShowBottomBar != null) {
         widget.onShowBottomBar!(true);
       }
+      setState(() {
+        overlayColor ??= Theme.of(context).colorScheme.surface;
+      });
+      lastOffset = 0;
       return;
     }
 
@@ -279,6 +281,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
         setState(() {
           overlayColor = Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
         });
+
       } else if (delta < -_threshold) {
         // print('⬆️ 위로 스크롤 → 바텀바 보여줌 (콘텐츠가 아래로 이동) $overlayColor');
         if (widget.onShowBottomBar != null) {
