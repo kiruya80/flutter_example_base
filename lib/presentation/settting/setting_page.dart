@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/core/utils/device_info_util.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/utils/print_log.dart';
+import '../../core/utils/device_info_utils.dart';
 import '../../shared/state/base_con_state.dart';
 
 class SettingPage extends ConsumerStatefulWidget {
@@ -40,12 +40,10 @@ class _SettingPageState extends BaseConState<SettingPage> {
 
     return Scaffold(
       appBar: AppBar(title: Text('Setting')),
-      body:
-      SafeArea(
-        bottom: false,
-        top: false,
-        child:
-        Container(
+      body: SafeArea(
+        // bottom: false,
+        // top: false,
+        child: Container(
           width: double.maxFinite,
           color: Colors.orange,
           child: Column(
@@ -60,6 +58,7 @@ class _SettingPageState extends BaseConState<SettingPage> {
                 child: const Text('Back'),
               ),
               Spacer(),
+
               ///
               /// android 15 sdk 35부터
               /// 1. SafeArea 로 감싸지 않거나,
@@ -76,12 +75,13 @@ class _SettingPageState extends BaseConState<SettingPage> {
               /// 반대로, SafeArea를 감싸는 경우 하단 홈 인디게이터 색상 이슈가 생길수 있다
               /// >> 홈 인디게이터 영역까지 전체를 다 사용하고 하단 마진을 가지는걸로 색상이슈 해결
               ///
-              ElevatedButton(
-                onPressed: () {
-                },
-                child: const Text('Bottom'),
+              ElevatedButton(onPressed: () {}, child: const Text('Bottom')),
+              SizedBox(
+                height: DeviceInfoUtils.instance.getBottomHeightEdgeToEdge(
+                  context,
+                  isEdgeToEdge: false,
+                ),
               ),
-              SizedBox(height: DeviceInfoUtil.instance.getBottomHeightEdgeToEdge(context, isEdgeToEdge: true),)
             ],
           ),
         ),

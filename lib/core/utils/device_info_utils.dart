@@ -9,22 +9,22 @@ import '../constants/app_constants.dart';
 ///
 /// 디바이스 유틸
 ///
-/// final deviceInfo = DeviceInfoUtil(); or
-/// DeviceInfoUtil.instance
+/// final deviceInfo = DeviceInfoUtils(); or
+/// DeviceInfoUtils.instance
 ///
-class DeviceInfoUtil {
+class DeviceInfoUtils {
   // 싱글톤 인스턴스
-  static final DeviceInfoUtil _instance = DeviceInfoUtil._internal();
+  static final DeviceInfoUtils _instance = DeviceInfoUtils._internal();
 
-  static DeviceInfoUtil get instance => _instance;
+  static DeviceInfoUtils get instance => _instance;
 
   // factory constructor
-  factory DeviceInfoUtil() {
+  factory DeviceInfoUtils() {
     return _instance;
   }
 
   // private constructor
-  DeviceInfoUtil._internal();
+  DeviceInfoUtils._internal();
 
   // 디바이스 정보 저장
   late final String deviceModel;
@@ -163,7 +163,6 @@ class DeviceInfoUtil {
   ///
   /// 아이폰 8 - EdgeInsets(0.0, 20.0, 0.0, 0.0) , bottomInset : 0.0, extraBottomMargin: DEFAULT_BOTTOM_MAGGIN,
   /// 아이폰15프로 맥스 - EdgeInsets(0.0, 59.0, 0.0, 34.0) , bottomInset : 34.0, extraBottomMargin: 0.0,
-  /// 아이폰15프로 맥스 - EdgeInsets(0.0, 62.0, 0.0, 34.0) , bottomInset : 34.0, extraBottomMargin: 0.0
   ///
   /// 안드로이드 하드웨어키 - EdgeInsets(0.0, 24.0, 0.0, 0.0) , bottomInset : 0.0, === return extraBottomMargin: 16.0,
   /// 안드로이드 소프트키 - EdgeInsets(0.0, 28.6, 0.0, 0.0) , bottomInset : 0.0, === return extraBottomMargin:  16.0,
@@ -171,7 +170,8 @@ class DeviceInfoUtil {
   /// 갤럭시 S25[os15]  엣지투엣지
   /// ㄴ EdgeInsets(0.0, 34.7, 0.0, 48.0) , bottomInset : 48.0, === return extraBottomMargin: 0.0
   ///
-  double getBottomHeightEdgeToEdge(BuildContext context, {bool? isEdgeToEdge = false}) {
+  double getBottomHeightEdgeToEdge(BuildContext context, {bool? isEdgeToEdge = true}) {
+    QcLog.d('getBottomHeightEdgeToEdge ==== $isEdgeToEdge');
     /// // iPhone 8: padding.bottom == 0
     /// // iPhone X: padding.bottom > 0 (보통 34px 정도)
     /// // 안드로이드 소프트키 : padding.bottom == 0

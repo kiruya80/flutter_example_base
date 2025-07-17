@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/di/shared_prefs_provider.dart';
-import 'core/utils/device_info_util.dart';
+import 'core/utils/device_info_utils.dart';
 import 'my_app.dart';
 
 void main() async {
@@ -15,13 +15,13 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   // final deviceInfo = DeviceInfoUtil();
-  await DeviceInfoUtil.instance.init();
+  await DeviceInfoUtils.instance.init();
 
 
-  QcLog.d('deviceInfo.deviceModel == ${DeviceInfoUtil.instance.deviceModel}\n'
-      'deviceInfo.osVersion : ${DeviceInfoUtil.instance.osVersion}\n'
-      'deviceInfo.deviceId : ${DeviceInfoUtil.instance.deviceId} ,\n\n'
-      'deviceInfo.sdkInt ${DeviceInfoUtil.instance.sdkInt}');
+  QcLog.d('deviceInfo.deviceModel == ${DeviceInfoUtils.instance.deviceModel}\n'
+      'deviceInfo.osVersion : ${DeviceInfoUtils.instance.osVersion}\n'
+      'deviceInfo.deviceId : ${DeviceInfoUtils.instance.deviceId} ,\n\n'
+      'deviceInfo.sdkInt ${DeviceInfoUtils.instance.sdkInt}');
 
 
 

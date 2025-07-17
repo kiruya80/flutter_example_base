@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
-import 'package:flutter_example_base/core/utils/device_info_util.dart';
 import 'package:flutter_example_base/shared/entities/nav_item.dart';
 import 'package:flutter_example_base/shared/widgets/blur_bottom_bar_item.dart';
 import 'package:flutter_example_base/shared/widgets/common_default_edge_page.dart';
@@ -12,7 +11,6 @@ import 'package:go_router/go_router.dart';
 
 import 'app/routes/app_routes_info.dart';
 import 'app/routes/tab/tab_router.dart';
-import 'core/utils/common_utils.dart';
 import 'core/utils/print_log.dart';
 
 ///
