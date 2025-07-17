@@ -10,7 +10,6 @@ import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
 import 'blur_overlay.dart';
 
-
 ///
 /// 안드로이드
 /// https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ko
@@ -162,7 +161,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
     //
     var appThemeMode = ref.watch(appThemeModeProvider);
     // QcLog.d("앱 테마 : ${(appThemeMode == ThemeMode.dark) ? "☀🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
-    if ((appThemeMode == ThemeMode.dark )!= isDark) {
+    if ((appThemeMode == ThemeMode.dark) != isDark) {
       /// 테마가 변경됨
     }
     isDark = appThemeMode == ThemeMode.dark;
@@ -213,8 +212,12 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
               ),
             ),
 
-            /// Blur Navigation Bar
-            if (Platform.isAndroid)
+            ///
+            /// Navigation Bar\
+            /// 안드로이드는 기본
+            /// ios는 바텀네비게이터를 사용할때만
+            ///
+            if (Platform.isAndroid || widget.bottomNavigationBar != null)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: BlurOverlay(
@@ -279,9 +282,12 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
           widget.onShowBottomBar!(false);
         }
         setState(() {
-          overlayColor = Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
+          if (Platform.isIOS) {
+            overlayColor = Colors.transparent;
+          } else {
+            overlayColor = Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
+          }
         });
-
       } else if (delta < -_threshold) {
         // print('⬆️ 위로 스크롤 → 바텀바 보여줌 (콘텐츠가 아래로 이동) $overlayColor');
         if (widget.onShowBottomBar != null) {
@@ -301,7 +307,11 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
     }
 
     setState(() {
-      overlayColor = Theme.of(context).colorScheme.surfaceDim.withOpacitySafe(0.5);
+      if (Platform.isIOS) {
+        overlayColor = Colors.transparent;
+      } else {
+        overlayColor = Theme.of(context).colorScheme.surfaceDim.withOpacitySafe(0.5);
+      }
     });
   }
 

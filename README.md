@@ -107,6 +107,8 @@ fvm flutter packages pub run build_runner build
 fvm flutter pub run build_runner build --delete-conflicting-outputs
 fvm flutter pub run build_runner build
 
+open ios/Runner.xcworkspace
+
 ## freezed 설정
 freezed는 copyWith, == 연산자, hashCode, toString, fromJson, toJson 등 많은 기능을 자동 생성
 flutter pub run build_runner build --delete-conflicting-outputs
