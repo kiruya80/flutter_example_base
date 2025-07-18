@@ -21,7 +21,7 @@ abstract class BaseConState<T extends ConsumerStatefulWidget> extends ConsumerSt
   /// 페이지 트리에 있는지만 확인 (화면에 보이는지 여부와는 무관)
   bool get isActivePage => mounted;
 
-  /// safeArea
+  /// safeArea 엣지투엣지에서
   bool isTop = false;
   bool isBottom = false;
 

@@ -5,11 +5,16 @@ import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/common_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/theme/app_theme_provider.dart';
-import '../../core/utils/print_log.dart';
-import '../../shared/state/base_con_state.dart';
-import 'blur_overlay.dart';
+import '../../../core/theme/app_theme_provider.dart';
+import '../../../core/utils/print_log.dart';
+import '../../state/base_con_state.dart';
+import '../common/blur_overlay.dart';
 
+///
+///
+/// ✅ 메인홈 (탭 네이게이터 구성)
+/// navigationShell을 child로 가진다
+///
 ///
 /// 안드로이드
 /// https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ko
@@ -53,7 +58,8 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
   final Color? backgroundColor;
 
   final bool? isBlur;
-  final Color? statusBarColor;
+
+  // final Color? statusBarColor;
 
   /// Scaffold에서 시스템 status bar까지 확장
   final bool? extendBodyBehindAppBar;
@@ -91,8 +97,7 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
 
     /// 블러효과가 false인 경우 색상처리
     /// 단, ios 색상불가로 블러만 처리
-    this.statusBarColor = Colors.white,
-
+    // this.statusBarColor = Colors.white,
     this.extendBodyBehindAppBar = true,
     this.extendBody = true,
 
@@ -265,7 +270,12 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
         widget.onShowBottomBar!(true);
       }
       setState(() {
-        overlayColor ??= Theme.of(context).colorScheme.surface;
+        if (widget.bottomNavigationBar != null) {
+          /// 바텀 네비게이션이 있는 경우
+          overlayColor ??= Theme.of(context).colorScheme.surface;
+        } else {
+          overlayColor ??= Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
+        }
       });
       lastOffset = 0;
       return;
@@ -276,6 +286,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
       final currentOffset = notification.metrics.pixels;
       final delta = currentOffset - lastOffset;
 
+      // print('_onNotification ===== isTop : $isTop , isBottom : $isBottom');
       if (delta > _threshold) {
         // print('⬇️  아래로 스크롤 → 바텀바 숨김 (콘텐츠가 위로 이동) $overlayColor');
         if (widget.onShowBottomBar != null) {
@@ -294,7 +305,19 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
           widget.onShowBottomBar!(true);
         }
         setState(() {
-          overlayColor = Theme.of(context).colorScheme.surface;
+          if (widget.bottomNavigationBar != null) {
+            /// 바텀 네비게이션이 있는 경우
+            overlayColor = Theme.of(context).colorScheme.surface;
+          } else {
+            overlayColor = Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
+          }
+        });
+      } else {
+        print('⬇️ ⬆️ 그이외 $overlayColor');
+        setState(() {
+          if (widget.bottomNavigationBar == null) {
+            overlayColor = Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
+          }
         });
       }
       lastOffset = currentOffset;

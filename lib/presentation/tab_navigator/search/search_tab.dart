@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/utils/print_log.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../shared/state/base_con_state.dart';
-import '../../../shared/widgets/edge_custom_scrollview.dart';
+import '../../../shared/widgets/simple_edge_content_page.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
@@ -39,7 +39,7 @@ class _SearchTabState extends BaseConState<SearchTab> {
     /// searchDetailFullPath ==== /search/detail/123?tab=settings
     QcLog.d('searchDetailFullPath ==== $url2');
 
-    return EdgeCustomScrollview(
+    return SimpleEdgeContentPage(
       content: _content(),
       controller: widget.mainNavScrollController,
       backgroundColor: Theme.of(context).colorScheme.surface,

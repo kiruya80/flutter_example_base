@@ -17,6 +17,8 @@ import 'package:flutter_example_base/core/extensions/color_extensions.dart';
     많이 퍼지는 강한 블러
 
     CommonEdgeToEdgePage에서 appBar가 있으면 빌드시 appBar까지 블러처리됨
+
+    스테이터스 및 바텀네비게이터 위에 덮는 용도
  */
 class BlurOverlay extends StatelessWidget {
   final Color? overlayColor;

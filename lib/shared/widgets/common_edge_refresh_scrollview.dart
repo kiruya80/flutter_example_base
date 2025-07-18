@@ -117,28 +117,28 @@ class _CommonEdgeRefreshScrollviewState extends BaseConState<CommonEdgeRefreshSc
     // });
   }
 
-  void _setSystemUiOverlayStyle() {
-    ///
-    /// statusBarIconBrightness
-    /// ㄴ ThemeMode.dark - 아이콘 검은색 - 블러 처리시
-    /// ㄴ Brightness.light - 아이콘 흰색
-    ///
-    ///
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        // ✅ iOS 상태바 아이콘 밝기 light(black ison), dark(white icon)
-        statusBarBrightness: Brightness.light,
-        // ✅ Android 상태바 아이콘 밝기 → light(white ison), dark(black icon)
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.transparent,
-        // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
-        systemNavigationBarDividerColor: Colors.transparent,
-        // ✅ Android 네비게이션 아이콘 밝기 → light(white ison, 검은색 반투명 배경), dark(black icon, 흰색 반투명 배경)
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-    );
-  }
+  // void _setSystemUiOverlayStyle() {
+  //   ///
+  //   /// statusBarIconBrightness
+  //   /// ㄴ ThemeMode.dark - 아이콘 검은색 - 블러 처리시
+  //   /// ㄴ Brightness.light - 아이콘 흰색
+  //   ///
+  //   ///
+  //   SystemChrome.setSystemUIOverlayStyle(
+  //     SystemUiOverlayStyle(
+  //       statusBarColor: Colors.transparent,
+  //       // ✅ iOS 상태바 아이콘 밝기 light(black ison), dark(white icon)
+  //       statusBarBrightness: Brightness.light,
+  //       // ✅ Android 상태바 아이콘 밝기 → light(white ison), dark(black icon)
+  //       statusBarIconBrightness: Brightness.dark,
+  //       systemNavigationBarColor: Colors.transparent,
+  //       // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
+  //       systemNavigationBarDividerColor: Colors.transparent,
+  //       // ✅ Android 네비게이션 아이콘 밝기 → light(white ison, 검은색 반투명 배경), dark(black icon, 흰색 반투명 배경)
+  //       systemNavigationBarIconBrightness: Brightness.dark,
+  //     ),
+  //   );
+  // }
 
   /// NotificationListener
   ///

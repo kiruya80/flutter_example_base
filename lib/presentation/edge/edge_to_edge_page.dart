@@ -10,9 +10,9 @@ import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_theme_provider.dart';
 import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
-import '../../shared/widgets/common_default_edge_page.dart';
+import '../../shared/widgets/page/common_default_edge_page.dart';
 import '../../shared/widgets/common_edge_refresh_scrollview.dart';
-import '../../shared/widgets/my_sliver_persistent_header_delegate.dart';
+import '../../shared/widgets/common/my_sliver_persistent_header_delegate.dart';
 import '../../shared/widgets/refresh_more_scrollview.dart';
 import '../tab_navigator/profile/profile_tab.dart';
 

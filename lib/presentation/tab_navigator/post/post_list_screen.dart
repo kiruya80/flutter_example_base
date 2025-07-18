@@ -15,7 +15,7 @@ import '../../../shared/mixin/navigation_listener_mixin.dart';
 import '../../../shared/state/base_con_state.dart';
 import '../../../core/controller/dialog_controller.dart';
 import '../../../domain/common/entities/dialog_request.dart';
-import '../../../shared/widgets/edge_custom_scrollview.dart';
+import '../../../shared/widgets/simple_edge_content_page.dart';
 import '../../widgets/item_title.dart';
 
 class PostListScreen extends ConsumerStatefulWidget {
@@ -51,7 +51,7 @@ class _PostListScreenState extends BaseConState<PostListScreen>
 
   @override
   Widget build(BuildContext context) {
-    return EdgeCustomScrollview(
+    return SimpleEdgeContentPage(
       content: _content(),
       controller: widget.mainNavScrollController,
       backgroundColor: Theme.of(context).colorScheme.surface,

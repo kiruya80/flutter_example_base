@@ -8,7 +8,7 @@ import '../../../core/theme/app_theme_provider.dart';
 import '../../../core/utils/common_utils.dart';
 import '../../../core/utils/print_log.dart';
 import '../../../shared/state/base_con_state.dart';
-import '../../../shared/widgets/edge_custom_scrollview.dart';
+import '../../../shared/widgets/simple_edge_content_page.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
@@ -51,7 +51,7 @@ class _HomeTabState extends BaseConState<HomeTab> {
     // final postFromJson = TestUsual.fromJson(json);
     // QcLog.d('postFromJson ===== ${postFromJson.toJson()}');
 
-    return EdgeCustomScrollview(
+    return SimpleEdgeContentPage(
       content: _content(),
       controller: widget.mainNavScrollController,
       backgroundColor: Theme.of(context).colorScheme.surface,

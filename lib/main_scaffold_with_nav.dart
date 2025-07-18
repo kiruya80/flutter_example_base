@@ -4,8 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/shared/entities/nav_item.dart';
-import 'package:flutter_example_base/shared/widgets/blur_bottom_bar_item.dart';
-import 'package:flutter_example_base/shared/widgets/common_default_edge_page.dart';
+import 'package:flutter_example_base/shared/widgets/common/blur_bottom_bar_item.dart';
+import 'package:flutter_example_base/shared/widgets/page/common_default_edge_page.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -170,7 +170,6 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
 
   @override
   Widget build(BuildContext context) {
-
     // return getDefault();
     // return getBottomNavBlur();
 

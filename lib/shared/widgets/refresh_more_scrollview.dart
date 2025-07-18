@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 
 import '../../core/constants/app_constants.dart';
+import '../../core/utils/device_info_utils.dart';
+import 'common/edge_space_widget.dart';
+import 'common/my_sliver_persistent_header_delegate.dart';
 
 /// 더보기 데이터 상태
 // enum MoreDataScroll { HAS, NONE, FAIL }
@@ -89,6 +92,7 @@ import '../../core/constants/app_constants.dart';
 //
 class RefreshMoreScrollview extends StatefulWidget {
   final bool? isPhysics;
+
   /// 리프래시 사용하는 위젯여부
   final bool? isRefresh;
   final int? itemCount;
@@ -120,6 +124,10 @@ class RefreshMoreScrollview extends StatefulWidget {
   /// 리스트뷰
   final IndexedWidgetBuilder? sliverChildBuilder;
   final Widget? noListContent;
+  final Widget? content;
+
+  final bool? safeAreaTop;
+  final bool? safeAreaBottom;
 
   const RefreshMoreScrollview({
     super.key,
@@ -138,6 +146,10 @@ class RefreshMoreScrollview extends StatefulWidget {
     this.fixedHeader,
     this.sliverChildBuilder,
     this.noListContent,
+    this.content,
+
+    this.safeAreaTop = false,
+    this.safeAreaBottom = false,
   });
 
   @override
@@ -215,6 +227,19 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
     //     child: widget.boxAdapter,
     //   ));
     // }
+
+    /// 엣지 투 엣지인 경우 상단 스테이터스 영역
+    if (widget.safeAreaTop == false) {
+      scrollSlivers.add(
+        SliverPersistentHeader(
+          delegate: MySliverPersistentHeaderDelegate(
+            maxHeight: DeviceInfoUtils.instance.getEdgeSpaceHeight(context, isBottom: false),
+            minHeight: 0,
+            child: BottomEdgeSpaceWidget(isEdgeToEdge: true, isBottom: false),
+          ),
+        ),
+      );
+    }
 
     /// 위로 올라가는 위젯 영역
     if (widget.upDisappearHeader != null) {
@@ -333,6 +358,12 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
             ),
           );
         } else {
+          /// 컨텐츠 영역
+          // if (widget.content != null) {
+          //   QcLog.d('컨텐츠 영역 ============');
+          //   scrollSlivers.add(SliverToBoxAdapter(child: widget.content));
+          // }
+
           // scrollSlivers.add(SliverFillRemaining(
           //     hasScrollBody: true,
           //     child: widget.noListContent));
@@ -343,86 +374,98 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
         }
 
         /// 하단 리스트 로딩 후 뷰
-        scrollSlivers.add(
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: getSliverFillRemaining(context, widget.isMoreDataScroll),
-          ),
-        );
+        if (widget.safeAreaBottom == false) {
+          scrollSlivers.add(
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: getSliverFillRemaining(context, widget.isMoreDataScroll),
+            ),
+          );
+        }
 
       default:
     }
 
+    /// 하단 여백
+    if (widget.safeAreaBottom != null) {
+      scrollSlivers.add(
+        SliverToBoxAdapter(
+          child: BottomEdgeSpaceWidget(isEdgeToEdge: !(widget.safeAreaBottom ?? false)),
+        ),
+      );
+    }
     return scrollSlivers;
   }
-}
 
-/*
+  /*
  * 실패
  * 로드할 데이터가 있는 경우
  *
  */
-Widget getSliverFillRemaining(BuildContext context, MoreDataScroll? isMoreScrollLoad) {
-  if (isMoreScrollLoad == MoreDataScroll.HAS) {
-    return const Align(
-      alignment: Alignment.bottomCenter,
-      child: SizedBox(
-        width: double.infinity,
-        height: 60,
-        child: Center(child: CircularProgressIndicator(color: Color(0xFFFE6F0F), strokeWidth: 3.5)),
-      ),
-    );
-  } else if (isMoreScrollLoad == MoreDataScroll.FAIL) {
-    /// 더보기 실패시 메시지 필요하다면
-    return Container(
-      alignment: Alignment.center,
-      // child: QcText.bodyMedium(
-      //   'error_content'.tr,
-      // ),
-      child: const Text("오류가 발생했습니다."),
-    );
-  } else {
-    // return Container();
-    return const SizedBox.shrink();
-  }
+  Widget getSliverFillRemaining(BuildContext context, MoreDataScroll? isMoreScrollLoad) {
+    if (isMoreScrollLoad == MoreDataScroll.HAS) {
+      return const Align(
+        alignment: Alignment.bottomCenter,
+        child: SizedBox(
+          width: double.infinity,
+          height: 60,
+          child: Center(
+            child: CircularProgressIndicator(color: Color(0xFFFE6F0F), strokeWidth: 3.5),
+          ),
+        ),
+      );
+    } else if (isMoreScrollLoad == MoreDataScroll.FAIL) {
+      /// 더보기 실패시 메시지 필요하다면
+      return Container(
+        alignment: Alignment.center,
+        // child: QcText.bodyMedium(
+        //   'error_content'.tr,
+        // ),
+        child: const Text("오류가 발생했습니다."),
+      );
+    } else {
+      // return Container();
+      return const SizedBox.shrink();
+    }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return NotificationListener<ScrollNotification>(
-  //       onNotification: (ScrollNotification scrollInfo) {
-  //         /// ScrollUpdateNotification(depth: 0 (local), FixedScrollMetrics(968.9..[717.7]..3673.4), scrollDelta: 0.09460146127491953)
-  //         // widget.onScrollNotification(scrollInfo);
-  //         // return false;
-  //
-  //         logUtil.debug("Scroll === ${scrollInfo.metrics.axisDirection} , ${AxisDirection.down} , ${AxisDirection.up}");
-  //         var metrics = scrollInfo.metrics;
-  //
-  //         //세로 스크롤인 경우에만 추적
-  //         if (metrics.axisDirection != AxisDirection.down){
-  //           logUtil.debug('scrollInfo ==== 세로 스크롤인 경우에만 추적');
-  //           return false;
-  //         }
-  //
-  //         if (metrics.extentAfter <= 0) {
-  //           //스크롤 끝에 닿은 경우 실행
-  //           logUtil.debug('scrollInfo ==== 스크롤 끝에 닿은 경우 실행');
-  //         }
-  //         return false;
-  //       },
-  //       child: CustomScrollView(
-  //         // key: Key(itemCount.toString()), // 리스트 내용 변환시 업데이트 반영 todo 그런데 리스트 추가시도 변경됨 remove에 사용해야하는데
-  //         // controller: scController,
-  //         physics: widget.isRefresh
-  //             ? const AlwaysScrollableScrollPhysics(
-  //                 //physics 물리 - 원하는 UI에 맞춰 작업하면 됨
-  //                 // NeverScrollableScrollPhysics : 목록 스크롤 불가능하게 설정
-  //                 // BouncingScrollPhysics : 튕겨저 올라가는 듯한 동작 가능 List 끝에 도달했을 시에 다시 되돌아감
-  //                 // ClampingScrollPhysics : 안드로이드의 기본 스크롤과 동일하다. List의 끝에 도달하면 동작을 멈춤
-  //                 // PageScrollPhysics : 다른 스크롤에 비해 조금더 부드럽게 만듬
-  //                 parent: BouncingScrollPhysics(), //ios 기본
-  //               )
-  //             : null,
-  //         slivers: getSliversContents(context),
-  //       ));
-  // }
+    // @override
+    // Widget build(BuildContext context) {
+    //   return NotificationListener<ScrollNotification>(
+    //       onNotification: (ScrollNotification scrollInfo) {
+    //         /// ScrollUpdateNotification(depth: 0 (local), FixedScrollMetrics(968.9..[717.7]..3673.4), scrollDelta: 0.09460146127491953)
+    //         // widget.onScrollNotification(scrollInfo);
+    //         // return false;
+    //
+    //         logUtil.debug("Scroll === ${scrollInfo.metrics.axisDirection} , ${AxisDirection.down} , ${AxisDirection.up}");
+    //         var metrics = scrollInfo.metrics;
+    //
+    //         //세로 스크롤인 경우에만 추적
+    //         if (metrics.axisDirection != AxisDirection.down){
+    //           logUtil.debug('scrollInfo ==== 세로 스크롤인 경우에만 추적');
+    //           return false;
+    //         }
+    //
+    //         if (metrics.extentAfter <= 0) {
+    //           //스크롤 끝에 닿은 경우 실행
+    //           logUtil.debug('scrollInfo ==== 스크롤 끝에 닿은 경우 실행');
+    //         }
+    //         return false;
+    //       },
+    //       child: CustomScrollView(
+    //         // key: Key(itemCount.toString()), // 리스트 내용 변환시 업데이트 반영 todo 그런데 리스트 추가시도 변경됨 remove에 사용해야하는데
+    //         // controller: scController,
+    //         physics: widget.isRefresh
+    //             ? const AlwaysScrollableScrollPhysics(
+    //                 //physics 물리 - 원하는 UI에 맞춰 작업하면 됨
+    //                 // NeverScrollableScrollPhysics : 목록 스크롤 불가능하게 설정
+    //                 // BouncingScrollPhysics : 튕겨저 올라가는 듯한 동작 가능 List 끝에 도달했을 시에 다시 되돌아감
+    //                 // ClampingScrollPhysics : 안드로이드의 기본 스크롤과 동일하다. List의 끝에 도달하면 동작을 멈춤
+    //                 // PageScrollPhysics : 다른 스크롤에 비해 조금더 부드럽게 만듬
+    //                 parent: BouncingScrollPhysics(), //ios 기본
+    //               )
+    //             : null,
+    //         slivers: getSliversContents(context),
+    //       ));
+    // }
+  }
 }

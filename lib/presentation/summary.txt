@@ -30,3 +30,52 @@ StatefulShellRoute는 **각 탭(브랜치)**가 자체적인 Navigator 스택을
 📦 Repository (AuthRepository)
    ↓
 🌐 RemoteDataSource (Retrofit API)
+
+main.dart
+setSystemUIOverlayStyle
+
+✅ 메인홈 (탭 네이게이터 구성)
+MainScaffoldWithNav
+├── CommonDefaultEdgePage
+    ㄴ child: widget.navigationShell,
+    ㄴ Stack 구성으로 배경 +  컨텐츠 + 스테이터스 및 네비게이션 색상덮기 (BlurOverlay)
+    ㄴ NotificationListener : 스크롤시에 따라 바텀네비게이션 애니메이션 onShowBottomBar전달
+    ㄴ
+    ㄴ RefreshMoreScrollview 와같은 컨텐츠도
+
+
+
+CommonPopScopeWidget
+ㄴ 안드로이드 등 백키 및 키보드 내림 처리
+
+
+CommonEdgeRefreshScrollview
+ㄴ CustomScrollView를 가지고 있는
+
+
+
+CommonSafeAreaWidget
+ㄴ 엣지투엣지인 경우 상하단 자동 여백처리
+
+
+EdgeCustomScrollview
+ㄴ CustomScrollView를 가지고 있는 위젯인데 이유는
+스크롤 초기에 스테이터스 및 바텀 네비게이터 영역공간을 주기위해 SliverToBoxAdapter
+ㄴ RefreshMoreScrollview에 넣을 만하다
+
+CommonSafeAreaWidget & EdgeCustomScrollview ==> SimpleEdgeContentPage로 ?
+
+
+
+
+
+RefreshMoreScrollview
+ㄴ 순수 리프레쉬 가능한 CustomScrollView, 상하단 여백 가능
+>>> CommonDefaultEdgePage안에 RefreshMoreScrollview를 넣으면
+
+
+
+
+
+
+

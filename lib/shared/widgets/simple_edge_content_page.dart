@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 
+import 'common/edge_space_widget.dart';
+
 ///
 ///
 /// CustomScrollView 들어갈 수 있는 위젯
@@ -18,7 +20,7 @@ import 'package:flutter_example_base/core/utils/print_log.dart';
 /// 그리드
 ///
 ///
-class EdgeCustomScrollview extends StatefulWidget {
+class SimpleEdgeContentPage extends StatefulWidget {
   /// 스크롤시 팅기는 효과
   final bool? isPhysics;
 
@@ -28,7 +30,7 @@ class EdgeCustomScrollview extends StatefulWidget {
   final Widget? content;
   final ScrollController? controller;
 
-  const EdgeCustomScrollview({
+  const SimpleEdgeContentPage({
     super.key,
     this.isPhysics = false,
     this.isSpaceStatus = true,
@@ -38,10 +40,10 @@ class EdgeCustomScrollview extends StatefulWidget {
   });
 
   @override
-  State<EdgeCustomScrollview> createState() => _EdgeCustomScrollviewState();
+  State<SimpleEdgeContentPage> createState() => _SimpleEdgeContentPageState();
 }
 
-class _EdgeCustomScrollviewState extends State<EdgeCustomScrollview> {
+class _SimpleEdgeContentPageState extends State<SimpleEdgeContentPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,16 +62,21 @@ class _EdgeCustomScrollviewState extends State<EdgeCustomScrollview> {
   }
 
   List<Widget> getSliversContents(BuildContext context) {
-    final statusBarHeight = MediaQuery.of(context).padding.top;
-    final bottomInset = MediaQuery.of(context).padding.bottom;
+    // final statusBarHeight = MediaQuery.of(context).padding.top;
+    // final bottomInset = MediaQuery.of(context).padding.bottom;
     // QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
 
     List<Widget> scrollSlivers = [];
 
     /// status 영역잡기
     if (widget.isSpaceStatus == true) {
+      // scrollSlivers.add(
+      //   SliverToBoxAdapter(child: Container(height: statusBarHeight, color: Colors.transparent)),
+      // );
       scrollSlivers.add(
-        SliverToBoxAdapter(child: Container(height: statusBarHeight, color: Colors.transparent)),
+        SliverToBoxAdapter(
+            child: BottomEdgeSpaceWidget(isEdgeToEdge: true, isBottom: false)
+        ),
       );
     }
 
@@ -77,8 +84,13 @@ class _EdgeCustomScrollviewState extends State<EdgeCustomScrollview> {
     scrollSlivers.add(SliverToBoxAdapter(child: widget.content));
 
     /// 네비게이터 높이
+    // scrollSlivers.add(
+    //   SliverToBoxAdapter(child: Container(height: bottomInset, color: Colors.transparent)),
+    // );
     scrollSlivers.add(
-      SliverToBoxAdapter(child: Container(height: bottomInset, color: Colors.transparent)),
+      SliverToBoxAdapter(
+          child: BottomEdgeSpaceWidget(isEdgeToEdge: true)
+      ),
     );
 
     return scrollSlivers;

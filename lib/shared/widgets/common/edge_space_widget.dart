@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/utils/device_info_utils.dart';
+import '../../../core/utils/device_info_utils.dart';
 
 ///
 /// 엣지투엣지인 화면인 경우 탑 또는 바텀 빈공간 주기
@@ -24,11 +24,13 @@ class BottomEdgeSpaceWidget extends ConsumerStatefulWidget {
 class _BottomEdgeSpaceWidgetState extends ConsumerState<BottomEdgeSpaceWidget> {
   @override
   Widget build(BuildContext context) {
-
     // return SizedBox(height: getEdgeSpaceHeight());
     return SizedBox(
-      height: DeviceInfoUtils.instance.getEdgeSpaceHeight(context, isBottom: widget.isBottom,
-      isEdgeToEdge: widget.isEdgeToEdge),
+      height: DeviceInfoUtils.instance.getEdgeSpaceHeight(
+        context,
+        isBottom: widget.isBottom,
+        isEdgeToEdge: widget.isEdgeToEdge,
+      ),
     );
   }
 
