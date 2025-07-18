@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
+import '../../shared/widgets/common_safe_area_widget.dart';
 import '../../shared/widgets/edge_space_widget.dart';
 
 class SettingPage extends ConsumerStatefulWidget {
@@ -15,9 +16,6 @@ class SettingPage extends ConsumerStatefulWidget {
 }
 
 class _SettingPageState extends BaseConState<SettingPage> {
-  bool isTop = false;
-  bool isBottom = false;
-
   @override
   Widget build(BuildContext context) {
     QcLog.d('build =====  $isThisPageVisible ');
@@ -37,75 +35,138 @@ class _SettingPageState extends BaseConState<SettingPage> {
     // print('현재 경로: $currentLocation');
 
     return Scaffold(
-      // appBar: AppBar(title: Text('Setting')),
-      body: SafeArea(
-        top: isTop,
-        bottom: isBottom,
-        child: Container(
-          width: double.maxFinite,
-          color: Colors.orange,
-          child: Column(
-            children: [
-              BottomEdgeSpaceWidget(
-                isBottom: false,
-                isEdgeToEdge: !isTop,),
-              SizedBox(
-                  width: double.maxFinite,
-                  child: ElevatedButton(onPressed: () {}, child: const Text('Top'))),
+      body: CommonSafeAreaWidget(
+        isTop: isTop,
+        isBottom: isBottom,
+        child: Column(
+          children: [
+            SizedBox(
+              width: double.maxFinite,
+              child: ElevatedButton(onPressed: () {}, child: const Text('Top')),
+            ),
 
-              Spacer(),
-              ElevatedButton(
-                onPressed: () {
-                  if (context.canPop()) {
-                    context.pop(); // 뒤로 가기
-                  }
-                },
-                child: const Text('Back'),
-              ),
+            Spacer(),
+            ElevatedButton(
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop(); // 뒤로 가기
+                }
+              },
+              child: const Text('Back'),
+            ),
 
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    isTop = !isTop;
-                  });
-                },
-                child:   Text('isTop : $isTop ${isTop == false? '엣지' : '노엣지'}'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    isBottom = !isBottom;
-                  });
-                },
-                child:   Text('isBottom : $isBottom ${isBottom == false? '엣지' : '노엣지'}'),
-              ),
-              Spacer(),
-              ///
-              /// android 15 sdk 35부터
-              /// 1. SafeArea 로 감싸지 않거나,
-              /// 2. SafeArea(top:false,bottom:false)
-              /// 인 경우 바텀네이게이터 또는 스테이터스바 영역을 침범한다
-              ///
-              /// 침범하지 않게 하려면 SafeArea로 감싸야한다
-              ///
-              /// ios 홈인디게이터 존재시
-              /// 1. SafeArea 로 감싸지 않거나,
-              /// 2. SafeArea(top:false,bottom:false)
-              /// 인 경우 바텀네이게이터 또는 스테이터스바 영역을 침범한다
-              ///
-              /// 반대로, SafeArea를 감싸는 경우 하단 홈 인디게이터 색상 이슈가 생길수 있다
-              /// >> 홈 인디게이터 영역까지 전체를 다 사용하고 하단 마진을 가지는걸로 색상이슈 해결
-              ///
-              SizedBox(
-                  width: double.maxFinite,
-                  child: ElevatedButton(onPressed: () {}, child: const Text('Bottom'))),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isTop = !isTop;
+                });
+              },
+              child: Text('isTop : $isTop ${isTop == false ? '엣지' : '노엣지'}'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isBottom = !isBottom;
+                });
+              },
+              child: Text('isBottom : $isBottom ${isBottom == false ? '엣지' : '노엣지'}'),
+            ),
+            Spacer(),
 
-              BottomEdgeSpaceWidget(
-                isEdgeToEdge: !isBottom,)
-            ],
-          ),
+            ///
+            /// android 15 sdk 35부터
+            /// 1. SafeArea 로 감싸지 않거나,
+            /// 2. SafeArea(top:false,bottom:false)
+            /// 인 경우 바텀네이게이터 또는 스테이터스바 영역을 침범한다
+            ///
+            /// 침범하지 않게 하려면 SafeArea로 감싸야한다
+            ///
+            /// ios 홈인디게이터 존재시
+            /// 1. SafeArea 로 감싸지 않거나,
+            /// 2. SafeArea(top:false,bottom:false)
+            /// 인 경우 바텀네이게이터 또는 스테이터스바 영역을 침범한다
+            ///
+            /// 반대로, SafeArea를 감싸는 경우 하단 홈 인디게이터 색상 이슈가 생길수 있다
+            /// >> 홈 인디게이터 영역까지 전체를 다 사용하고 하단 마진을 가지는걸로 색상이슈 해결
+            ///
+            SizedBox(
+              width: double.maxFinite,
+              child: ElevatedButton(onPressed: () {}, child: const Text('Bottom')),
+            ),
+          ],
         ),
       ),
     );
+    // return Scaffold(
+    //   // appBar: AppBar(title: Text('Setting')),
+    //   body: SafeArea(
+    //     top: isTop,
+    //     bottom: isBottom,
+    //     child: Container(
+    //       width: double.maxFinite,
+    //       color: Colors.orange,
+    //       child: Column(
+    //         children: [
+    //           BottomEdgeSpaceWidget(
+    //             isBottom: false,
+    //             isEdgeToEdge: !isTop,),
+    //           SizedBox(
+    //               width: double.maxFinite,
+    //               child: ElevatedButton(onPressed: () {}, child: const Text('Top'))),
+    //
+    //           Spacer(),
+    //           ElevatedButton(
+    //             onPressed: () {
+    //               if (context.canPop()) {
+    //                 context.pop(); // 뒤로 가기
+    //               }
+    //             },
+    //             child: const Text('Back'),
+    //           ),
+    //
+    //           ElevatedButton(
+    //             onPressed: () {
+    //               setState(() {
+    //                 isTop = !isTop;
+    //               });
+    //             },
+    //             child:   Text('isTop : $isTop ${isTop == false? '엣지' : '노엣지'}'),
+    //           ),
+    //           ElevatedButton(
+    //             onPressed: () {
+    //               setState(() {
+    //                 isBottom = !isBottom;
+    //               });
+    //             },
+    //             child:   Text('isBottom : $isBottom ${isBottom == false? '엣지' : '노엣지'}'),
+    //           ),
+    //           Spacer(),
+    //           ///
+    //           /// android 15 sdk 35부터
+    //           /// 1. SafeArea 로 감싸지 않거나,
+    //           /// 2. SafeArea(top:false,bottom:false)
+    //           /// 인 경우 바텀네이게이터 또는 스테이터스바 영역을 침범한다
+    //           ///
+    //           /// 침범하지 않게 하려면 SafeArea로 감싸야한다
+    //           ///
+    //           /// ios 홈인디게이터 존재시
+    //           /// 1. SafeArea 로 감싸지 않거나,
+    //           /// 2. SafeArea(top:false,bottom:false)
+    //           /// 인 경우 바텀네이게이터 또는 스테이터스바 영역을 침범한다
+    //           ///
+    //           /// 반대로, SafeArea를 감싸는 경우 하단 홈 인디게이터 색상 이슈가 생길수 있다
+    //           /// >> 홈 인디게이터 영역까지 전체를 다 사용하고 하단 마진을 가지는걸로 색상이슈 해결
+    //           ///
+    //           SizedBox(
+    //               width: double.maxFinite,
+    //               child: ElevatedButton(onPressed: () {}, child: const Text('Bottom'))),
+    //
+    //           BottomEdgeSpaceWidget(
+    //             isEdgeToEdge: !isBottom,)
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }
