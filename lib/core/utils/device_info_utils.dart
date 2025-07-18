@@ -35,6 +35,7 @@ class DeviceInfoUtils {
   final DeviceInfoPlugin _deviceInfoPlugin = DeviceInfoPlugin();
 
   int get sdkInt => _sdkInt;
+  static const double DEFAULT_TOP_MAGGIN = 20.0;
   static const double DEFAULT_BOTTOM_MAGGIN = 34.0;
 
   /// 초기화 (앱 시작 시 1회 호출)
@@ -84,7 +85,7 @@ class DeviceInfoUtils {
   /// 화면 넓이 가져오기
   /// 팝업에서는 1/2 최대
   ///
-  static double getDisplayWidth(BuildContext context) {
+  double getDisplayWidth(BuildContext context) {
     double totalWidth = MediaQuery.of(context).size.width;
     final leftInset = MediaQuery.of(context).padding.left;
     final rightInset = MediaQuery.of(context).padding.right;
@@ -96,7 +97,7 @@ class DeviceInfoUtils {
   /// 화면 높이 가져오기
   /// 팝업에서는 1/2 최대
   ///
-  static double getDisplayHeight(BuildContext context) {
+  double getDisplayHeight(BuildContext context) {
     double totalHeight = MediaQuery.of(context).size.height;
     final statusBarHeight = MediaQuery.of(context).padding.top; // 상단 상태바
     final bottomInset = MediaQuery.of(context).padding.bottom; // 하단 시스템 영역 (네비게이션 바 등)
@@ -108,7 +109,7 @@ class DeviceInfoUtils {
   /// 태블릿인지 여부
   /// 600dp 이상이면 태블릿으로 간주
   ///
-  static bool isTablet(BuildContext context) {
+  bool isTablet(BuildContext context) {
     final shortestSide = MediaQuery.of(context).size.shortestSide;
     bool isTablet = shortestSide >= 600;
     QcLog.d('isTablet ====== $isTablet');
@@ -161,52 +162,69 @@ class DeviceInfoUtils {
   /// 바텀 여유공간 높이 가져오기 왜? 하단에 버튼등이 있는 경우 네비게이션이나 홈 인디게이터와 겹쳐서
   ///
   ///
-  /// 아이폰 8 - EdgeInsets(0.0, 20.0, 0.0, 0.0) , bottomInset : 0.0, extraBottomMargin: DEFAULT_BOTTOM_MAGGIN,
-  /// 아이폰15프로 맥스 - EdgeInsets(0.0, 59.0, 0.0, 34.0) , bottomInset : 34.0, extraBottomMargin: 0.0,
+  /// 아이폰 8 - EdgeInsets(0.0, 20.0, 0.0, 0.0) , bottomInset : 0.0, extraMargin: DEFAULT_BOTTOM_MAGGIN,
+  /// 아이폰15프로 맥스 - EdgeInsets(0.0, 59.0, 0.0, 34.0) , bottomInset : 34.0, extraMargin: 0.0,
   ///
-  /// 안드로이드 하드웨어키 - EdgeInsets(0.0, 24.0, 0.0, 0.0) , bottomInset : 0.0, === return extraBottomMargin: 16.0,
-  /// 안드로이드 소프트키 - EdgeInsets(0.0, 28.6, 0.0, 0.0) , bottomInset : 0.0, === return extraBottomMargin:  16.0,
+  /// 안드로이드 하드웨어키 - EdgeInsets(0.0, 24.0, 0.0, 0.0) , bottomInset : 0.0, === return extraMargin: 16.0,
+  /// 안드로이드 소프트키 - EdgeInsets(0.0, 28.6, 0.0, 0.0) , bottomInset : 0.0, === return extraMargin:  16.0,
   ///
   /// 갤럭시 S25[os15]  엣지투엣지
-  /// ㄴ EdgeInsets(0.0, 34.7, 0.0, 48.0) , bottomInset : 48.0, === return extraBottomMargin: 0.0
+  /// ㄴ EdgeInsets(0.0, 34.7, 0.0, 48.0) , bottomInset : 48.0, === return extraMargin: 0.0
   ///
-  double getBottomHeightEdgeToEdge(BuildContext context, {bool? isEdgeToEdge = true}) {
-    QcLog.d('getBottomHeightEdgeToEdge ==== $isEdgeToEdge');
-    /// // iPhone 8: padding.bottom == 0
-    /// // iPhone X: padding.bottom > 0 (보통 34px 정도)
-    /// // 안드로이드 소프트키 : padding.bottom == 0
-    final bottomInset = MediaQuery.of(context).padding.bottom;
+  double getEdgeSpaceHeight(
+    BuildContext context, {
+    bool? isBottom = true,
+    bool? isEdgeToEdge = true,
+  }) {
+    QcLog.d('getEdgeSpaceHeight ==== $isBottom');
 
-    /// bottomInset이 0이 아닌 경우는 설정된 바텀 마진으로
-    var extraBottomMargin = bottomInset == 0 ? DEFAULT_BOTTOM_MAGGIN : 0.0;
+    if (isEdgeToEdge == false) {
+      /// 엣지가 아닌 경우는 0 반환
+      return 0;
+    }
 
-    // if (Platform.isAndroid && sdkInt >= 35) {
-    if (Platform.isAndroid) {
-      /// 안드로이드 35이상에서는 safearea인 경우 바텀네비게이션에 붙는다
-      // extraBottomMargin = DEFAULT_BOTTOM_MAGGIN;
-      // extraBottomMargin = bottomInset;
-      if (isEdgeToEdge == true) {
-        extraBottomMargin = bottomInset == 0 ? DEFAULT_BOTTOM_MAGGIN : bottomInset;
+    double extraMargin = 0;
+
+    /// 아이폰 se3 > EdgeInsets.zero
+    final padding = MediaQuery.of(context).padding;
+
+    /// 엣지 화면인지
+    if (isBottom == true) {
+      if (Platform.isAndroid && DeviceInfoUtils.instance.sdkInt < 35) {
+        /// android os 15, sdk 35 미만인 경우 bottom은 엣지투엣지가 안되서 0
+        extraMargin = padding.bottom;
       } else {
-        // extraBottomMargin = bottomInset;
-        extraBottomMargin = 0;
+        /// 아이폰 하드웨어키, 안드로이드 os15이전 버전등은 EdgeInsets이 0으로 기본 마진 주기
+        if (Platform.isIOS && isHomeBtnIos(context)) {
+          /// ios 홈버튼이 있는 경우
+          extraMargin = 0;
+        } else {
+          extraMargin = padding.bottom == 0 ? DEFAULT_BOTTOM_MAGGIN : padding.bottom;
+        }
       }
     } else {
-      /// ios는 하드웨어 버튼 유무에 따라 달라서 필요
-      /// 하드웨어키 아이폰은 bottomInset이 0으로 디폴트 마진 으로
-      /// 홈 인디게이터 모델은 bottomInset이 있으므로 그대로 사용
-      if (isEdgeToEdge == true) {
-        extraBottomMargin = bottomInset == 0 ? DEFAULT_BOTTOM_MAGGIN : bottomInset;
-      } else {
-        extraBottomMargin = 0;
-      }
+      /// 아이폰 하드웨어키, 안드로이드 os15이전 버전등은 EdgeInsets이 0으로 기본 마진 주기
+      /// android os 15, sdk 35 미만인 경우, top은 엣지투엣지가 먹는다 top
+      extraMargin = padding.top == 0 ? DEFAULT_TOP_MAGGIN : padding.top;
     }
 
     QcLog.d(
-      'getNavBottomMargin  ======= ${MediaQuery.of(context).padding} ,'
-      ' bottomInset : $bottomInset, === return extraBottomMargin: $extraBottomMargin',
+      'padding  ======= ${MediaQuery.of(context).padding} ,'
+      'return extraMargin: $extraMargin',
     );
+    return extraMargin;
+  }
 
-    return extraBottomMargin;
+  ///
+  /// 홈버튼을 가지고 있는지
+  ///
+  bool isHomeBtnIos(BuildContext context) {
+    if (MediaQuery.of(context).padding.bottom > 0) {
+      // 홈 인디케이터 있는 iPhone → 하드웨어키 없음
+      return false;
+    } else {
+      // 홈 인디케이터 없음 → 하드웨어 홈버튼 있을 가능성 높음
+      return true;
+    }
   }
 }
