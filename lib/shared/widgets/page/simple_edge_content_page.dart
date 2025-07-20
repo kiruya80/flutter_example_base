@@ -49,42 +49,49 @@ class SimpleEdgeContentPage extends StatefulWidget {
 class _SimpleEdgeContentPageState extends State<SimpleEdgeContentPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: Container(
-          width: double.maxFinite,
-          color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
-          child: CustomScrollView(
-            controller: widget.controller,
-            physics:
-                widget.isPhysics == true
-                    ? const AlwaysScrollableScrollPhysics(
-                      parent: BouncingScrollPhysics(), //ios 기본
-                    )
-                    : null,
-            slivers: getSliversContents(context),
-          ),
-        ),
+    // return Scaffold(
+    //   extendBody: true,
+    //   extendBodyBehindAppBar: true,
+    //   body: SafeArea(
+    //     top: false,
+    //     bottom: false,
+    //     child: Container(
+    //       width: double.maxFinite,
+    //       color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
+    //       child: CustomScrollView(
+    //         controller: widget.controller,
+    //         physics:
+    //             widget.isPhysics == true
+    //                 ? const AlwaysScrollableScrollPhysics(
+    //                   parent: BouncingScrollPhysics(), //ios 기본
+    //                 )
+    //                 : null,
+    //         slivers: getSliversContents(context),
+    //       ),
+    //     ),
+    //   ),
+    // );
+    return Container(
+      width: double.maxFinite,
+      color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
+      child: CustomScrollView(
+        controller: widget.controller,
+        physics:
+            widget.isPhysics == true
+                ? const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(), //ios 기본
+                )
+                : null,
+        slivers: getSliversContents(context),
       ),
     );
   }
 
   List<Widget> getSliversContents(BuildContext context) {
-    // final statusBarHeight = MediaQuery.of(context).padding.top;
-    // final bottomInset = MediaQuery.of(context).padding.bottom;
-    // QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
-
     List<Widget> scrollSlivers = [];
 
     /// status 영역잡기
     if (widget.isSpaceStatus == true) {
-      // scrollSlivers.add(
-      //   SliverToBoxAdapter(child: Container(height: statusBarHeight, color: Colors.transparent)),
-      // );
       scrollSlivers.add(
         SliverToBoxAdapter(child: BottomEdgeSpaceWidget(isEdgeToEdge: true, isBottom: false)),
       );
@@ -94,9 +101,6 @@ class _SimpleEdgeContentPageState extends State<SimpleEdgeContentPage> {
     scrollSlivers.add(SliverToBoxAdapter(child: widget.child));
 
     /// 네비게이터 높이
-    // scrollSlivers.add(
-    //   SliverToBoxAdapter(child: Container(height: bottomInset, color: Colors.transparent)),
-    // );
     scrollSlivers.add(SliverToBoxAdapter(child: BottomEdgeSpaceWidget(isEdgeToEdge: true)));
 
     return scrollSlivers;

@@ -17,13 +17,12 @@ void main() async {
   // final deviceInfo = DeviceInfoUtil();
   await DeviceInfoUtils.instance.init();
 
-
-  QcLog.d('deviceInfo.deviceModel == ${DeviceInfoUtils.instance.deviceModel}\n'
-      'deviceInfo.osVersion : ${DeviceInfoUtils.instance.osVersion}\n'
-      'deviceInfo.deviceId : ${DeviceInfoUtils.instance.deviceId} ,\n\n'
-      'deviceInfo.sdkInt ${DeviceInfoUtils.instance.sdkInt}');
-
-
+  QcLog.d(
+    'deviceInfo.deviceModel == ${DeviceInfoUtils.instance.deviceModel}\n'
+    'deviceInfo.osVersion : ${DeviceInfoUtils.instance.osVersion}\n'
+    'deviceInfo.deviceId : ${DeviceInfoUtils.instance.deviceId} ,\n\n'
+    'deviceInfo.sdkInt ${DeviceInfoUtils.instance.sdkInt}',
+  );
 
   /// 상태바/내비게이션바 투명하게 만들기
   ///

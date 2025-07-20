@@ -70,6 +70,7 @@ class _ProfileTabState extends BaseConState<ProfileTab> with ScrollBottomListene
       backgroundColor: Theme.of(context).colorScheme.surface,
       //   isMoreDataScroll: MoreDataScroll.HAS,
     );
+    // return _getMoveEdgeToEdge();
   }
 
   _getMoveEdgeToEdge() {

@@ -68,8 +68,8 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   void _onTap(int index) {
     QcLog.d(
       'state before ===== ${GoRouterState.of(context).topRoute.toString()} ,'
-          ' ${GoRouterState.of(context).uri} , '
-          '${widget.navigationShell.currentIndex} ',
+      ' ${GoRouterState.of(context).uri} , '
+      '${widget.navigationShell.currentIndex} ',
     );
 
     if (onTabChanged(index) == false) {
@@ -311,33 +311,33 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     return CommonDefaultEdgePage(
       extendBodyBehindAppBar: true,
       extendBody: true,
-      onScrollTop: () {
-        // 스크롤 시작 → 일단 숨기자 (UX 선택 사항)
-        // setState(() => isBottomBarVisible = true);
-        showBottomBar(true);
-      },
-      onScrollUpdate: (offset) {
-        print('onScrollUpdate ==== $offset | $lastOffset');
-        final difference = offset - lastOffset;
-        // setState(() => isBottomBarVisible = false);
-
-        // if (difference > scrollThreshold && isBottomBarVisible) {
-        //   showBottomBar(false);
-        // } else if (difference < -scrollThreshold && !isBottomBarVisible) {
-        //   showBottomBar(true);
-        // }
-
-        // offset 값 변화에 따라 위/아래 감지해서 show/hide
-        if (offset > lastOffset) {
-          showBottomBar(false);
-        } else if (offset < lastOffset) {
-          showBottomBar(true);
-        }
-        lastOffset = offset;
-      },
-      onScrollEnd: () {
-        // 스크롤 멈췄을 때 상태 유지 또는 복구 로직 추가 가능
-      },
+      // onScrollTop: () {
+      //   // 스크롤 시작 → 일단 숨기자 (UX 선택 사항)
+      //   // setState(() => isBottomBarVisible = true);
+      //   showBottomBar(true);
+      // },
+      // onScrollUpdate: (offset) {
+      //   print('onScrollUpdate ==== $offset | $lastOffset');
+      //   final difference = offset - lastOffset;
+      //   // setState(() => isBottomBarVisible = false);
+      //
+      //   // if (difference > scrollThreshold && isBottomBarVisible) {
+      //   //   showBottomBar(false);
+      //   // } else if (difference < -scrollThreshold && !isBottomBarVisible) {
+      //   //   showBottomBar(true);
+      //   // }
+      //
+      //   // offset 값 변화에 따라 위/아래 감지해서 show/hide
+      //   if (offset > lastOffset) {
+      //     showBottomBar(false);
+      //   } else if (offset < lastOffset) {
+      //     showBottomBar(true);
+      //   }
+      //   lastOffset = offset;
+      // },
+      // onScrollEnd: () {
+      //   // 스크롤 멈췄을 때 상태 유지 또는 복구 로직 추가 가능
+      // },
       bottomNavigationBar: _buildBlurBottomBar(),
       child: widget.navigationShell,
     );

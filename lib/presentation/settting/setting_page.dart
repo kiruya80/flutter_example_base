@@ -7,8 +7,9 @@ import '../../../core/utils/print_log.dart';
 import '../../core/constants/app_constants.dart';
 import '../../shared/state/base_con_state.dart';
 import '../../shared/widgets/common/edge_space_widget.dart';
+import '../../shared/widgets/common/common_pop_scope_widget.dart';
 import '../../shared/widgets/page/common_default_edge_page.dart';
-import '../../shared/widgets/refresh_more_scrollview.dart';
+import '../../shared/widgets/common/refresh_more_scrollview.dart';
 import '../../shared/widgets/page/simple_edge_content_page.dart';
 
 class SettingPage extends ConsumerStatefulWidget {
@@ -41,7 +42,7 @@ class _SettingPageState extends BaseConState<SettingPage> {
     // final currentLocation = GoRouter.of(context).location;
     // print('현재 경로: $currentLocation');
 
-    return getRefresh();
+    return CommonPopScopeWidget(child: getRefresh());
     // return _content1();
   }
 

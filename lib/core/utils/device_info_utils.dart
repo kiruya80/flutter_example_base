@@ -208,10 +208,10 @@ class DeviceInfoUtils {
       extraMargin = padding.top == 0 ? DEFAULT_TOP_MAGGIN : padding.top;
     }
 
-    // QcLog.d(
-    //   'padding  ======= ${MediaQuery.of(context).padding} ,'
-    //   'return extraMargin: $extraMargin',
-    // );
+    QcLog.d(
+      'padding  ======= $isBottom , ${MediaQuery.of(context).padding} ,'
+      'return extraMargin: $extraMargin',
+    );
     return extraMargin;
   }
 

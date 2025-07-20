@@ -11,8 +11,8 @@ import '../../core/theme/app_theme_provider.dart';
 import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
 import '../../shared/widgets/common/my_sliver_persistent_header_delegate.dart';
-import '../../shared/widgets/page/common_nav_edge_page.dart';
-import '../../shared/widgets/refresh_more_scrollview.dart';
+import '../../shared/widgets/page/common_default_edge_page.dart';
+import '../../shared/widgets/common/refresh_more_scrollview.dart';
 import '../tab_navigator/profile/profile_tab.dart';
 
 ///
@@ -70,7 +70,6 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
   bool? isDark;
   NetState? netState = NetState.Paging;
 
-
   @override
   Widget build(BuildContext context) {
     QcLog.d('build ==== id : ${widget.id} , type : ${widget.type} , appbar : ${widget.appbar}');
@@ -96,13 +95,10 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
         return getCommon();
       }
       // return getCommon();
-
     } else if (widget.type == EdgeToEdgeType.Refresh.name) {
       return getRefresh();
-
     } else if (widget.type == EdgeToEdgeType.CommonRefresh.name) {
       return getCommonRefresh();
-
     } else if (widget.type == EdgeToEdgeType.CustomScrollView.name) {
       /// CommonEdgeRefreshScrollview
       if (widget.appbar == true) {
@@ -111,8 +107,8 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
       } else {
         return getCustomScrollView();
       }
-    // } else if (widget.type == EdgeToEdgeType.iosCupertino.name) {
-    //   return getIosCupertino();
+      // } else if (widget.type == EdgeToEdgeType.iosCupertino.name) {
+      //   return getIosCupertino();
     } else {
       return Container();
     }
@@ -153,15 +149,13 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
   }
 
   getCommonAppBar() {
-    return CommonNavEdgePage(
+    return CommonDefaultEdgePage(
       backgroundColor: Theme.of(context).colorScheme.surface,
       // appBar: Container(height: kToolbarHeight, color: Colors.deepPurple,),
       // appBar: Container(height: kToolbarHeight,),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: AppBar(
-          title: Text('긴 텍스트'),
-        ),
+        child: AppBar(title: Text('긴 텍스트')),
       ),
       child: ListView.builder(
         // padding: EdgeInsets.zero,
@@ -182,7 +176,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
 
   /// ok
   getCommon() {
-    return CommonNavEdgePage(
+    return CommonDefaultEdgePage(
       backgroundColor: Theme.of(context).colorScheme.surface,
 
       child: ListView.builder(
@@ -209,7 +203,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
-    return CommonNavEdgePage(
+    return CommonDefaultEdgePage(
       // backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
       child: refreshScroll(
@@ -236,7 +230,6 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     // );
     return Scaffold(body: customScrollView());
   }
-
 
   Widget getCustomScrollViewAppBar() {
     // return CommonEdgeRefreshScrollview(
@@ -388,7 +381,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
-    return CommonNavEdgePage(
+    return CommonDefaultEdgePage(
       // backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
       isBlur: true,

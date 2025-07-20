@@ -7,10 +7,10 @@ import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/extensions/string_extensions.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 
-import '../../core/constants/app_constants.dart';
-import '../../core/utils/device_info_utils.dart';
-import 'common/edge_space_widget.dart';
-import 'common/my_sliver_persistent_header_delegate.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../../core/utils/device_info_utils.dart';
+import 'edge_space_widget.dart';
+import 'my_sliver_persistent_header_delegate.dart';
 
 /// 더보기 데이터 상태
 // enum MoreDataScroll { HAS, NONE, FAIL }
@@ -169,26 +169,6 @@ class RefreshMoreScrollview extends StatefulWidget {
 }
 
 class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
-  /// NotificationListener
-  ///
-  bool _onNotification(ScrollNotification scrollNotification) {
-    if (widget.isMoreDataScroll != MoreDataScroll.HAS) {
-      return false;
-    }
-    // QcLog.d('_onNotification  RefreshMoreScrollviewState ====== ');
-    var metrics = scrollNotification.metrics;
-    //세로 스크롤인 경우에만 추적
-    if (metrics.axisDirection != AxisDirection.down) return false;
-    if (metrics.extentAfter <= 0) {
-      //스크롤 끝에 닿은 경우 실행
-      // if (widget.isRefresh == true && widget.onBottom != null) {
-      if (widget.onBottom != null) {
-        widget.onBottom!();
-      }
-    }
-    return false;
-  }
-
   /**
       AlwaysScrollableScrollPhysics(
       //physics 물리 - 원하는 UI에 맞춰 작업하면 됨
@@ -199,53 +179,20 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
    */
   @override
   Widget build(BuildContext context) {
-    /// 1. pagingScrollController
-    // return CustomScrollView(
-    //   controller: pagingScrollController,
-    //   physics: widget.isRefresh == true
-    //       ? const AlwaysScrollableScrollPhysics(
-    //     parent: BouncingScrollPhysics(), //ios 기본
-    //   )
-    //       : null,
-    //   slivers: getSliversContents(context),
-    // );
     return Container(
       width: double.maxFinite,
       color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
       child: CustomScrollView(
         controller: widget.controller,
         physics:
-        widget.isPhysics == true
-            ? const AlwaysScrollableScrollPhysics(
-          parent: BouncingScrollPhysics(), //ios 기본
-        )
-            : null,
+            widget.isPhysics == true
+                ? const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(), //ios 기본
+                )
+                : null,
         slivers: getSliversContents(context),
       ),
     );
-
-    /// 2. NotificationListener
-    // return NotificationListener<ScrollNotification>(
-    //   onNotification: (ScrollNotification onNotification) {
-    //     //스크롤 시 이 부분에서 이벤트가 발생한다.
-    //     _onNotification(onNotification);
-    //     return false;
-    //   },
-    //   child: Container(
-    //     color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
-    //     child: CustomScrollView(
-    //       controller: widget.controller,
-    //       physics:
-    //           widget.isPhysics == true
-    //               ? const AlwaysScrollableScrollPhysics(
-    //                 parent: BouncingScrollPhysics(), //ios 기본
-    //               )
-    //               : null,
-    //       slivers: getSliversContents(context),
-    //     ),
-    //   ),
-    // );
-
   }
 
   List<Widget> getSliversContents(BuildContext context) {
@@ -494,56 +441,9 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
       );
     } else if (isMoreScrollLoad == MoreDataScroll.FAIL) {
       /// 더보기 실패시 메시지 필요하다면
-      return Container(
-        alignment: Alignment.center,
-        // child: QcText.bodyMedium(
-        //   'error_content'.tr,
-        // ),
-        child: const Text("오류가 발생했습니다."),
-      );
+      return Container(alignment: Alignment.center, child: const Text("오류가 발생했습니다."));
     } else {
-      // return Container();
       return const SizedBox.shrink();
     }
-
-    // @override
-    // Widget build(BuildContext context) {
-    //   return NotificationListener<ScrollNotification>(
-    //       onNotification: (ScrollNotification scrollInfo) {
-    //         /// ScrollUpdateNotification(depth: 0 (local), FixedScrollMetrics(968.9..[717.7]..3673.4), scrollDelta: 0.09460146127491953)
-    //         // widget.onScrollNotification(scrollInfo);
-    //         // return false;
-    //
-    //         logUtil.debug("Scroll === ${scrollInfo.metrics.axisDirection} , ${AxisDirection.down} , ${AxisDirection.up}");
-    //         var metrics = scrollInfo.metrics;
-    //
-    //         //세로 스크롤인 경우에만 추적
-    //         if (metrics.axisDirection != AxisDirection.down){
-    //           logUtil.debug('scrollInfo ==== 세로 스크롤인 경우에만 추적');
-    //           return false;
-    //         }
-    //
-    //         if (metrics.extentAfter <= 0) {
-    //           //스크롤 끝에 닿은 경우 실행
-    //           logUtil.debug('scrollInfo ==== 스크롤 끝에 닿은 경우 실행');
-    //         }
-    //         return false;
-    //       },
-    //       child: CustomScrollView(
-    //         // key: Key(itemCount.toString()), // 리스트 내용 변환시 업데이트 반영 todo 그런데 리스트 추가시도 변경됨 remove에 사용해야하는데
-    //         // controller: scController,
-    //         physics: widget.isRefresh
-    //             ? const AlwaysScrollableScrollPhysics(
-    //                 //physics 물리 - 원하는 UI에 맞춰 작업하면 됨
-    //                 // NeverScrollableScrollPhysics : 목록 스크롤 불가능하게 설정
-    //                 // BouncingScrollPhysics : 튕겨저 올라가는 듯한 동작 가능 List 끝에 도달했을 시에 다시 되돌아감
-    //                 // ClampingScrollPhysics : 안드로이드의 기본 스크롤과 동일하다. List의 끝에 도달하면 동작을 멈춤
-    //                 // PageScrollPhysics : 다른 스크롤에 비해 조금더 부드럽게 만듬
-    //                 parent: BouncingScrollPhysics(), //ios 기본
-    //               )
-    //             : null,
-    //         slivers: getSliversContents(context),
-    //       ));
-    // }
   }
 }

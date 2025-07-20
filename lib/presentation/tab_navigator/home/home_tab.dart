@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -9,12 +8,10 @@ import '../../../app/di/scroll_notifier.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_theme_provider.dart';
-import '../../../core/utils/common_utils.dart';
 import '../../../core/utils/print_log.dart';
 import '../../../shared/mixin/scroll_bottom_listener_mixin.dart';
 import '../../../shared/state/base_con_state.dart';
-import '../../../shared/widgets/refresh_more_scrollview.dart';
-import '../../../shared/widgets/page/simple_edge_content_page.dart';
+import '../../../shared/widgets/common/refresh_more_scrollview.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
@@ -31,19 +28,12 @@ class _HomeTabState extends BaseConState<HomeTab> with ScrollBottomListenerMixin
   bool? isDark;
 
   // late void Function() _cancelLoadingListener;
-  // late final ProviderSubscription _subscription;
 
   @override
   void initState() {
     super.initState();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     // });
-  }
-
-  @override
-  void dispose() {
-    // _subscription.close(); // 꼭 닫아줘야 메모리 누수 안 생깁니다
-    super.dispose();
   }
 
   @override

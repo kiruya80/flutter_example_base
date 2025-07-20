@@ -39,7 +39,7 @@ class SystemSettingUtils {
             // isBlur == true
             //     ? Brightness.dark
             //     : (isDark == true ? Brightness.dark : Brightness.light),
-        isDark == true ? Brightness.light : Brightness.dark,
+            isDark == true ? Brightness.light : Brightness.dark,
 
         // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
         // 변경시 transparent로 하고 위에 위젯을 덮는 형태로 색상변경 가능
@@ -52,7 +52,7 @@ class SystemSettingUtils {
             // isBlur == true
             //     ? Brightness.dark
             //     : (isDark == true ? Brightness.dark : Brightness.light),
-        isDark == true ? Brightness.light : Brightness.dark,
+            isDark == true ? Brightness.light : Brightness.dark,
         // 자동 대비 조정 끄기 (Android 10+) false : 검은색,흰색 반투명 삭제 투명으로 변경
         systemNavigationBarContrastEnforced: false,
       ),

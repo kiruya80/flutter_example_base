@@ -56,21 +56,27 @@ import '../common/edge_space_widget.dart';
 /// 2. 블러 on 인 경우 & 앱바 있는 경우
 /// ㄴ
 class CommonDefaultEdgePage extends ConsumerStatefulWidget {
-  final Widget child;
-  final Widget? background;
+  ///
+  /// Scaffold 설정
+  ///
   final Widget? appBar;
-  final bool? isStatusDark;
   final Color? backgroundColor;
 
-  final bool? isBlur;
-
-  // final Color? statusBarColor;
+  /// Scaffold에서 bottomNavigationBar 아래로 확장
+  final bool? extendBody;
 
   /// Scaffold에서 시스템 status bar까지 확장
   final bool? extendBodyBehindAppBar;
 
-  /// Scaffold에서 bottomNavigationBar 아래로 확장
-  final bool? extendBody;
+  final Widget? floatingActionButton;
+  final Widget? bottomSheet;
+  final Widget? bottomNavigationBar;
+
+  ///
+  /// body 내 컨텐츠 및 SafeArea 설정
+  ///
+
+  final Widget? background;
 
   /// safeArea의 상단 및 하단 사용여부
   /// true : 안전구역, 스테이터스바 또는 네비게이션 바 영역을 침범하지 않는다
@@ -78,15 +84,16 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
   ///
   final bool? safeAreaTop;
   final bool? safeAreaBottom;
+  final Widget child;
+  final bool? isBlur;
 
-  final Widget? floatingActionButton;
-  final Widget? bottomSheet;
-  final Widget? bottomNavigationBar;
-
-  final VoidCallback? onScrollTop;
-  final ValueChanged<double>? onScrollUpdate;
-  final VoidCallback? onScrollEnd;
-
+  ///
+  /// 스크롤 위치
+  ///
+  // final VoidCallback? onScrollTop;
+  // final ValueChanged<double>? onScrollUpdate;
+  // final VoidCallback? onScrollEnd;
+  /// 바텀 네비게이션 보이기
   final ValueChanged<bool>? onShowBottomBar;
 
   const CommonDefaultEdgePage({
@@ -94,28 +101,18 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
     required this.child,
     this.background,
     this.appBar,
-    this.isStatusDark = false,
     this.backgroundColor = Colors.white,
-
-    /// isBlur 블러 효과
     this.isBlur = true,
-
-    /// 블러효과가 false인 경우 색상처리
-    /// 단, ios 색상불가로 블러만 처리
-    // this.statusBarColor = Colors.white,
     this.extendBodyBehindAppBar = true,
     this.extendBody = true,
-
     this.safeAreaTop = false,
     this.safeAreaBottom = false,
     this.floatingActionButton,
     this.bottomSheet,
     this.bottomNavigationBar,
-
-    this.onScrollTop,
-    this.onScrollUpdate,
-    this.onScrollEnd,
-
+    // this.onScrollTop,
+    // this.onScrollUpdate,
+    // this.onScrollEnd,
     this.onShowBottomBar,
   });
 
@@ -126,13 +123,13 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
 class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   bool? isDark = false;
   bool? isBlur = true;
+  Color? overlayColor;
 
   bool isBottomBarVisible = true;
   bool isOnBottom = false;
   double lastOffset = 0;
   final double _threshold = 10.0; // 최소 스크롤 거리
-  Color? overlayColor;
-  double bottomMoreHeight = 100;
+  final double bottomMoreHeight = 100;
 
   @override
   void initState() {
@@ -187,10 +184,10 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
       },
 
       child: Scaffold(
-        extendBodyBehindAppBar: widget.extendBodyBehindAppBar ?? true,
-        extendBody: widget.extendBody ?? true,
-        backgroundColor: widget.backgroundColor,
         // appBar: widget.appBar,
+        backgroundColor: widget.backgroundColor,
+        extendBody: widget.extendBody ?? true,
+        extendBodyBehindAppBar: widget.extendBodyBehindAppBar ?? true,
         floatingActionButton: widget.floatingActionButton,
         bottomSheet: widget.bottomSheet,
         bottomNavigationBar: widget.bottomNavigationBar,
