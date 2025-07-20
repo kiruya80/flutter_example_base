@@ -10,9 +10,8 @@ import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_theme_provider.dart';
 import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
-import '../../shared/widgets/page/common_default_edge_page.dart';
-import '../../shared/widgets/common_edge_refresh_scrollview.dart';
 import '../../shared/widgets/common/my_sliver_persistent_header_delegate.dart';
+import '../../shared/widgets/page/common_nav_edge_page.dart';
 import '../../shared/widgets/refresh_more_scrollview.dart';
 import '../tab_navigator/profile/profile_tab.dart';
 
@@ -154,7 +153,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
   }
 
   getCommonAppBar() {
-    return CommonDefaultEdgePage(
+    return CommonNavEdgePage(
       backgroundColor: Theme.of(context).colorScheme.surface,
       // appBar: Container(height: kToolbarHeight, color: Colors.deepPurple,),
       // appBar: Container(height: kToolbarHeight,),
@@ -183,7 +182,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
 
   /// ok
   getCommon() {
-    return CommonDefaultEdgePage(
+    return CommonNavEdgePage(
       backgroundColor: Theme.of(context).colorScheme.surface,
 
       child: ListView.builder(
@@ -210,7 +209,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
-    return CommonDefaultEdgePage(
+    return CommonNavEdgePage(
       // backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
       child: refreshScroll(
@@ -240,53 +239,54 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
 
 
   Widget getCustomScrollViewAppBar() {
-    return CommonEdgeRefreshScrollview(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appTitle: 'CustomScrollView appbar',
-      itemCount: items.length,
-      // isMoreDataScroll: _isLastPage(),
-      isMoreDataScroll: MoreDataScroll.HAS,
-      netState: NetState.Completed,
-      // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
-      onRefresh: () async {
-        // setState(() {
-        //   netState = NetState.Loading;
-        // });
-        // await Future.delayed(const Duration(seconds: 2));
-        // setState(() {
-        //   netState = NetState.Completed;
-        // });
-        QcLog.d('items 11 ====== ${items.length}');
-        await Future.delayed(const Duration(seconds: 2));
-        setState(() {
-          items.insert(0, 'Refreshed at ${DateTime.now().toIso8601String()}');
-        });
-        QcLog.d('items 22 ====== ${items.length}');
-      },
-      onBottom: () async {
-        QcLog.d('onBottom ====== ');
-        // if (claimSelectionViewModel?.isLoad == false &&
-        //     claimSelectionViewModel?.historyList.state == NetState.Completed &&
-        //     claimSelectionViewModel?.historyList.isNextPage == true) {
-        //   await claimSelectionViewModel?.requestHistoryList(isNext: true);
-        // }
-      },
-      // upDisappearHeader: upDisappearHeader,
-      // fixedHeader: fixedHeader,
-      sliverChildBuilder: (context, index) {
-        return Column(
-          children: [
-            // if (index == 0) Container(height: top),
-            ListTile(
-              leading: CircleAvatar(child: Text('${index + 1}')),
-              title: Text("${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}"),
-              subtitle: Text('This is item number ${index + 1}'),
-            ),
-            // if (index + 1 == items.length) Container(height: bottom),
-          ],
-        );
-      },
-    );
+    // return CommonEdgeRefreshScrollview(
+    //   backgroundColor: Theme.of(context).colorScheme.surface,
+    //   appTitle: 'CustomScrollView appbar',
+    //   itemCount: items.length,
+    //   // isMoreDataScroll: _isLastPage(),
+    //   isMoreDataScroll: MoreDataScroll.HAS,
+    //   netState: NetState.Completed,
+    //   // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
+    //   onRefresh: () async {
+    //     // setState(() {
+    //     //   netState = NetState.Loading;
+    //     // });
+    //     // await Future.delayed(const Duration(seconds: 2));
+    //     // setState(() {
+    //     //   netState = NetState.Completed;
+    //     // });
+    //     QcLog.d('items 11 ====== ${items.length}');
+    //     await Future.delayed(const Duration(seconds: 2));
+    //     setState(() {
+    //       items.insert(0, 'Refreshed at ${DateTime.now().toIso8601String()}');
+    //     });
+    //     QcLog.d('items 22 ====== ${items.length}');
+    //   },
+    //   onBottom: () async {
+    //     QcLog.d('onBottom ====== ');
+    //     // if (claimSelectionViewModel?.isLoad == false &&
+    //     //     claimSelectionViewModel?.historyList.state == NetState.Completed &&
+    //     //     claimSelectionViewModel?.historyList.isNextPage == true) {
+    //     //   await claimSelectionViewModel?.requestHistoryList(isNext: true);
+    //     // }
+    //   },
+    //   // upDisappearHeader: upDisappearHeader,
+    //   // fixedHeader: fixedHeader,
+    //   sliverChildBuilder: (context, index) {
+    //     return Column(
+    //       children: [
+    //         // if (index == 0) Container(height: top),
+    //         ListTile(
+    //           leading: CircleAvatar(child: Text('${index + 1}')),
+    //           title: Text("${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}"),
+    //           subtitle: Text('This is item number ${index + 1}'),
+    //         ),
+    //         // if (index + 1 == items.length) Container(height: bottom),
+    //       ],
+    //     );
+    //   },
+    // );
+    return Container();
   }
 
   getCustomScrollViewAppBar1() {
@@ -388,7 +388,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
-    return CommonDefaultEdgePage(
+    return CommonNavEdgePage(
       // backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
       isBlur: true,

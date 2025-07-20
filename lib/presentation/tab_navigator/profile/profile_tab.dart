@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/utils/print_log.dart';
+import '../../../app/di/scroll_notifier.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../core/theme/app_theme_provider.dart';
+import '../../../shared/mixin/scroll_bottom_listener_mixin.dart';
 import '../../../shared/state/base_con_state.dart';
-import '../../../shared/widgets/simple_edge_content_page.dart';
+import '../../../shared/widgets/page/simple_edge_content_page.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
@@ -22,8 +25,33 @@ class ProfileTab extends ConsumerStatefulWidget {
   ConsumerState<ProfileTab> createState() => _ProfileTabState();
 }
 
-class _ProfileTabState extends BaseConState<ProfileTab> {
+class _ProfileTabState extends BaseConState<ProfileTab> with ScrollBottomListenerMixin<ProfileTab> {
   bool? isDark;
+
+  late final ProviderSubscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // });
+  }
+
+  @override
+  void dispose() {
+    _subscription.close(); // 꼭 닫아줘야 메모리 누수 안 생깁니다
+    super.dispose();
+  }
+
+  @override
+  void onScrollBottomReached() {
+    _fetchMore();
+  }
+
+  _fetchMore() {
+    QcLog.d("📦 _fetchMore");
+    Fluttertoast.showToast(msg: "${GoRouterState.of(context).topRoute?.name} 더보기 호출");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +65,7 @@ class _ProfileTabState extends BaseConState<ProfileTab> {
     // QcLog.d("앱 테마 : ${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}");
 
     return SimpleEdgeContentPage(
-      content: _getMoveEdgeToEdge(),
+      child: _getMoveEdgeToEdge(),
       controller: widget.mainNavScrollController,
       backgroundColor: Theme.of(context).colorScheme.surface,
       //   isMoreDataScroll: MoreDataScroll.HAS,

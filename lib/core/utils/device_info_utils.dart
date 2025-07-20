@@ -176,7 +176,7 @@ class DeviceInfoUtils {
     bool? isBottom = true,
     bool? isEdgeToEdge = true,
   }) {
-    QcLog.d('getEdgeSpaceHeight ==== $isBottom');
+    // QcLog.d('getEdgeSpaceHeight ==== $isBottom');
 
     if (isEdgeToEdge == false) {
       /// 엣지가 아닌 경우는 0 반환
@@ -208,10 +208,10 @@ class DeviceInfoUtils {
       extraMargin = padding.top == 0 ? DEFAULT_TOP_MAGGIN : padding.top;
     }
 
-    QcLog.d(
-      'padding  ======= ${MediaQuery.of(context).padding} ,'
-      'return extraMargin: $extraMargin',
-    );
+    // QcLog.d(
+    //   'padding  ======= ${MediaQuery.of(context).padding} ,'
+    //   'return extraMargin: $extraMargin',
+    // );
     return extraMargin;
   }
 

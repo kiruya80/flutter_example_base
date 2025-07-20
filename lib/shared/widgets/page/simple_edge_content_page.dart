@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/core/utils/print_log.dart';
 
-import 'common/edge_space_widget.dart';
+import '../common/edge_space_widget.dart';
 
+///
+/// 사용
+/// ㄴ 엣지투엣지이고 앱바 및
+/// 바텀네비게이션 x
 ///
 ///
 /// CustomScrollView 들어갈 수 있는 위젯
@@ -27,7 +30,7 @@ class SimpleEdgeContentPage extends StatefulWidget {
   /// status 여백 유무
   final bool? isSpaceStatus;
   final Color? backgroundColor;
-  final Widget? content;
+  final Widget? child;
   final ScrollController? controller;
 
   const SimpleEdgeContentPage({
@@ -35,7 +38,7 @@ class SimpleEdgeContentPage extends StatefulWidget {
     this.isPhysics = false,
     this.isSpaceStatus = true,
     this.backgroundColor,
-    this.content,
+    this.child,
     this.controller,
   });
 
@@ -46,17 +49,26 @@ class SimpleEdgeContentPage extends StatefulWidget {
 class _SimpleEdgeContentPageState extends State<SimpleEdgeContentPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
-      child: CustomScrollView(
-        controller: widget.controller,
-        physics:
-            widget.isPhysics == true
-                ? const AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics(), //ios 기본
-                )
-                : null,
-        slivers: getSliversContents(context),
+    return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Container(
+          width: double.maxFinite,
+          color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
+          child: CustomScrollView(
+            controller: widget.controller,
+            physics:
+                widget.isPhysics == true
+                    ? const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics(), //ios 기본
+                    )
+                    : null,
+            slivers: getSliversContents(context),
+          ),
+        ),
       ),
     );
   }
@@ -74,24 +86,18 @@ class _SimpleEdgeContentPageState extends State<SimpleEdgeContentPage> {
       //   SliverToBoxAdapter(child: Container(height: statusBarHeight, color: Colors.transparent)),
       // );
       scrollSlivers.add(
-        SliverToBoxAdapter(
-            child: BottomEdgeSpaceWidget(isEdgeToEdge: true, isBottom: false)
-        ),
+        SliverToBoxAdapter(child: BottomEdgeSpaceWidget(isEdgeToEdge: true, isBottom: false)),
       );
     }
 
     /// 컨텐츠 영역
-    scrollSlivers.add(SliverToBoxAdapter(child: widget.content));
+    scrollSlivers.add(SliverToBoxAdapter(child: widget.child));
 
     /// 네비게이터 높이
     // scrollSlivers.add(
     //   SliverToBoxAdapter(child: Container(height: bottomInset, color: Colors.transparent)),
     // );
-    scrollSlivers.add(
-      SliverToBoxAdapter(
-          child: BottomEdgeSpaceWidget(isEdgeToEdge: true)
-      ),
-    );
+    scrollSlivers.add(SliverToBoxAdapter(child: BottomEdgeSpaceWidget(isEdgeToEdge: true)));
 
     return scrollSlivers;
   }

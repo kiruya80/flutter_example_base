@@ -1,14 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/di/scroll_notifier.dart';
 import '../../../app/routes/app_routes_info.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_theme_provider.dart';
 import '../../../core/utils/common_utils.dart';
 import '../../../core/utils/print_log.dart';
+import '../../../shared/mixin/scroll_bottom_listener_mixin.dart';
 import '../../../shared/state/base_con_state.dart';
-import '../../../shared/widgets/simple_edge_content_page.dart';
+import '../../../shared/widgets/refresh_more_scrollview.dart';
+import '../../../shared/widgets/page/simple_edge_content_page.dart';
 import '../../widgets/item_title.dart';
 import '../../widgets/router_move_item.dart';
 
@@ -21,10 +27,11 @@ class HomeTab extends ConsumerStatefulWidget {
   ConsumerState<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends BaseConState<HomeTab> {
+class _HomeTabState extends BaseConState<HomeTab> with ScrollBottomListenerMixin<HomeTab> {
   bool? isDark;
 
   // late void Function() _cancelLoadingListener;
+  // late final ProviderSubscription _subscription;
 
   @override
   void initState() {
@@ -34,9 +41,35 @@ class _HomeTabState extends BaseConState<HomeTab> {
   }
 
   @override
+  void dispose() {
+    // _subscription.close(); // 꼭 닫아줘야 메모리 누수 안 생깁니다
+    super.dispose();
+  }
+
+  @override
+  void onScrollBottomReached() {
+    _fetchMore();
+  }
+
+  _fetchMore() {
+    QcLog.d("📦 _fetchMore");
+    Fluttertoast.showToast(msg: "${GoRouterState.of(context).topRoute?.name} 더보기 호출");
+  }
+
+  @override
   Widget build(BuildContext context) {
-    QcLog.d('build ===== $isThisPageVisible');
+    // QcLog.d('build ===== $isThisPageVisible');
     // CommonUtils.isTablet(context);
+    // ref.listen<bool>(  scrollReachedBottomProvider(
+    //   GoRouterState.of(context).topRoute?.name ??
+    //     GoRouterState.of(context).uri.toString(),
+    //     // AppRoutesInfo.tabHome.name
+    // ), (prev, next) {
+    //   QcLog.d("📦 scrollReachedBottomProvider ==== $prev , $next");
+    //   if (next == true) {
+    //     _fetchMore();
+    //   }
+    // });
 
     final appThemeMode = ref.watch(appThemeModeProvider);
     isDark = appThemeMode == ThemeMode.dark;
@@ -51,16 +84,85 @@ class _HomeTabState extends BaseConState<HomeTab> {
     // final postFromJson = TestUsual.fromJson(json);
     // QcLog.d('postFromJson ===== ${postFromJson.toJson()}');
 
-    return SimpleEdgeContentPage(
+    // return SimpleEdgeContentPage(
+    //   // content:  _content(),
+    //   content: refreshScroll(),
+    //   controller: widget.mainNavScrollController,
+    //   backgroundColor: Theme.of(context).colorScheme.surface,
+    //   //   isMoreDataScroll: MoreDataScroll.HAS,
+    // );
+
+    return RefreshMoreScrollview(
       content: _content(),
-      controller: widget.mainNavScrollController,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      //   isMoreDataScroll: MoreDataScroll.HAS,
+      // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
+      onRefresh: () async {
+        QcLog.d('onRefresh ======');
+        _refresh();
+      },
+
+      onBottom: () async {
+        QcLog.d('onBottom ======');
+      },
     );
+  }
+
+  bool _isRefreshing = false;
+
+  Future<void> _refresh() async {
+    setState(() => _isRefreshing = true);
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() => _isRefreshing = false);
+  }
+
+  final items = List.generate(30, (index) => 'Item ${index + 1}');
+
+  refreshScroll({
+    SliverPersistentHeaderDelegate? upDisappearHeader,
+    SliverPersistentHeaderDelegate? fixedHeader,
+    double? top,
+    double? bottom,
+  }) {
+    return RefreshMoreScrollview(
+      itemCount: items.length,
+      // isMoreDataScroll: _isLastPage(),
+      netState: NetState.Completed,
+      // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
+      onRefresh: () async {
+        await Future.delayed(const Duration(milliseconds: 500));
+      },
+      onBottom: () async {
+        // if (claimSelectionViewModel?.isLoad == false &&
+        //     claimSelectionViewModel?.historyList.state == NetState.Completed &&
+        //     claimSelectionViewModel?.historyList.isNextPage == true) {
+        //   await claimSelectionViewModel?.requestHistoryList(isNext: true);
+        // }
+      },
+      upDisappearHeader: upDisappearHeader,
+      fixedHeader: fixedHeader,
+      sliverChildBuilder: (context, index) {
+        return Column(
+          children: [
+            // if (index == 0) Container(height: top),
+            ListTile(
+              leading: CircleAvatar(child: Text('${index + 1}')),
+              title: Text("${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}"),
+              subtitle: Text('This is item number ${index + 1}'),
+            ),
+            // if (index + 1 == items.length) Container(height: bottom),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _onRefresh() async {
+    await Future.delayed(const Duration(seconds: 1));
+    print("새로고침 완료");
   }
 
   _content() {
     return SingleChildScrollView(
+      // physics: const AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [
           ///
@@ -72,14 +174,19 @@ class _HomeTabState extends BaseConState<HomeTab> {
             QcLog.d('테마변경 === ');
             // final appThemeMode = ref.read(appThemeModeProvider);
             // isDark = appThemeMode == ThemeMode.dark;
-            ref.read(appThemeModeProvider.notifier).state =
-                (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
+            // ref.read(appThemeModeProvider.notifier).state =
+            //     (isDark ?? false) ? ThemeMode.light : ThemeMode.dark;
+
+            ref.read(scrollReachedBottomProvider(AppRoutesInfo.tabHome.name).notifier).state = true;
           }),
 
           RouterMoveItem('go(/home/detail)', () {
             // context.go('${AppTabRoutes.home.path}/${AppTabRoutes.detail.path}'); // context.go('/home/detail');
             //     context.pushNamed('details', pathParameters: {'id': '123'});
-            context.go('/home/detail');
+            // context.go('/home/detail');
+
+            ref.read(scrollReachedBottomProvider(AppRoutesInfo.tabHome.name).notifier).state =
+                false;
           }),
 
           RouterMoveItem('go(/detail)', () {

@@ -3,6 +3,7 @@ import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/post/post_list_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/providers/viewmodel/auth_viewmodel_providers.dart';
@@ -12,10 +13,11 @@ import '../../../core/utils/common_utils.dart';
 import '../../../shared/mixin/error_listener_mixin.dart';
 import '../../../shared/mixin/loading_listener_mixin.dart';
 import '../../../shared/mixin/navigation_listener_mixin.dart';
+import '../../../shared/mixin/scroll_bottom_listener_mixin.dart';
 import '../../../shared/state/base_con_state.dart';
 import '../../../core/controller/dialog_controller.dart';
 import '../../../domain/common/entities/dialog_request.dart';
-import '../../../shared/widgets/simple_edge_content_page.dart';
+import '../../../shared/widgets/page/simple_edge_content_page.dart';
 import '../../widgets/item_title.dart';
 
 class PostListScreen extends ConsumerStatefulWidget {
@@ -31,7 +33,8 @@ class _PostListScreenState extends BaseConState<PostListScreen>
     with
         ErrorListenerMixin<PostListState, PostListScreen>,
         NavigationListenerMixin<PostListState, PostListScreen>,
-        LoadingListenerMixin<PostListState, PostListScreen> {
+        LoadingListenerMixin<PostListState, PostListScreen>,
+        ScrollBottomListenerMixin<PostListScreen> {
   // 100개의 샘플 텍스트 리스트 생성
   final items = List.generate(100, (index) => 'Item ${index + 1}');
 
@@ -50,9 +53,19 @@ class _PostListScreenState extends BaseConState<PostListScreen>
   }
 
   @override
+  void onScrollBottomReached() {
+    _fetchMore();
+  }
+
+  _fetchMore() {
+    QcLog.d("📦 _fetchMore");
+    Fluttertoast.showToast(msg: "${GoRouterState.of(context).topRoute?.name} 더보기 호출");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SimpleEdgeContentPage(
-      content: _content(),
+      child: _content(),
       controller: widget.mainNavScrollController,
       backgroundColor: Theme.of(context).colorScheme.surface,
       //   isMoreDataScroll: MoreDataScroll.HAS,

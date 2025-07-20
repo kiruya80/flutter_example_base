@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -67,9 +66,11 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// ㄴ 아닌 경우 탭 이동
   ///
   void _onTap(int index) {
-    // QcLog.d(
-    //   'state before ===== ${GoRouterState.of(context).topRoute.toString()} , ${GoRouterState.of(context).uri} , ${widget.navigationShell.currentIndex} ',
-    // );
+    QcLog.d(
+      'state before ===== ${GoRouterState.of(context).topRoute.toString()} ,'
+          ' ${GoRouterState.of(context).uri} , '
+          '${widget.navigationShell.currentIndex} ',
+    );
 
     if (onTabChanged(index) == false) {
       final mainNavScrollController = controllers[index];
@@ -387,7 +388,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// stack으로 구성
   /// ㄴ 단, 뒤로가기시 종료가 안되는 이슈
   // getCustomNavStack() {
-  //   return CommonDefaultEdgePage(
+  //   return CommonDefaultEdgePageCommonDefaultEdgePage(
   //     // body: widget.shell,
   //     extendBodyBehindAppBar: true,
   //     extendBody: true,

@@ -1,5 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_example_base/core/extensions/color_extensions.dart';
+import 'package:flutter_example_base/core/extensions/string_extensions.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 
 import '../../core/constants/app_constants.dart';
@@ -129,6 +134,10 @@ class RefreshMoreScrollview extends StatefulWidget {
   final bool? safeAreaTop;
   final bool? safeAreaBottom;
 
+  final Color? backgroundColor;
+  final ScrollController? controller;
+  final String? appTitle;
+
   const RefreshMoreScrollview({
     super.key,
     this.isPhysics = true,
@@ -150,6 +159,9 @@ class RefreshMoreScrollview extends StatefulWidget {
 
     this.safeAreaTop = false,
     this.safeAreaBottom = false,
+    this.backgroundColor,
+    this.controller,
+    this.appTitle,
   });
 
   @override
@@ -197,25 +209,43 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
     //       : null,
     //   slivers: getSliversContents(context),
     // );
-
-    /// 2. NotificationListener
-    return NotificationListener<ScrollNotification>(
-      onNotification: (ScrollNotification onNotification) {
-        //스크롤 시 이 부분에서 이벤트가 발생한다.
-        _onNotification(onNotification);
-        return false;
-      },
+    return Container(
+      width: double.maxFinite,
+      color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
       child: CustomScrollView(
-        // controller: pagingScrollController,
+        controller: widget.controller,
         physics:
-            widget.isPhysics == true
-                ? const AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics(), //ios 기본
-                )
-                : null,
+        widget.isPhysics == true
+            ? const AlwaysScrollableScrollPhysics(
+          parent: BouncingScrollPhysics(), //ios 기본
+        )
+            : null,
         slivers: getSliversContents(context),
       ),
     );
+
+    /// 2. NotificationListener
+    // return NotificationListener<ScrollNotification>(
+    //   onNotification: (ScrollNotification onNotification) {
+    //     //스크롤 시 이 부분에서 이벤트가 발생한다.
+    //     _onNotification(onNotification);
+    //     return false;
+    //   },
+    //   child: Container(
+    //     color: widget.backgroundColor ?? Theme.of(context).colorScheme.surface,
+    //     child: CustomScrollView(
+    //       controller: widget.controller,
+    //       physics:
+    //           widget.isPhysics == true
+    //               ? const AlwaysScrollableScrollPhysics(
+    //                 parent: BouncingScrollPhysics(), //ios 기본
+    //               )
+    //               : null,
+    //       slivers: getSliversContents(context),
+    //     ),
+    //   ),
+    // );
+
   }
 
   List<Widget> getSliversContents(BuildContext context) {
@@ -236,6 +266,48 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
             maxHeight: DeviceInfoUtils.instance.getEdgeSpaceHeight(context, isBottom: false),
             minHeight: 0,
             child: BottomEdgeSpaceWidget(isEdgeToEdge: true, isBottom: false),
+          ),
+        ),
+      );
+      // scrollSlivers.add(
+      //   SliverToBoxAdapter(
+      //       child: BottomEdgeSpaceWidget(isEdgeToEdge: true, isBottom: false)
+      //   ),
+      // );
+    }
+
+    /// 높이 고정 앱바 - transparent
+    if (widget.appTitle.isNotNullOrEmpty) {
+      scrollSlivers.add(
+        SliverAppBar(
+          expandedHeight: kToolbarHeight,
+          // 스크롤 방향 반대로 올리면 다시 보여줄지 여부
+          floating: true,
+          // 스크롤 시 상단에 고정될지 여부
+          pinned: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            // ✅ iOS 상태바 아이콘 밝기 light(black ison), dark(white icon)
+            statusBarBrightness: Brightness.light,
+            // ✅ Android 상태바 아이콘 밝기 → light(white ison), dark(black icon)
+            statusBarIconBrightness: Brightness.dark,
+            systemNavigationBarColor: Colors.transparent,
+            // 안드로이드용 네비게이션 아이콘 색상 null이면 불투명
+            systemNavigationBarDividerColor: Colors.transparent,
+            // ✅ Android 네비게이션 아이콘 밝기 → light(white ison, 검은색 반투명 배경), dark(black icon, 흰색 반투명 배경)
+            systemNavigationBarIconBrightness: Brightness.dark,
+          ),
+          // 검정 아이콘
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text(widget.appTitle ?? ''),
+            background: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(height: kToolbarHeight, color: Colors.white.withOpacitySafe(0.4)),
+              ),
+            ),
           ),
         ),
       );
@@ -322,7 +394,13 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
       scrollSlivers.add(SliverToBoxAdapter(child: widget.noListContent));
     }
 
-    /// 리스트 내용
+    /// 컨텐츠 영역 - scrollview, listview 등등
+    if (widget.content != null) {
+      QcLog.d('컨텐츠 영역 ============');
+      scrollSlivers.add(SliverToBoxAdapter(child: widget.content));
+    }
+
+    /// 리스트 내용 - sliverChildBuilder 를 사용하는 경우
     /// 로딩 결과에 따라
     ///
     switch (widget.netState) {

@@ -34,6 +34,8 @@ StatefulShellRoute는 **각 탭(브랜치)**가 자체적인 Navigator 스택을
 main.dart
 setSystemUIOverlayStyle
 
+
+
 ✅ 메인홈 (탭 네이게이터 구성)
 MainScaffoldWithNav
 ├── CommonDefaultEdgePage
