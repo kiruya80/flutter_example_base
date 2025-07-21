@@ -89,6 +89,7 @@ class _PostListScreenState extends BaseConState<PostListScreen>
     // );
     return CommonEdgePage(
       child: refreshScroll(
+        controller: widget.mainNavScrollController,
         safeAreaTop: false,
         safeAreaBottom: false,
         upDisappearHeader: MySliverPersistentHeaderDelegate(
@@ -183,11 +184,14 @@ class _PostListScreenState extends BaseConState<PostListScreen>
     double? top,
     double? bottom,
 
+     ScrollController? controller,
+
     bool? safeAreaTop,
     bool? safeAreaBottom,
   }) {
     final state = ref.watch(postListViewModelProvider);
     return RefreshMoreScrollview(
+      controller: controller,
       safeAreaTop: safeAreaTop,
       safeAreaBottom: safeAreaBottom,
       itemCount: state.posts.length,
