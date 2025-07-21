@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
-import 'package:flutter_example_base/core/utils/common_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/constants/app_constants.dart';
@@ -11,8 +10,8 @@ import '../../core/theme/app_theme_provider.dart';
 import '../../core/utils/print_log.dart';
 import '../../shared/state/base_con_state.dart';
 import '../../shared/widgets/common/my_sliver_persistent_header_delegate.dart';
-import '../../shared/widgets/page/common_default_edge_page.dart';
 import '../../shared/widgets/common/refresh_more_scrollview.dart';
+import '../../shared/widgets/page/common_edge_page.dart';
 import '../tab_navigator/profile/profile_tab.dart';
 
 ///
@@ -149,7 +148,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
   }
 
   getCommonAppBar() {
-    return CommonDefaultEdgePage(
+    return CommonEdgePage(
       backgroundColor: Theme.of(context).colorScheme.surface,
       // appBar: Container(height: kToolbarHeight, color: Colors.deepPurple,),
       // appBar: Container(height: kToolbarHeight,),
@@ -176,7 +175,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
 
   /// ok
   getCommon() {
-    return CommonDefaultEdgePage(
+    return CommonEdgePage(
       backgroundColor: Theme.of(context).colorScheme.surface,
 
       child: ListView.builder(
@@ -203,7 +202,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
-    return CommonDefaultEdgePage(
+    return CommonEdgePage(
       // backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
       child: refreshScroll(
@@ -381,7 +380,7 @@ class _EdgeToEdgePageState extends BaseConState<EdgeToEdgePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
-    return CommonDefaultEdgePage(
+    return CommonEdgePage(
       // backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
       isBlur: true,

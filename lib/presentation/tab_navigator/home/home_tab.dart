@@ -84,6 +84,7 @@ class _HomeTabState extends BaseConState<HomeTab> with ScrollBottomListenerMixin
 
     return RefreshMoreScrollview(
       content: _content(),
+      // controller: widget.mainNavScrollController,
       // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
       onRefresh: () async {
         QcLog.d('onRefresh ======');
@@ -105,50 +106,6 @@ class _HomeTabState extends BaseConState<HomeTab> with ScrollBottomListenerMixin
   }
 
   final items = List.generate(30, (index) => 'Item ${index + 1}');
-
-  refreshScroll({
-    SliverPersistentHeaderDelegate? upDisappearHeader,
-    SliverPersistentHeaderDelegate? fixedHeader,
-    double? top,
-    double? bottom,
-  }) {
-    return RefreshMoreScrollview(
-      itemCount: items.length,
-      // isMoreDataScroll: _isLastPage(),
-      netState: NetState.Completed,
-      // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
-      onRefresh: () async {
-        await Future.delayed(const Duration(milliseconds: 500));
-      },
-      onBottom: () async {
-        // if (claimSelectionViewModel?.isLoad == false &&
-        //     claimSelectionViewModel?.historyList.state == NetState.Completed &&
-        //     claimSelectionViewModel?.historyList.isNextPage == true) {
-        //   await claimSelectionViewModel?.requestHistoryList(isNext: true);
-        // }
-      },
-      upDisappearHeader: upDisappearHeader,
-      fixedHeader: fixedHeader,
-      sliverChildBuilder: (context, index) {
-        return Column(
-          children: [
-            // if (index == 0) Container(height: top),
-            ListTile(
-              leading: CircleAvatar(child: Text('${index + 1}')),
-              title: Text("${isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"}"),
-              subtitle: Text('This is item number ${index + 1}'),
-            ),
-            // if (index + 1 == items.length) Container(height: bottom),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _onRefresh() async {
-    await Future.delayed(const Duration(seconds: 1));
-    print("새로고침 완료");
-  }
 
   _content() {
     return SingleChildScrollView(
@@ -265,6 +222,45 @@ class _HomeTabState extends BaseConState<HomeTab> with ScrollBottomListenerMixin
       //   },
       //   child: const Icon(Icons.add),
       // ),
+    );
+  }
+
+  refreshScroll({
+    SliverPersistentHeaderDelegate? upDisappearHeader,
+    SliverPersistentHeaderDelegate? fixedHeader,
+    double? top,
+    double? bottom,
+  }) {
+    return RefreshMoreScrollview(
+      itemCount: items.length,
+      // isMoreDataScroll: _isLastPage(),
+      netState: NetState.Completed,
+      // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
+      onRefresh: () async {
+        await Future.delayed(const Duration(milliseconds: 500));
+      },
+      onBottom: () async {
+        // if (claimSelectionViewModel?.isLoad == false &&
+        //     claimSelectionViewModel?.historyList.state == NetState.Completed &&
+        //     claimSelectionViewModel?.historyList.isNextPage == true) {
+        //   await claimSelectionViewModel?.requestHistoryList(isNext: true);
+        // }
+      },
+      upDisappearHeader: upDisappearHeader,
+      fixedHeader: fixedHeader,
+      sliverChildBuilder: (context, index) {
+        return Column(
+          children: [
+            // if (index == 0) Container(height: top),
+            ListTile(
+              leading: CircleAvatar(child: Text('${index + 1}')),
+              title: Text(isDark == true ? "🌙 다크 모드입니다" : "☀️ 라이트 모드입니다"),
+              subtitle: Text('This is item number ${index + 1}'),
+            ),
+            // if (index + 1 == items.length) Container(height: bottom),
+          ],
+        );
+      },
     );
   }
 }

@@ -10,10 +10,14 @@ final RouteObserver<ModalRoute<void>> conWidgetRouteObserver = RouteObserver<Mod
 abstract class BaseConState<T extends ConsumerStatefulWidget> extends ConsumerState<T>
     with RouteAware {
   String _location = '';
+  String _routeName = '';
   bool _didPop = false;
 
   /// 현재 라우팅 경로 (예: "/home/detail/123")
   String get currentLocation => _location;
+
+  /// 현재 라우팅 이름 (예: "home")
+  String get currentRouteName => _routeName;
 
   /// 현재 이 페이지가 화면에 보이는 상태인지
   bool get isThisPageVisible => mounted && _didPop && ModalRoute.of(context)!.isCurrent;
@@ -38,7 +42,10 @@ abstract class BaseConState<T extends ConsumerStatefulWidget> extends ConsumerSt
 
     // final currentUri = GoRouter.of(context).routerDelegate.currentConfiguration.uri;
     _location = getCurrentPath(context);
-    print('currentUri.path == ${_location}'); // 예: /home/detail/123
+    _routeName =
+        GoRouterState.of(context).topRoute?.name ?? GoRouterState.of(context).uri.toString();
+
+    print('currentUri.path == $_location , route name : $_routeName'); // 예: /home/detail/123
   }
 
   String getCurrentPath(BuildContext context) {

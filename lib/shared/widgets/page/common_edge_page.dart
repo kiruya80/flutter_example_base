@@ -17,45 +17,9 @@ import '../common/blur_overlay.dart';
 import '../common/edge_space_widget.dart';
 
 ///
+/// ✅ 디폴트 엣지 페이지
 ///
-/// ✅ 메인홈 (탭 네이게이터 구성)
-/// navigationShell을 child로 가진다
-///
-///
-/// 안드로이드
-/// https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ko
-///
-///  홈화면 및 메인 화면등에서 사용
-///  ㄴ 스테이터스 & 바텀
-///  ㄴ 컨텐츠, 컨텐츠 배경
-///  ㄴ 앱바
-///  구성을 가지고
-///
-///  # Google Gmail앱 기분 #
-///  액션 : 리스트 최상단인 경우 스테이터스 반투명 바텀 : 불투명
-///  스크롤 아래로 첫페이지정도 지나면, 바텀 탭이 아래로 사라지고,플로팅 버튼도 줄어듬
-///  내리던 도중에 스크롤 위로 하자마자 상단에 검색 탭 메뉴등등이 내려오고 불투명
-///  조금 더 스크롤 위로시 바텀 네비게이터 위로 올라오고 불투명
-///
-///  1. light
-///  - 스테이터스,바텀버튼 아이콘 검은색 계열 ,
-///  - 스테이터스,바텀버튼 배경 흰색 반투명계열
-///
-///  2. dark
-///  - 스테이터스,바텀버튼 아이콘 흰색 계열
-///  - 스테이터스,바텀버튼 배경 검은색 계열
-///
-///
-///
-/// 앱바 고정된 경우, 앱바를 접는다
-/// 상단 앱 바가 고정되지 않은 경우 일치하는 배경 색상 그라데이션을 추가합니다.
-///
-/// 1. 블러 on 인 경우 & 앱바 없는 경우
-/// ㄴ 상태바, 네비게이션바 색상 투명 & 위에 블러 이미지
-///
-/// 2. 블러 on 인 경우 & 앱바 있는 경우
-/// ㄴ
-class CommonDefaultEdgePage extends ConsumerStatefulWidget {
+class CommonEdgePage extends ConsumerStatefulWidget {
   ///
   /// Scaffold 설정
   ///
@@ -70,7 +34,6 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
 
   final Widget? floatingActionButton;
   final Widget? bottomSheet;
-  final Widget? bottomNavigationBar;
 
   ///
   /// body 내 컨텐츠 및 SafeArea 설정
@@ -87,16 +50,7 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
   final Widget child;
   final bool? isBlur;
 
-  ///
-  /// 스크롤 위치
-  ///
-  // final VoidCallback? onScrollTop;
-  // final ValueChanged<double>? onScrollUpdate;
-  // final VoidCallback? onScrollEnd;
-  /// 바텀 네비게이션 보이기
-  final ValueChanged<bool>? onShowBottomBar;
-
-  const CommonDefaultEdgePage({
+  const CommonEdgePage({
     super.key,
     required this.child,
     this.background,
@@ -109,27 +63,15 @@ class CommonDefaultEdgePage extends ConsumerStatefulWidget {
     this.safeAreaBottom = false,
     this.floatingActionButton,
     this.bottomSheet,
-    this.bottomNavigationBar,
-    // this.onScrollTop,
-    // this.onScrollUpdate,
-    // this.onScrollEnd,
-    this.onShowBottomBar,
   });
 
   @override
-  ConsumerState<CommonDefaultEdgePage> createState() => _CommonDefaultEdgePageState();
+  ConsumerState<CommonEdgePage> createState() => _CommonEdgePageState();
 }
 
-class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
+class _CommonEdgePageState extends BaseConState<CommonEdgePage> {
   bool? isDark = false;
   bool? isBlur = true;
-  Color? overlayColor;
-
-  bool isBottomBarVisible = true;
-  bool isOnBottom = false;
-  double lastOffset = 0;
-  final double _threshold = 10.0; // 최소 스크롤 거리
-  final double bottomMoreHeight = 100;
 
   @override
   void initState() {
@@ -139,9 +81,15 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
       '${widget.extendBody}, ${widget.extendBodyBehindAppBar} /'
       '${widget.safeAreaTop} , ${widget.safeAreaBottom}',
     );
-    isBottomBarVisible = true;
-    lastOffset = 0;
     isBlur = widget.isBlur;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    QcLog.d('didChangeDependencies ===== ');
+    String bottomTabId =
+        GoRouterState.of(context).topRoute?.name ?? GoRouterState.of(context).uri.toString();
   }
 
   ///
@@ -157,7 +105,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
   Widget build(BuildContext context) {
     // QcLog.d('build ==== $isBlur , $isDark');
     // CommonUtils.isTablet(context);
-    overlayColor ??= Theme.of(context).colorScheme.surface;
+    // overlayColor ??= Theme.of(context).colorScheme.surface;
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
     // QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
@@ -190,7 +138,6 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
         extendBodyBehindAppBar: widget.extendBodyBehindAppBar ?? true,
         floatingActionButton: widget.floatingActionButton,
         bottomSheet: widget.bottomSheet,
-        bottomNavigationBar: widget.bottomNavigationBar,
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
@@ -204,6 +151,7 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
               child: widget.child,
             ),
 
+            /// todo 앱바 영역 확인 필요 높이
             Container(
               margin: EdgeInsets.only(top: widget.appBar != null ? statusBarHeight : 0),
               height: widget.appBar != null ? kToolbarHeight : 0,
@@ -223,11 +171,11 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
             ),
 
             ///
-            /// Navigation Bar\
+            /// Navigation Bar
             /// 안드로이드는 기본
             /// ios는 바텀네비게이터를 사용할때만
             ///
-            if (Platform.isAndroid || widget.bottomNavigationBar != null)
+            if (Platform.isAndroid)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: BlurOverlay(
@@ -235,7 +183,8 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
                   isBlur: isBlur,
                   isDark: isDark,
                   isBottom: true,
-                  overlayColor: overlayColor,
+                  // overlayColor: overlayColor,
+                  overlayColor: Theme.of(context).colorScheme.surface.withOpacitySafe(0.7),
                 ),
               ),
           ],
@@ -265,107 +214,27 @@ class _CommonDefaultEdgePageState extends BaseConState<CommonDefaultEdgePage> {
       //세로 스크롤인 경우에만 추적
       if (metrics.axisDirection != AxisDirection.down) return false;
 
-      final isTop = metrics.pixels <= metrics.minScrollExtent + (displayHeight);
       final isBottom = metrics.pixels >= metrics.maxScrollExtent - 1;
+      QcLog.d(
+        '_onNotification ==== ${metrics.pixels} , $displayHeight , ${metrics.maxScrollExtent}',
+      );
       // notification.metrics.pixels >=
       //     notification.metrics.maxScrollExtent -
       //         (bottomMoreHeight + DeviceInfoUtils.instance.getEdgeSpaceHeight(context))
-      String bottomTabId =
-          GoRouterState.of(context).topRoute?.name ?? GoRouterState.of(context).uri.toString();
 
-      if (isTop) {
-        if (lastOffset != 0) {
-          QcLog.d("📍 최상단입니다. $isBlur");
-
-          if (widget.onShowBottomBar != null) {
-            widget.onShowBottomBar!(true);
-          }
-          setState(() {
-            if (widget.bottomNavigationBar != null) {
-              /// 바텀 네비게이션이 있는 경우
-              overlayColor ??= Theme.of(context).colorScheme.surface;
-            } else {
-              overlayColor ??= Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
-            }
-          });
-          lastOffset = 0;
-          isOnBottom = false;
-        }
-        return;
-      }
-
-      var isScrollBottom = ref.read(scrollReachedBottomProvider(bottomTabId));
+      var isScrollBottom = ref.read(scrollReachedBottomProvider(currentRouteName));
       if (isBottom) {
-        // QcLog.d("📍 최하단입니다.");
-        //   if (isBottom && isOnBottom == false) {
-        //     if (widget.onShowBottomBar != null) {
-        //       widget.onShowBottomBar!(false);
-        //     }
-        //     isOnBottom = true;
-        //
-        //     setState(() {
-        //       if (Platform.isIOS) {
-        //         overlayColor = Colors.transparent;
-        //       } else {
-        //         overlayColor = Theme.of(context).colorScheme.surfaceDim.withOpacitySafe(0.5);
-        //       }
-        //     });
-        //   }
-        // 홈 탭에서만 무한 스크롤
-        // if (notification.metrics.pixels >=
-        //     notification.metrics.maxScrollExtent -
-        //         (bottomMoreHeight + DeviceInfoUtils.instance.getEdgeSpaceHeight(context))) {
-
         if (isScrollBottom == false) {
-          debugPrint("📍 최하단입니다. 📦 더 불러오기 트리거, $bottomTabId , ${GoRouterState.of(context).uri} ,");
-          ref.read(scrollReachedBottomProvider(bottomTabId).notifier).state = true;
+          debugPrint(
+            "📍 최하단입니다. 📦 더 불러오기 트리거, $currentRouteName , ${GoRouterState.of(context).uri} ,",
+          );
+          ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = true;
         }
         return;
       }
 
-      ref.read(scrollReachedBottomProvider(bottomTabId).notifier).state = false;
-
-      if (isTop == false && isBottom == false) {
-        // QcLog.d("📍 최상단을 지남.");
-        final currentOffset = notification.metrics.pixels;
-        final delta = currentOffset - lastOffset;
-        lastOffset = currentOffset;
-        isOnBottom = false;
-
-        // print('_onNotification ===== isTop : $isTop , isBottom : $isBottom');
-        if (delta > _threshold) {
-          // print('⬇️  아래로 스크롤 → 바텀바 숨김 (콘텐츠가 위로 이동) $overlayColor');
-          if (widget.onShowBottomBar != null) {
-            widget.onShowBottomBar!(false);
-          }
-          setState(() {
-            if (Platform.isIOS) {
-              overlayColor = Colors.transparent;
-            } else {
-              overlayColor = Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
-            }
-          });
-        } else if (delta < -_threshold) {
-          // print('⬆️ 위로 스크롤 → 바텀바 보여줌 (콘텐츠가 아래로 이동) $overlayColor');
-          if (widget.onShowBottomBar != null) {
-            widget.onShowBottomBar!(true);
-          }
-          setState(() {
-            if (widget.bottomNavigationBar != null) {
-              /// 바텀 네비게이션이 있는 경우
-              overlayColor = Theme.of(context).colorScheme.surface;
-            } else {
-              overlayColor = Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
-            }
-          });
-        } else {
-          // print('⬇️ ⬆️ 그이외 $overlayColor');
-          setState(() {
-            if (widget.bottomNavigationBar == null) {
-              overlayColor = Theme.of(context).colorScheme.surface.withOpacitySafe(0.7);
-            }
-          });
-        }
+      if (isScrollBottom == true) {
+        ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = false;
       }
     }
   }

@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/utils/print_log.dart';
 import '../../core/constants/app_constants.dart';
+import '../../shared/mixin/scroll_bottom_listener_mixin.dart';
 import '../../shared/state/base_con_state.dart';
 import '../../shared/widgets/common/edge_space_widget.dart';
 import '../../shared/widgets/common/common_pop_scope_widget.dart';
-import '../../shared/widgets/page/common_default_edge_page.dart';
 import '../../shared/widgets/common/refresh_more_scrollview.dart';
+import '../../shared/widgets/page/common_edge_page.dart';
 import '../../shared/widgets/page/simple_edge_content_page.dart';
 
 class SettingPage extends ConsumerStatefulWidget {
@@ -19,10 +21,42 @@ class SettingPage extends ConsumerStatefulWidget {
   ConsumerState<SettingPage> createState() => _SettingPageState();
 }
 
-class _SettingPageState extends BaseConState<SettingPage> {
-  final items = List.generate(30, (index) => 'Item ${index + 1}');
+class _SettingPageState extends BaseConState<SettingPage>
+    with ScrollBottomListenerMixin<SettingPage> {
+  var items = List.generate(30, (index) => 'Item ${index + 1}');
   bool? isDark;
-  NetState? netState = NetState.Paging;
+  NetState? netState = NetState.Completed;
+
+  @override
+  void onScrollBottomReached() {
+    _fetchMore();
+  }
+
+  _fetchMore() {
+    QcLog.d("📦 _fetchMore");
+    Fluttertoast.showToast(msg: "${GoRouterState.of(context).topRoute?.name} 더보기 호출");
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      items = [];
+      netState = NetState.Loading;
+    });
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() {
+      items = List.generate(50, (index) => 'Item ${index + 1}');
+      netState = NetState.Completed;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // ref.read(postListViewModelProvider.notifier).loadPosts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +217,7 @@ class _SettingPageState extends BaseConState<SettingPage> {
   }
 
   getRefresh() {
-    return CommonDefaultEdgePage(
+    return CommonEdgePage(
       // safeAreaTop: false,
       // safeAreaBottom: false,
 
@@ -227,10 +261,11 @@ class _SettingPageState extends BaseConState<SettingPage> {
       safeAreaBottom: safeAreaBottom,
       itemCount: items.length,
       // isMoreDataScroll: _isLastPage(),
-      netState: NetState.Completed,
+      netState: netState,
       // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
       onRefresh: () async {
-        await Future.delayed(const Duration(milliseconds: 500));
+        QcLog.d('onRefresh ======');
+        _refresh();
       },
       onBottom: () async {
         // if (claimSelectionViewModel?.isLoad == false &&

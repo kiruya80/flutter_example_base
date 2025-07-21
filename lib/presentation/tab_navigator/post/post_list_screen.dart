@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/print_log.dart';
 import 'package:flutter_example_base/presentation/tab_navigator/post/post_list_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/providers/viewmodel/auth_viewmodel_providers.dart';
 import '../../../app/providers/viewmodel/post_viewmodel_providers.dart';
-import '../../../app/routes/app_routes_info.dart';
+import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/common_utils.dart';
 import '../../../shared/mixin/error_listener_mixin.dart';
 import '../../../shared/mixin/loading_listener_mixin.dart';
@@ -17,7 +15,9 @@ import '../../../shared/mixin/scroll_bottom_listener_mixin.dart';
 import '../../../shared/state/base_con_state.dart';
 import '../../../core/controller/dialog_controller.dart';
 import '../../../domain/common/entities/dialog_request.dart';
-import '../../../shared/widgets/page/simple_edge_content_page.dart';
+import '../../../shared/widgets/common/my_sliver_persistent_header_delegate.dart';
+import '../../../shared/widgets/common/refresh_more_scrollview.dart';
+import '../../../shared/widgets/page/common_edge_page.dart';
 import '../../widgets/item_title.dart';
 
 class PostListScreen extends ConsumerStatefulWidget {
@@ -62,17 +62,159 @@ class _PostListScreenState extends BaseConState<PostListScreen>
     Fluttertoast.showToast(msg: "${GoRouterState.of(context).topRoute?.name} 더보기 호출");
   }
 
+  Future<void> _refresh() async {
+    // setState(() {
+    //   items = [];
+    //   netState = NetState.Loading;
+    // });
+    await Future.delayed(const Duration(seconds: 2));
+    // setState(() {
+    //   items = List.generate(50, (index) => 'Item ${index + 1}');
+    //   netState = NetState.Completed;
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SimpleEdgeContentPage(
-      child: _content(),
-      controller: widget.mainNavScrollController,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      //   isMoreDataScroll: MoreDataScroll.HAS,
+    // return SimpleEdgeContentPage(
+    //   child: _content(),
+    //   // controller: widget.mainNavScrollController,
+    //   backgroundColor: Theme.of(context).colorScheme.surface,
+    //   //   isMoreDataScroll: MoreDataScroll.HAS,
+    //   isPhysics: true,
+    //   onRefresh: () async {
+    //     QcLog.d('onRefresh ======');
+    //     _refresh();
+    //   },
+    // );
+    return CommonEdgePage(
+      child: refreshScroll(
+        safeAreaTop: false,
+        safeAreaBottom: false,
+        upDisappearHeader: MySliverPersistentHeaderDelegate(
+          maxHeight: 80,
+          minHeight: 80,
+          child: ItemTitle('api & dialog'),
+        ),
+        fixedHeader: MySliverPersistentHeaderDelegate(maxHeight: 150, minHeight: 85, child: _tab()),
+      ),
     );
   }
 
-  _content() {
+  _tab() {
+    return Container(
+      color: Colors.orange,
+      alignment: Alignment.bottomCenter,
+      child: SingleChildScrollView(
+        controller: widget.mainNavScrollController,
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            ElevatedButton(
+              child: Text('loadPosts'),
+              onPressed: () {
+                ref.read(postListViewModelProvider.notifier).loadPosts();
+              },
+            ),
+            ElevatedButton(
+              child: Text('일반 dialog'),
+              onPressed: () {
+                DialogController(ref).enqueue(
+                  DialogRequest.confirm(
+                    '다이얼로그 띄우기',
+                    onCancel: () {
+                      QcLog.d('onCancelled');
+                    },
+                    onConfirm: () {
+                      QcLog.d('onConfirm');
+                    },
+                  ),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: Text('error dialog'),
+              onPressed: () {
+                ref.read(postListViewModelProvider.notifier).dialogLoadError();
+              },
+            ),
+            ElevatedButton(
+              child: Text('Delayed dialog'),
+              onPressed: () {
+                ref.read(postListViewModelProvider.notifier).dialogDelayed();
+              },
+            ),
+            ElevatedButton(
+              child: Text('custom dialog'),
+              onPressed: () {
+                CommonUtils.isTablet(context);
+
+                DialogController(ref).enqueue(
+                  DialogRequest.custom(
+                    ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: CircleAvatar(child: Text('${index + 1}')),
+                          title: Text(items[index]),
+                          subtitle: Text('This is item number ${index + 1}'),
+                        );
+                      },
+                    ),
+                    onCancel: () {
+                      QcLog.d('onCancelled');
+                    },
+                    onConfirm: () {
+                      QcLog.d('onConfirm');
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  refreshScroll({
+    SliverPersistentHeaderDelegate? upDisappearHeader,
+    SliverPersistentHeaderDelegate? fixedHeader,
+    double? top,
+    double? bottom,
+
+    bool? safeAreaTop,
+    bool? safeAreaBottom,
+  }) {
+    final state = ref.watch(postListViewModelProvider);
+    return RefreshMoreScrollview(
+      safeAreaTop: safeAreaTop,
+      safeAreaBottom: safeAreaBottom,
+      itemCount: state.posts.length,
+      // isMoreDataScroll: _isLastPage(),
+      netState: NetState.Completed,
+      // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
+      onRefresh: () async {
+        QcLog.d('onRefresh ======');
+        _refresh();
+      },
+      onBottom: () async {
+        // if (claimSelectionViewModel?.isLoad == false &&
+        //     claimSelectionViewModel?.historyList.state == NetState.Completed &&
+        //     claimSelectionViewModel?.historyList.isNextPage == true) {
+        //   await claimSelectionViewModel?.requestHistoryList(isNext: true);
+        // }
+      },
+      upDisappearHeader: upDisappearHeader,
+      fixedHeader: fixedHeader,
+      sliverChildBuilder: (context, index) {
+        final post = state.posts[index];
+        return ListTile(title: Text(post.title ?? ''), subtitle: Text(post.body ?? ''));
+      },
+    );
+  }
+
+  _content2() {
     final state = ref.watch(postListViewModelProvider);
     QcLog.d('state ===== ${state.toString()}');
 

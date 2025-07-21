@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/shared/entities/nav_item.dart';
 import 'package:flutter_example_base/shared/widgets/common/blur_bottom_bar_item.dart';
-import 'package:flutter_example_base/shared/widgets/page/common_default_edge_page.dart';
+import 'package:flutter_example_base/shared/widgets/page/common_nav_edge_page.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -82,6 +82,9 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
     }
   }
 
+  ///
+  /// 탭 별 스크롤 최상단
+  ///
   void _scrollToTop(mainNavScrollController) {
     if (mainNavScrollController?.hasClients == true) {
       mainNavScrollController.animateTo(
@@ -239,7 +242,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// ㄴ 백키 종료 가능
   getBottomNavBlur() {
     // var bottom = MediaQuery.of(context).padding.bottom;
-    return CommonDefaultEdgePage(
+    return CommonNavEdgePage(
       extendBodyBehindAppBar: true,
       extendBody: true,
       bottomNavigationBar: Padding(
@@ -254,7 +257,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// ㄴ 백키 종료 가능
   ///
   getBottomNavBlurAni({bool? isBlur = false}) {
-    return CommonDefaultEdgePage(
+    return CommonNavEdgePage(
       extendBodyBehindAppBar: true,
       extendBody: true,
       isBlur: isBlur,
@@ -303,52 +306,10 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   }
 
   ///
-  double lastOffset = 0;
-
-  /// 2-3 .블러 처리된 네비게이션 애니메이션
-  /// ㄴ 백키 종료 가능
-  getBottomNavBlurAni2() {
-    return CommonDefaultEdgePage(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      // onScrollTop: () {
-      //   // 스크롤 시작 → 일단 숨기자 (UX 선택 사항)
-      //   // setState(() => isBottomBarVisible = true);
-      //   showBottomBar(true);
-      // },
-      // onScrollUpdate: (offset) {
-      //   print('onScrollUpdate ==== $offset | $lastOffset');
-      //   final difference = offset - lastOffset;
-      //   // setState(() => isBottomBarVisible = false);
-      //
-      //   // if (difference > scrollThreshold && isBottomBarVisible) {
-      //   //   showBottomBar(false);
-      //   // } else if (difference < -scrollThreshold && !isBottomBarVisible) {
-      //   //   showBottomBar(true);
-      //   // }
-      //
-      //   // offset 값 변화에 따라 위/아래 감지해서 show/hide
-      //   if (offset > lastOffset) {
-      //     showBottomBar(false);
-      //   } else if (offset < lastOffset) {
-      //     showBottomBar(true);
-      //   }
-      //   lastOffset = offset;
-      // },
-      // onScrollEnd: () {
-      //   // 스크롤 멈췄을 때 상태 유지 또는 복구 로직 추가 가능
-      // },
-      bottomNavigationBar: _buildBlurBottomBar(),
-      child: widget.navigationShell,
-    );
-  }
-
-  ///
   /// blur 처리된 바텀네이게이션
   ///
   Widget _buildBlurBottomBar({BlurBottomType? blurType = BlurBottomType.Scale}) {
     return SafeArea(
-      // top: false,
       child: ClipRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -388,7 +349,7 @@ class MainScaffoldWithNavState extends State<MainScaffoldWithNav>
   /// stack으로 구성
   /// ㄴ 단, 뒤로가기시 종료가 안되는 이슈
   // getCustomNavStack() {
-  //   return CommonDefaultEdgePageCommonDefaultEdgePage(
+  //   return CommonNavEdgePage(
   //     // body: widget.shell,
   //     extendBodyBehindAppBar: true,
   //     extendBody: true,
