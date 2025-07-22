@@ -61,8 +61,6 @@ class _SettingPageState extends BaseConState<SettingPage>
   @override
   Widget build(BuildContext context) {
     QcLog.d('build =====  $isThisPageVisible ');
-    // final bottomInset = MediaQuery.of(context).padding.bottom;
-    // QcLog.d('bottomInset ===== ${MediaQuery.of(context).padding} , $bottomInset ');
     // final name = GoRouter.of(context).routeInformationProvider.value.uri.toString();
     // QcLog.d('name =====  $name ');
     // final routeMatchList = GoRouter.of(context).routerDelegate.currentConfiguration;
@@ -77,7 +75,6 @@ class _SettingPageState extends BaseConState<SettingPage>
     // print('현재 경로: $currentLocation');
 
     return CommonPopScopeWidget(child: getRefresh());
-    // return _content1();
   }
 
   _content1() {

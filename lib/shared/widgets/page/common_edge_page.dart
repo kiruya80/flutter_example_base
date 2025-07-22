@@ -169,6 +169,23 @@ class _CommonEdgePageState extends BaseConState<CommonEdgePage> {
                 overlayColor: Theme.of(context).colorScheme.surface.withOpacitySafe(0.7),
               ),
             ),
+
+            ///
+            /// Navigation Bar
+            /// 안드로이드는 기본
+            /// ios는 바텀네비게이터를 사용할때만
+            ///
+            if (Platform.isAndroid)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: BlurOverlay(
+                  height: bottomInset,
+                  isBlur: isBlur,
+                  isDark: isDark,
+                  isBottom: true,
+                  overlayColor: Theme.of(context).colorScheme.surface.withOpacitySafe(0.7),
+                ),
+              ),
           ],
         ),
       ),
