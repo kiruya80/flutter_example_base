@@ -120,8 +120,7 @@ class _SimpleEdgeContentPageState extends State<SimpleEdgeContentPage> {
     scrollSlivers.add(SliverToBoxAdapter(child: widget.child));
 
     /// 네비게이터 높이 :  홈 네비게이터등이 있는 경우 여백
-    // scrollSlivers.add(SliverToBoxAdapter(child: BottomEdgeSpaceWidget(isEdgeToEdge: true)));
-    RefreshScrollWidgets().getBottomSpace(scrollSlivers, true);
+    RefreshScrollWidgets().getBottomSpace(scrollSlivers);
 
     return scrollSlivers;
   }

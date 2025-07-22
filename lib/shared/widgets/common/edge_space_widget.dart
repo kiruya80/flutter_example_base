@@ -15,7 +15,7 @@ class BottomEdgeSpaceWidget extends ConsumerStatefulWidget {
   final bool isBottom;
   final bool isEdgeToEdge;
 
-  const BottomEdgeSpaceWidget({super.key, this.isBottom = true, this.isEdgeToEdge = false});
+  const BottomEdgeSpaceWidget({super.key, this.isBottom = true, this.isEdgeToEdge = true});
 
   @override
   ConsumerState<BottomEdgeSpaceWidget> createState() => _BottomEdgeSpaceWidgetState();

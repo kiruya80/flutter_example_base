@@ -107,8 +107,11 @@ class _CommonEdgePageState extends BaseConState<CommonEdgePage> {
     // CommonUtils.isTablet(context);
     // overlayColor ??= Theme.of(context).colorScheme.surface;
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    final bottomInset = MediaQuery.of(context).padding.bottom;
-    // QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) bottomInset === $bottomInset');
+    // final bottomInset = MediaQuery.of(context).padding.bottom; // 시스템 제스처
+    final homePadding = MediaQuery.of(context).viewPadding.bottom; // 전체 시스템 UI
+    QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) '
+        // 'bottomInset === $bottomInset'
+        '   homePadding : $homePadding');
 
     // 실제 시스템 바 영역 (상태바, 내비게이션바)
     // final viewPadding = MediaQuery.of(context).viewPadding;
@@ -179,7 +182,7 @@ class _CommonEdgePageState extends BaseConState<CommonEdgePage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: BlurOverlay(
-                  height: bottomInset,
+                  height: homePadding,
                   isBlur: isBlur,
                   isDark: isDark,
                   isBottom: true,

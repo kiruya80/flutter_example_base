@@ -85,7 +85,7 @@ class _HomeTabState extends BaseConState<HomeTab> with ScrollBottomListenerMixin
 
     return RefreshMoreScrollview(
       content: _content(),
-      // controller: widget.mainNavScrollController,
+      controller: widget.mainNavScrollController,
       // emptyMsg: claimSelectionViewModel?.selectedTab.emptyMsg,
       onRefresh: () async {
         QcLog.d('onRefresh ======');

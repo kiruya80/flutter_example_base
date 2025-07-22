@@ -79,13 +79,6 @@ class _PostListScreenState extends BaseConState<PostListScreen>
 
   @override
   Widget build(BuildContext context) {
-    var result = ref.watch(postListViewModelProvider);
-    QcLog.d('result ==== ${result.isLoading}');
-
-    var notifier = ref.watch(postListViewModelProvider.notifier);
-    QcLog.d('notifier ==== ${notifier.toString()}');
-
-
     // return SimpleEdgeContentPage(
     //   child: _content(),
     //   // controller: widget.mainNavScrollController,

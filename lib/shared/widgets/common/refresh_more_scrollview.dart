@@ -156,7 +156,11 @@ class RefreshMoreScrollview extends StatefulWidget {
     this.content,
 
     this.safeAreaTop = false,
+
+    /// false인 경우 엣지투엣지
     this.safeAreaBottom = false,
+
+    /// false인 경우 엣지투엣지
     this.backgroundColor,
     this.controller,
     this.appTitle,
@@ -235,13 +239,11 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
     /// 1. 데이터가 없는 경우
     if (widget.emptyContent != null) {
       scrollSlivers.add(SliverToBoxAdapter(child: widget.emptyContent));
-      return scrollSlivers;
     }
 
     /// 2. 컨텐츠 영역 - scrollview, listview 등등
     if (widget.content != null) {
       scrollSlivers.add(SliverToBoxAdapter(child: widget.content));
-      return scrollSlivers;
     }
 
     /// 3. 리스트 내용 - sliverChildBuilder 를 사용하는 경우
@@ -254,13 +256,13 @@ class _RefreshMoreScrollviewState extends State<RefreshMoreScrollview> {
       widget.itemCount,
       widget.netState,
       widget.emptyMsg,
-      widget.safeAreaBottom,
+      // widget.safeAreaBottom,
       widget.isMoreDataScroll,
     );
 
     /// 네비게이터 높이 :  홈 네비게이터등이 있는 경우 여백
-    if (widget.safeAreaBottom != null) {
-      RefreshScrollWidgets().getBottomSpace(scrollSlivers, !(widget.safeAreaBottom ?? false));
+    if (widget.safeAreaBottom == false) {
+      RefreshScrollWidgets().getBottomSpace(scrollSlivers);
     }
     return scrollSlivers;
   }

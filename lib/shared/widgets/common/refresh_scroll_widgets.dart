@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
+import 'package:flutter_example_base/core/utils/print_log.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/utils/device_info_utils.dart';
@@ -161,7 +162,7 @@ class RefreshScrollWidgets {
     int? itemCount,
     NetState? netState,
     String? emptyMsg,
-    bool? safeAreaBottom,
+    // bool? safeAreaBottom,
     MoreDataScroll? isMoreDataScroll,
   ) {
     switch (netState) {
@@ -213,14 +214,14 @@ class RefreshScrollWidgets {
         }
 
         /// 하단 리스트 로딩 후 뷰
-        if (safeAreaBottom == false) {
+        // if (safeAreaBottom == false) {
           scrollSlivers.add(
             SliverFillRemaining(
               hasScrollBody: false,
               child: getSliverFillRemaining(context, isMoreDataScroll),
             ),
           );
-        }
+        // }
         break;
 
       default:
@@ -228,9 +229,10 @@ class RefreshScrollWidgets {
   }
 
   /// 네비게이터 높이 :  홈 네비게이터등이 있는 경우 여백
-  getBottomSpace(List<Widget> scrollSlivers, bool? isEdgeToEdge) {
+  getBottomSpace(List<Widget> scrollSlivers, {bool isEdgeToEdge = true}) {
+    QcLog.d('getBottomSpace ====$isEdgeToEdge');
     scrollSlivers.add(
-      SliverToBoxAdapter(child: BottomEdgeSpaceWidget(isEdgeToEdge: isEdgeToEdge ?? true)),
+      SliverToBoxAdapter(child: BottomEdgeSpaceWidget(isEdgeToEdge: isEdgeToEdge)),
     );
   }
 
