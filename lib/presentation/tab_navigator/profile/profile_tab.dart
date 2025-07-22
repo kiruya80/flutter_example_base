@@ -25,7 +25,7 @@ class ProfileTab extends ConsumerStatefulWidget {
   ConsumerState<ProfileTab> createState() => _ProfileTabState();
 }
 
-class _ProfileTabState extends BaseConState<ProfileTab> with ScrollBottomListenerMixin<ProfileTab> {
+class _ProfileTabState extends BaseConState<ProfileTab> with ScrollBottomListenerMixin {
   bool? isDark;
 
   late final ProviderSubscription _subscription;

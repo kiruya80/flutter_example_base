@@ -36,9 +36,9 @@ class _PostWriteScreenState extends BaseConState<PostWriteScreen>
     super.initState();
 
     // ✅ 로딩 리스너 등록
-    setupErrorListener(ref, postWriteViewModelProvider);
-    setupLoadingListener(ref, postWriteViewModelProvider);
-    setupNavigationListener(ref, postWriteViewModelProvider);
+    setupErrorListener(postWriteViewModelProvider);
+    setupLoadingListener(postWriteViewModelProvider);
+    setupNavigationListener(postWriteViewModelProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // ref.read(postListViewModelProvider.notifier).loadPosts();

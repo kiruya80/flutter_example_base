@@ -27,9 +27,9 @@ class _LoginPageState extends BaseConState<LoginPage>
     super.initState();
 
     // ✅ 로딩 리스너 등록
-    setupErrorListener(ref, authViewModelProvider);
-    setupLoadingListener(ref, authViewModelProvider);
-    setupNavigationListener(ref, authViewModelProvider);
+    setupErrorListener(authViewModelProvider);
+    setupLoadingListener(authViewModelProvider);
+    setupNavigationListener(authViewModelProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // ref.read(postListViewModelProvider.notifier).loadPosts();

@@ -213,27 +213,38 @@ class _CommonEdgePageState extends BaseConState<CommonEdgePage> {
       //세로 스크롤인 경우에만 추적
       if (metrics.axisDirection != AxisDirection.down) return false;
 
+      /// metrics.pixels == displayHeight 첫페이지가 넘는 정도
+      /// 현재 스크롤 컨텐츠 전체 길이 metrics.maxScrollExtent
       final isBottom = metrics.pixels >= metrics.maxScrollExtent - 1;
-      QcLog.d(
-        '_onNotification ==== ${metrics.pixels} , $displayHeight , ${metrics.maxScrollExtent}',
-      );
+      // print(
+      //   '_onNotification ==== ${metrics.pixels} , $displayHeight , ${metrics.maxScrollExtent}',
+      // );
+      //  0.0 , 808.7619047619048 , 1351.238095238095
       // notification.metrics.pixels >=
       //     notification.metrics.maxScrollExtent -
       //         (bottomMoreHeight + DeviceInfoUtils.instance.getEdgeSpaceHeight(context))
 
-      var isScrollBottom = ref.read(scrollReachedBottomProvider(currentRouteName));
-      if (isBottom) {
-        if (isScrollBottom == false) {
-          debugPrint(
-            "📍 최하단입니다. 📦 더 불러오기 트리거, $currentRouteName , ${GoRouterState.of(context).uri} ,",
-          );
-          ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = true;
+      if (metrics.maxScrollExtent > displayHeight) {
+        var isScrollBottom = ref.read(scrollReachedBottomProvider(currentRouteName));
+        if (isBottom) {
+          if (isScrollBottom == false) {
+            debugPrint(
+              "📍 최하단입니다. 📦 더 불러오기 트리거, $currentRouteName , ${GoRouterState
+                  .of(context)
+                  .uri} ,",
+            );
+            ref
+                .read(scrollReachedBottomProvider(currentRouteName).notifier)
+                .state = true;
+          }
+          return;
         }
-        return;
-      }
 
-      if (isScrollBottom == true) {
-        ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = false;
+        if (isScrollBottom == true) {
+          ref
+              .read(scrollReachedBottomProvider(currentRouteName).notifier)
+              .state = false;
+        }
       }
     }
   }

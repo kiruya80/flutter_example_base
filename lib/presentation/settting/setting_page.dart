@@ -21,8 +21,7 @@ class SettingPage extends ConsumerStatefulWidget {
   ConsumerState<SettingPage> createState() => _SettingPageState();
 }
 
-class _SettingPageState extends BaseConState<SettingPage>
-    with ScrollBottomListenerMixin<SettingPage> {
+class _SettingPageState extends BaseConState<SettingPage> with ScrollBottomListenerMixin {
   var items = List.generate(30, (index) => 'Item ${index + 1}');
   bool? isDark;
   NetState? netState = NetState.Completed;

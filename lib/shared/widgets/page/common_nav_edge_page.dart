@@ -300,36 +300,42 @@ class _CommonNavEdgePageState extends BaseConState<CommonNavEdgePage> {
         }
         return;
       }
-
-      var isScrollBottom = ref.read(scrollReachedBottomProvider(currentRouteName));
-      if (isBottom) {
-        // QcLog.d("📍 최하단입니다.");
-        //   if (isBottom && isOnBottom == false) {
-        //     if (widget.onShowBottomBar != null) {
-        //       widget.onShowBottomBar!(false);
-        //     }
-        //     isOnBottom = true;
-        //
-        //     setState(() {
-        //       if (Platform.isIOS) {
-        //         overlayColor = Colors.transparent;
-        //       } else {
-        //         overlayColor = Theme.of(context).colorScheme.surfaceDim.withOpacitySafe(0.5);
-        //       }
-        //     });
-        //   }
-        if (isScrollBottom == false) {
-          debugPrint(
-            "📍 최하단입니다. 📦 더 불러오기 트리거, $currentRouteName , ${GoRouterState.of(context).uri} ,",
-          );
-          ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = true;
+      // print(
+      //   '_onNotification ==== ${metrics.pixels} , $displayHeight , ${metrics.maxScrollExtent}',
+      // );
+      if (metrics.maxScrollExtent > displayHeight) {
+        /// 리스트 데이터가 화면보다 적은 경우
+        var isScrollBottom = ref.read(scrollReachedBottomProvider(currentRouteName));
+        if (isBottom) {
+          // QcLog.d("📍 최하단입니다.");
+          //   if (isBottom && isOnBottom == false) {
+          //     if (widget.onShowBottomBar != null) {
+          //       widget.onShowBottomBar!(false);
+          //     }
+          //     isOnBottom = true;
+          //
+          //     setState(() {
+          //       if (Platform.isIOS) {
+          //         overlayColor = Colors.transparent;
+          //       } else {
+          //         overlayColor = Theme.of(context).colorScheme.surfaceDim.withOpacitySafe(0.5);
+          //       }
+          //     });
+          //   }
+          if (isScrollBottom == false) {
+            debugPrint(
+              "📍 최하단입니다. 📦 더 불러오기 트리거, $currentRouteName , ${GoRouterState.of(context).uri} ,",
+            );
+            ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = true;
+          }
+          return;
         }
-        return;
+
+        if (isScrollBottom == true) {
+          ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = false;
+        }
       }
 
-      if (isScrollBottom == true) {
-        ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = false;
-      }
 
       if (isTop == false && isBottom == false) {
         // QcLog.d("📍 최상단을 지남.");

@@ -145,7 +145,7 @@ class RefreshScrollWidgets {
         },
         onRefresh: () async {
           if (onRefresh != null) {
-            await Future.delayed(const Duration(milliseconds: 1500));
+            await Future.delayed(const Duration(milliseconds: 500));
             await onRefresh();
           }
         },

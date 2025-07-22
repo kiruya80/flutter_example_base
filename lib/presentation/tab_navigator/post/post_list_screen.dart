@@ -34,7 +34,7 @@ class _PostListScreenState extends BaseConState<PostListScreen>
         ErrorListenerMixin<PostListState, PostListScreen>,
         NavigationListenerMixin<PostListState, PostListScreen>,
         LoadingListenerMixin<PostListState, PostListScreen>,
-        ScrollBottomListenerMixin<PostListScreen> {
+        ScrollBottomListenerMixin {
   // 100개의 샘플 텍스트 리스트 생성
   final items = List.generate(100, (index) => 'Item ${index + 1}');
 
@@ -43,9 +43,10 @@ class _PostListScreenState extends BaseConState<PostListScreen>
     super.initState();
 
     // ✅ 로딩 리스너 등록
-    setupErrorListener(ref, postListViewModelProvider);
-    setupLoadingListener(ref, postListViewModelProvider);
-    setupNavigationListener(ref, postListViewModelProvider);
+    // setupAllUiStatusListeners(postListViewModelProvider.notifier);
+    setupErrorListener(postListViewModelProvider);
+    setupLoadingListener(postListViewModelProvider);
+    setupNavigationListener(postListViewModelProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // ref.read(postListViewModelProvider.notifier).loadPosts();
@@ -63,6 +64,7 @@ class _PostListScreenState extends BaseConState<PostListScreen>
   }
 
   Future<void> _refresh() async {
+    DialogController(ref).showLoading();
     // setState(() {
     //   items = [];
     //   netState = NetState.Loading;
@@ -72,10 +74,18 @@ class _PostListScreenState extends BaseConState<PostListScreen>
     //   items = List.generate(50, (index) => 'Item ${index + 1}');
     //   netState = NetState.Completed;
     // });
+    DialogController(ref).hideLoading();
   }
 
   @override
   Widget build(BuildContext context) {
+    var result = ref.watch(postListViewModelProvider);
+    QcLog.d('result ==== ${result.isLoading}');
+
+    var notifier = ref.watch(postListViewModelProvider.notifier);
+    QcLog.d('notifier ==== ${notifier.toString()}');
+
+
     // return SimpleEdgeContentPage(
     //   child: _content(),
     //   // controller: widget.mainNavScrollController,

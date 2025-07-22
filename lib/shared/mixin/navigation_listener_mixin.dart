@@ -15,7 +15,7 @@ mixin NavigationListenerMixin<T extends BaseUiStatus, W extends ConsumerStateful
     on ConsumerState<W> {
   late ProviderSubscription<T> _subscription;
 
-  void setupNavigationListener(WidgetRef ref, ProviderListenable<T> provider) {
+  void setupNavigationListener(ProviderListenable<T> provider) {
     _subscription = ref.listenManual<T>(provider, (prev, next) {
       QcLog.d('listenManual ==== ${prev?.error} , ${next.error}');
       if (next.navigateTo != null && next.navigateTo?.path.isNotNullOrEmpty == true) {

@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../app/di/scroll_notifier.dart';
 import '../../../app/routes/app_routes_info.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/controller/dialog_controller.dart';
 import '../../../core/theme/app_theme_provider.dart';
 import '../../../core/utils/print_log.dart';
 import '../../../shared/mixin/scroll_bottom_listener_mixin.dart';
@@ -24,7 +25,7 @@ class HomeTab extends ConsumerStatefulWidget {
   ConsumerState<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends BaseConState<HomeTab> with ScrollBottomListenerMixin<HomeTab> {
+class _HomeTabState extends BaseConState<HomeTab> with ScrollBottomListenerMixin {
   bool? isDark;
 
   // late void Function() _cancelLoadingListener;
@@ -100,9 +101,11 @@ class _HomeTabState extends BaseConState<HomeTab> with ScrollBottomListenerMixin
   bool _isRefreshing = false;
 
   Future<void> _refresh() async {
+    DialogController(ref).showLoading();
     setState(() => _isRefreshing = true);
     await Future.delayed(const Duration(seconds: 2));
     setState(() => _isRefreshing = false);
+    DialogController(ref).hideLoading();
   }
 
   final items = List.generate(30, (index) => 'Item ${index + 1}');

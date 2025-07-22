@@ -2,8 +2,10 @@ import 'package:flutter_example_base/domain/post/usecases/delete_post.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/error/failures.dart';
 import '../../../core/utils/print_log.dart';
+import '../../../domain/common/entities/route_info.dart';
 import '../../../domain/common/params/no_params.dart';
 import '../../../domain/post/usecases/get_posts.dart';
+import '../../../shared/base/base_view_model.dart';
 import 'post_list_state.dart';
 
 ///
@@ -15,7 +17,8 @@ import 'post_list_state.dart';
 // 	•	게시글 삭제 (DeletePost)
 // 	•	게시글 수정 버튼 눌렀을 때 상태 변경
 ///
-class PostListViewModel extends StateNotifier<PostListState> {
+// class PostListViewModel extends StateNotifier<PostListState> {
+class PostListViewModel extends BaseViewModel<PostListState> {
   final GetPosts getPosts;
   final DeletePost deletePost;
 
@@ -25,7 +28,8 @@ class PostListViewModel extends StateNotifier<PostListState> {
 
   Future<void> loadPosts() async {
     // state = const AsyncLoading();
-    state = state.copyWith(isLoading: true, error: null);
+    // state = state.copyWith(isLoading: true, error: null);
+    setLoading(true);
 
     await Future.delayed(Duration(seconds: 1));
 
@@ -34,6 +38,7 @@ class PostListViewModel extends StateNotifier<PostListState> {
 
     result.fold(
       (Failure failure) {
+        // setLoading(false);
         state = state.copyWith(isLoading: false, error: failure);
       },
       (posts) {
@@ -63,4 +68,22 @@ class PostListViewModel extends StateNotifier<PostListState> {
     // state = state.copyWith(error: ServerFailure('ServerFailure 에러'));
     // });
   }
+
+  @override
+  PostListState updateState({bool? isLoading, Failure? error, RouteInfo? navigateTo}) {
+    return state.copyWith(isLoading: isLoading, error: error, navigateTo: navigateTo);
+  }
+
+  // @override
+  // PostListUiStatus copyWith({
+  //   bool? isLoading,
+  //   AppFailure? error,
+  //   String? navigation,
+  // }) {
+  //   return state.copyWith(
+  //     isLoading: isLoading,
+  //     error: error,
+  //     navigation: navigation,
+  //   );
+  // }
 }

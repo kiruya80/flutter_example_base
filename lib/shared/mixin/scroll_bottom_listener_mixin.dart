@@ -9,6 +9,9 @@ import '../../app/di/scroll_notifier.dart';
 /// 1. mixin
 /// 스크롤 하단인 경우
 ///
+/// didChangeDependencies에서 scrollReachedBottomProvider를 기본으로 감지하기 위해
+/// <T extends ConsumerStatefulWidget> on ConsumerState<T> 사용
+///
 mixin ScrollBottomListenerMixin<T extends ConsumerStatefulWidget> on ConsumerState<T> {
   String? tabId;
   ProviderSubscription<bool>? _subscription;

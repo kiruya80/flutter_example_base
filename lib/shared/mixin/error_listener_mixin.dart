@@ -4,6 +4,7 @@ import '../../../core/utils/print_log.dart';
 import '../../domain/common/entities/dialog_request.dart';
 import '../../core/controller/dialog_controller.dart';
 import '../base/base_ui_status.dart';
+import '../base/base_view_model.dart';
 
 ///
 /// 1. mixin
@@ -12,7 +13,7 @@ mixin ErrorListenerMixin<T extends BaseUiStatus, W extends ConsumerStatefulWidge
     on ConsumerState<W> {
   late ProviderSubscription<T> _subscription;
 
-  void setupErrorListener(WidgetRef ref, ProviderListenable<T> provider) {
+  void setupErrorListener(ProviderListenable<T> provider) {
     _subscription = ref.listenManual<T>(provider, (prev, next) {
       QcLog.d(
         'ErrorListenerMixin listenManual ==== ${prev?.error} , ${next.error} / ${next.isLoading} ',

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/controller/dialog_controller.dart';
 import '../base/base_ui_status.dart';
+import '../base/base_view_model.dart';
 
 ///
 /// 1. mixin
@@ -11,7 +12,10 @@ import '../base/base_ui_status.dart';
 ///  mixin이나 ViewModel은 “무엇을 띄울지”까지만 결정
 ///
 ///  	•	첫 번째 제네릭 <T>는 ViewModel의 상태 (PostListState)를 의미하고
+///     T extends BaseUiStatus를 사용하는 이유는 프로바이더의 상태에서 isLoading을 가져오기 위해
+///
 /// 	•	두 번째 제네릭 <W>는 ConsumerStatefulWidget (즉 화면 위젯 클래스, PostListScreen)를 의미합니다.
+///     void dispose() 에서 ProviderSubscription<T> _subscription 해제를 위해서
 ///
 ///  	•	LoadingListenerMixin, ErrorListenerMixin, NavigationListenerMixin
 /// 	•	각각 isLoading, error, navigateTo를 수신하여 적절한 다이얼로그 또는 네비게이션 실행
@@ -32,7 +36,7 @@ mixin LoadingListenerMixin<T extends BaseUiStatus, W extends ConsumerStatefulWid
     on ConsumerState<W> {
   late ProviderSubscription<T> _subscription;
 
-  void setupLoadingListener(WidgetRef ref, ProviderListenable<T> provider) {
+  void setupLoadingListener(ProviderListenable<T> provider) {
     _subscription = ref.listenManual<T>(provider, (prev, next) {
       QcLog.d(
         'LoadingListenerMixin listenManual ==== ${prev?.isLoading} , ${next.isLoading} / ${next.error}',

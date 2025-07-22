@@ -85,14 +85,17 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
           context: context,
           barrierDismissible: false,
           builder:
-              (_) => Center(
-                child: GestureDetector(
-                  onLongPress: () {
-                    if (kDebugMode) {
-                      DialogController(ref).hideLoading();
-                    }
-                  },
-                  child: CircularProgressIndicator(),
+              (_) => PopScope(
+                canPop: false,
+                child: Center(
+                  child: GestureDetector(
+                    onLongPress: () {
+                      if (kDebugMode) {
+                        DialogController(ref).hideLoading();
+                      }
+                    },
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
               ),
         );
@@ -100,90 +103,102 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
       case DialogType.error:
         await showDialog(
           context: context,
+          barrierDismissible: false,
           builder:
-              (_) => AlertDialog(
-                title: Text(request.title ?? '에러'),
-                content: Container(
-                  width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
-                  child: Text(request.message ?? '오류가 발생했습니다.'),
-                ),
-                actions: [
-                  if (request.onCancel != null)
+              (_) => PopScope(
+                canPop: false,
+                child: AlertDialog(
+                  title: Text(request.title ?? '에러'),
+                  content: Container(
+                    width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
+                    child: Text(request.message ?? '오류가 발생했습니다.'),
+                  ),
+                  actions: [
+                    if (request.onCancel != null)
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          request.onCancel?.call();
+                        },
+                        child: const Text('취소'),
+                      ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        request.onCancel?.call();
+                        request.onConfirm?.call();
                       },
-                      child: const Text('취소'),
+                      child: const Text('확인'),
                     ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      request.onConfirm?.call();
-                    },
-                    child: const Text('확인'),
-                  ),
-                ],
+                  ],
+                ),
               ),
         );
         break;
       case DialogType.success:
         await showDialog(
           context: context,
+          barrierDismissible: false,
           builder:
-              (_) => AlertDialog(
-                title: Text(request.title ?? '성공'),
-                content: Container(
-                  width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
-                  child: Text(request.message ?? ''),
-                ),
-                actions: [
-                  if (request.onCancel != null)
+              (_) => PopScope(
+                canPop: false,
+                child: AlertDialog(
+                  title: Text(request.title ?? '성공'),
+                  content: Container(
+                    width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
+                    child: Text(request.message ?? ''),
+                  ),
+                  actions: [
+                    if (request.onCancel != null)
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          request.onCancel?.call();
+                        },
+                        child: const Text('취소'),
+                      ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        request.onCancel?.call();
+                        request.onConfirm?.call();
                       },
-                      child: const Text('취소'),
+                      child: const Text('확인'),
                     ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      request.onConfirm?.call();
-                    },
-                    child: const Text('확인'),
-                  ),
-                ],
+                  ],
+                ),
               ),
         );
         break;
       case DialogType.confirm:
         await showDialog(
           context: context,
+          barrierDismissible: false,
           builder:
-              (_) => AlertDialog(
-                title: Text(request.title ?? '알림'),
-                content: Container(
-                  width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
-                  child: Text(request.message ?? ''),
-                ),
-                actions: [
-                  if (request.onCancel != null)
+              (_) => PopScope(
+                canPop: false,
+                child: AlertDialog(
+                  title: Text(request.title ?? '알림'),
+                  content: Container(
+                    width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
+                    child: Text(request.message ?? ''),
+                  ),
+                  actions: [
+                    if (request.onCancel != null)
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          request.onCancel?.call();
+                        },
+                        child: const Text('취소'),
+                      ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        request.onCancel?.call();
+                        request.onConfirm?.call();
                       },
-                      child: const Text('취소'),
+                      child: const Text('확인'),
                     ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      request.onConfirm?.call();
-                    },
-                    child: const Text('확인'),
-                  ),
-                ],
+                  ],
+                ),
               ),
         );
         break;
@@ -208,36 +223,40 @@ class _DialogQueueListenerState extends ConsumerState<DialogQueueListener> {
 
         await showDialog(
           context: context,
+          // barrierDismissible: false,
           builder:
-              (_) => AlertDialog(
-                title: Text(request.title ?? '알림'),
-                content: Container(
-                  width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
-                  height: double.maxFinite,
-                  constraints: BoxConstraints(
-                    // maxWidth: CommonUtils.getDial ogMaxWidth(context),
-                    maxHeight: maxHeight,
-                    maxWidth: maxWidth,
+              (_) => PopScope(
+                canPop: false,
+                child: AlertDialog(
+                  title: Text(request.title ?? '알림'),
+                  content: Container(
+                    width: double.maxFinite, // 부모가 허용하는 최대한으로만 확장
+                    height: double.maxFinite,
+                    constraints: BoxConstraints(
+                      // maxWidth: CommonUtils.getDial ogMaxWidth(context),
+                      maxHeight: maxHeight,
+                      maxWidth: maxWidth,
+                    ),
+                    child: request.customWidget ?? Text(request.message ?? ''),
                   ),
-                  child: request.customWidget ?? Text(request.message ?? ''),
-                ),
-                actions: [
-                  if (request.onCancel != null)
+                  actions: [
+                    if (request.onCancel != null)
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          request.onCancel?.call();
+                        },
+                        child: const Text('취소'),
+                      ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        request.onCancel?.call();
+                        request.onConfirm?.call();
                       },
-                      child: const Text('취소'),
+                      child: const Text('확인'),
                     ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      request.onConfirm?.call();
-                    },
-                    child: const Text('확인'),
-                  ),
-                ],
+                  ],
+                ),
               ),
         );
         break;
