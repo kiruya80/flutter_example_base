@@ -3,18 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/common_utils.dart';
-import 'package:flutter_example_base/shared/entities/nav_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/di/scroll_notifier.dart';
-import '../../../app/routes/app_routes_info.dart';
 import '../../../core/theme/app_theme_provider.dart';
-import '../../../core/utils/device_info_utils.dart';
 import '../../../core/utils/print_log.dart';
 import '../../state/base_con_state.dart';
 import '../common/blur_overlay.dart';
-import '../common/edge_space_widget.dart';
 
 ///
 /// ✅ 디폴트 엣지 페이지
@@ -109,9 +105,6 @@ class _CommonEdgePageState extends BaseConState<CommonEdgePage> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     // final bottomInset = MediaQuery.of(context).padding.bottom; // 시스템 제스처
     final homePadding = MediaQuery.of(context).viewPadding.bottom; // 전체 시스템 UI
-    QcLog.d('statusBarHeight === $statusBarHeight ,($kToolbarHeight) '
-        // 'bottomInset === $bottomInset'
-        '   homePadding : $homePadding');
 
     // 실제 시스템 바 영역 (상태바, 내비게이션바)
     // final viewPadding = MediaQuery.of(context).viewPadding;
@@ -232,21 +225,15 @@ class _CommonEdgePageState extends BaseConState<CommonEdgePage> {
         if (isBottom) {
           if (isScrollBottom == false) {
             debugPrint(
-              "📍 최하단입니다. 📦 더 불러오기 트리거, $currentRouteName , ${GoRouterState
-                  .of(context)
-                  .uri} ,",
+              "📍 최하단입니다. 📦 더 불러오기 트리거, $currentRouteName , ${GoRouterState.of(context).uri} ,",
             );
-            ref
-                .read(scrollReachedBottomProvider(currentRouteName).notifier)
-                .state = true;
+            ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = true;
           }
           return;
         }
 
         if (isScrollBottom == true) {
-          ref
-              .read(scrollReachedBottomProvider(currentRouteName).notifier)
-              .state = false;
+          ref.read(scrollReachedBottomProvider(currentRouteName).notifier).state = false;
         }
       }
     }

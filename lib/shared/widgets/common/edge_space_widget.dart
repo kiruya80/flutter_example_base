@@ -24,7 +24,6 @@ class BottomEdgeSpaceWidget extends ConsumerStatefulWidget {
 class _BottomEdgeSpaceWidgetState extends ConsumerState<BottomEdgeSpaceWidget> {
   @override
   Widget build(BuildContext context) {
-    // return SizedBox(height: getEdgeSpaceHeight());
     return SizedBox(
       height: DeviceInfoUtils.instance.getEdgeSpaceHeight(
         context,

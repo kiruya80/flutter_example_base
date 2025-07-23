@@ -3,18 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_example_base/core/extensions/color_extensions.dart';
 import 'package:flutter_example_base/core/utils/common_utils.dart';
-import 'package:flutter_example_base/shared/entities/nav_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/di/scroll_notifier.dart';
-import '../../../app/routes/app_routes_info.dart';
 import '../../../core/theme/app_theme_provider.dart';
-import '../../../core/utils/device_info_utils.dart';
 import '../../../core/utils/print_log.dart';
 import '../../state/base_con_state.dart';
 import '../common/blur_overlay.dart';
-import '../common/edge_space_widget.dart';
 
 ///
 ///
