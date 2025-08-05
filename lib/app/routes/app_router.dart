@@ -9,6 +9,7 @@ import '../../presentation/edge/edge_to_edge_page.dart';
 import '../../presentation/intro/intro_page.dart';
 import '../../presentation/settting/setting_page.dart';
 import '../../presentation/splash/splash_page.dart';
+import '../../presentation/webview/webview_page.dart';
 import '../../shared/state/base_state.dart';
 import 'app_routes_info.dart';
 import 'my_route_observer.dart';
@@ -46,6 +47,11 @@ class AppRouter {
         name: AppRoutesInfo.setting.name,
         path: AppRoutesInfo.setting.path,
         builder: (context, state) => const SettingPage(),
+      ),
+      GoRoute(
+        name: AppRoutesInfo.webview.name,
+        path: AppRoutesInfo.webview.path,
+        builder: (context, state) => const WebviewPage(),
       ),
       GoRoute(
         name: AppRoutesInfo.edgeToEdge.name,

@@ -28,7 +28,8 @@ class _IntroPageState extends BaseConState<IntroPage> {
     await Future.delayed(const Duration(seconds: 2));
     if (mounted) {
       // context.go('/splash');
-      context.goNamed(AppRoutesInfo.splash.name);
+      // context.goNamed(AppRoutesInfo.splash.name);
+      context.goNamed(AppRoutesInfo.webview.name);
     }
   }
 

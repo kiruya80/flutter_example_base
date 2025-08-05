@@ -13,6 +13,7 @@ class AppRoutesInfo {
   static final splash = RouteRegistry.register('splash', '/splash');
   static final login = RouteRegistry.register('login', '/login');
   static final setting = RouteRegistry.register('setting', '/setting');
+  static final webview = RouteRegistry.register('webview', '/webview');
 
   /// 탭 라우터
   ///
@@ -66,13 +67,13 @@ class AppRoutesInfo {
     return '${tabSearch.path}/$path$queryStr';
   }
 
-  // static String profileDetailPath({
-  //   required String id,
-  //   Map<String, String> queryParams = const {},
-  // }) {
-  //   return profileDetail.fullPath(
-  //     pathParams: {'id': id},
-  //     queryParams: queryParams,
-  //   );
-  // }
+// static String profileDetailPath({
+//   required String id,
+//   Map<String, String> queryParams = const {},
+// }) {
+//   return profileDetail.fullPath(
+//     pathParams: {'id': id},
+//     queryParams: queryParams,
+//   );
+// }
 }
