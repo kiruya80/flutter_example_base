@@ -7,7 +7,6 @@ Flutter example base project.
 [master] 기본 설정만 (yaml등) 
 
 
-
 ## 안드로이드 스튜디오 버전
 Android Studio Koala Feature Drop | 2024.1.2 Patch 1
 Build #AI-241.19072.14.2412.12360217, built on September 13, 2024
