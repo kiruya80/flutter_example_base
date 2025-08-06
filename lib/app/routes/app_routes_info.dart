@@ -67,13 +67,13 @@ class AppRoutesInfo {
     return '${tabSearch.path}/$path$queryStr';
   }
 
-// static String profileDetailPath({
-//   required String id,
-//   Map<String, String> queryParams = const {},
-// }) {
-//   return profileDetail.fullPath(
-//     pathParams: {'id': id},
-//     queryParams: queryParams,
-//   );
-// }
+  // static String profileDetailPath({
+  //   required String id,
+  //   Map<String, String> queryParams = const {},
+  // }) {
+  //   return profileDetail.fullPath(
+  //     pathParams: {'id': id},
+  //     queryParams: queryParams,
+  //   );
+  // }
 }
